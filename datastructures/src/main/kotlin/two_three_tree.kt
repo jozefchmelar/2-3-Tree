@@ -32,6 +32,7 @@ class TwoThreeTree<K:Comparable<K>,V>:Map<K,V> {
                     key > foundNode.keyValue1!! && key < foundNode.keyValue2!!  -> fourNode = FourNode(foundNode.keyValue1, key with value , foundNode.keyValue2)
                     key > foundNode.keyValue2!!                                 -> fourNode = FourNode(foundNode.keyValue1, foundNode.keyValue2, key with value)
                 }
+
                insertFourNode(fourNode,foundNode)
             return null
            }
@@ -41,12 +42,21 @@ class TwoThreeTree<K:Comparable<K>,V>:Map<K,V> {
 
     private fun insertFourNode(fourNode: FourNode<K, V>?, foundNode: Node<K, V>) {
         when{
-            foundNode.parent == null -> {
+            root == null -> {
                 root =                  Node.TwoThreeNode(fourNode!!.keyValue2,
                     left = Node.TwoThreeNode(fourNode.keyValue1),right = Node.TwoThreeNode(fourNode.keyValue3)
                 )
             }
-            foundNode.parent!!.isTwoNode() ->{
+            foundNode==root ->{
+                root =  Node.TwoThreeNode(fourNode!!.keyValue2)
+                root?.addLeft (Node.TwoThreeNode(fourNode.keyValue1))
+                root?.addRight(Node.TwoThreeNode(fourNode.keyValue3))
+
+            }
+            foundNode.parent!!.isTwoNode() && foundNode.isThreeNode() ->{
+
+            }
+                foundNode.parent!!.isTwoNode() ->{
                 var node = Node.TwoThreeNode<K,V>()
                 when{
                     fourNode!!.keyValue2!!.key < foundNode.parent!!.keyValue1!! ->
