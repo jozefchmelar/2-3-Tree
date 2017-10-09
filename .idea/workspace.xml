@@ -1,24 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dec249bb-ad2a-4b84-841c-7c26cdb0acfe" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/KeyValue.class" afterPath="$PROJECT_DIR$/datastructures/out/production/classes/KeyValue.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/Node$FourNode.class" afterPath="$PROJECT_DIR$/datastructures/out/production/classes/Node$FourNode.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/Node$TwoThreeNode.class" afterPath="$PROJECT_DIR$/datastructures/out/production/classes/Node$TwoThreeNode.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/Node.class" afterPath="$PROJECT_DIR$/datastructures/out/production/classes/Node.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/NodeKt.class" afterPath="$PROJECT_DIR$/datastructures/out/production/classes/NodeKt.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/TwoThreeTree.class" afterPath="$PROJECT_DIR$/datastructures/out/production/classes/TwoThreeTree.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$1.class" afterPath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$2.class" afterPath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$3.class" afterPath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$4.class" afterPath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$5.class" afterPath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$6.class" afterPath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec.class" afterPath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec.class" />
+    <list default="true" id="dec249bb-ad2a-4b84-841c-7c26cdb0acfe" name="Default" comment="some functions in node, and handled cases when inserting to tree 11/13 tests passed">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/main/kotlin/two_three_tree.kt" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/two_three_tree.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt" afterPath="$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/datastructures/.gradle/" />
@@ -58,16 +43,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AbstractMap.class" pinned="false" current-in-tab="false">
-        <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/util/AbstractMap.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="10" column="53" lean-forward="false" selection-start-line="10" selection-start-column="53" selection-end-line="10" selection-end-column="53" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Map.class" pinned="false" current-in-tab="false">
         <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/util/Map.class">
           <provider selected="true" editor-type-id="text-editor">
@@ -78,7 +53,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="two_three_tree.kt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="two_three_tree.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/two_three_tree.kt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="400">
@@ -98,21 +73,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/datastructures/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="384">
-              <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+            <state relative-caret-position="256">
+              <caret line="16" column="14" lean-forward="true" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+      <file leaf-file-name="version.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/datastructures/build/kotlin-build/version.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="30" column="5" lean-forward="false" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -932,11 +907,11 @@
         <option value="$PROJECT_DIR$/main" />
         <option value="$PROJECT_DIR$/datastructures/build.gradle" />
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/Map.kt" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/kotlin/main.kt" />
         <option value="$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt" />
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt" />
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/two_three_tree.kt" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -949,7 +924,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
-      <flattenPackages />
+      <flattenPackages ProjectPane="true" />
       <showMembers />
       <showModules />
       <showLibraryContents />
@@ -1010,64 +985,9 @@
               <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="datastructures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
             </path>
-            <path>
-              <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="datastructures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="datastructures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="datastructures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="datastructures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="datastructures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
-        <option name="show-excluded-files" value="false" />
       </pane>
       <pane id="AndroidView" />
       <pane id="Scope">
@@ -1076,6 +996,35 @@
             <path>
               <item name="Root" type="cbb8eebc:String" user="Root" />
               <item name="datastructures" type="cbb8eebc:String" user="datastructures" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <subPane subId="Project Files">
+          <expand>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="datastructures" type="cbb8eebc:String" user="datastructures" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <subPane subId="Default">
+          <expand>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="sem1" type="cbb8eebc:String" user="sem1" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="sem1" type="cbb8eebc:String" user="sem1" />
+              <item name="semestralka1" type="cbb8eebc:String" user="semestralka1" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="sem1" type="cbb8eebc:String" user="sem1" />
+              <item name="semestralka1" type="cbb8eebc:String" user="semestralka1" />
+              <item name=".idea" type="cbb8eebc:String" user=".idea" />
             </path>
           </expand>
           <select />
@@ -1259,7 +1208,14 @@
       <option name="project" value="LOCAL" />
       <updated>1507559228122</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="some functions in node, and handled cases when inserting to tree 11/13 tests passed">
+      <created>1507578646825</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1507578646825</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1331,9 +1287,12 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="gitignore" />
     <MESSAGE value="added some tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="added some tests" />
+    <MESSAGE value="some functions in node, and handled cases when inserting to tree 11/13 tests passed" />
+    <option name="LAST_COMMIT_MESSAGE" value="some functions in node, and handled cases when inserting to tree 11/13 tests passed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1504,14 +1463,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="30" column="5" lean-forward="false" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.kotlintest/kotlintest/2.0.6/a342e6c37339649575d74f04a5a3c468eb9afe33/kotlintest-2.0.6-sources.jar!/io/kotlintest/matchers/Matchers.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
@@ -1524,14 +1475,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
           <caret line="149" column="24" lean-forward="false" selection-start-line="149" selection-start-column="24" selection-end-line="149" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/datastructures/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1568,6 +1511,30 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="400">
           <caret line="106" column="43" lean-forward="true" selection-start-line="106" selection-start-column="43" selection-end-line="106" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/datastructures/build/kotlin-build/version.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="65" column="5" lean-forward="true" selection-start-line="65" selection-start-column="5" selection-end-line="65" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/datastructures/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="16" column="14" lean-forward="true" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
           <folding />
         </state>
       </provider>
@@ -1624,7 +1591,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>datastructures_main|datastructures</last-edited>
+          <last-edited>datastructures</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
