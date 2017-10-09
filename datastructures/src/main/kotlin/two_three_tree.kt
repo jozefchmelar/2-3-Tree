@@ -1,91 +1,136 @@
 import Node.FourNode
 
 
-
-
-class TwoThreeTree<K:Comparable<K>,V>:Map<K,V> {
-    internal var root : Node<K,V>? = null
+class TwoThreeTree<K : Comparable<K>, V> : Map<K, V> {
+    internal var root: Node<K, V>? = null
 
     override fun put(key: K, value: V): V? {
-       if(root==null){
-           root= Node.TwoThreeNode(key with value)
-           return value
-       }
-        else {
-           val foundNode = getNode(key,root!!)
-           if(foundNode.isTwoNode()){
-               when{
-                   key < foundNode.keyValue1!! -> {
-                      foundNode.keyValue2 = foundNode.keyValue1
-                      foundNode.keyValue1 = key with value
-                       return value
-                   }
-                   key > foundNode.keyValue1!! -> {
-                       foundNode.keyValue2 = key with value
-                       return value
-                   }
-               }
-           }else if(foundNode.isThreeNode()){
-               var fourNode : FourNode<K,V>? = null
-                when{
-                    key < foundNode.keyValue1!!                                 -> fourNode = FourNode(key with value, foundNode.keyValue1, foundNode.keyValue2)
-                    key > foundNode.keyValue1!! && key < foundNode.keyValue2!!  -> fourNode = FourNode(foundNode.keyValue1, key with value , foundNode.keyValue2)
-                    key > foundNode.keyValue2!!                                 -> fourNode = FourNode(foundNode.keyValue1, foundNode.keyValue2, key with value)
-                }
-
-               insertFourNode(fourNode,foundNode)
-            return null
-           }
-       }
-        return null
+        if (root == null) {
+            root = Node.TwoThreeNode(key with value)
+            return value
+        } else {
+            val foundNode = getNode(key, root!!)
+            if (foundNode.isTwoNode())
+                return foundNode.addToNode(key with value)
+            else if (foundNode.isThreeNode())
+                  insertFourNode(foundNode.toFourNode(key with value), foundNode)
+        }
+        return value
     }
 
     private fun insertFourNode(fourNode: FourNode<K, V>?, foundNode: Node<K, V>) {
-        when{
+        when {
             root == null -> {
-                root =                  Node.TwoThreeNode(fourNode!!.keyValue2,
-                    left = Node.TwoThreeNode(fourNode.keyValue1),right = Node.TwoThreeNode(fourNode.keyValue3)
+                root = Node.TwoThreeNode(fourNode!!.keyValue2,
+                    left = Node.TwoThreeNode(fourNode.keyValue1), right = Node.TwoThreeNode(fourNode.keyValue3)
                 )
             }
-            foundNode==root ->{
-                root =  Node.TwoThreeNode(fourNode!!.keyValue2)
-                root?.addLeft (Node.TwoThreeNode(fourNode.keyValue1))
-                root?.addRight(Node.TwoThreeNode(fourNode.keyValue3))
 
-            }
-            foundNode.parent!!.isTwoNode() && foundNode.isThreeNode() ->{
+            foundNode == root -> {
 
-            }
-                foundNode.parent!!.isTwoNode() ->{
-                var node = Node.TwoThreeNode<K,V>()
-                when{
-                    fourNode!!.keyValue2!!.key < foundNode.parent!!.keyValue1!! ->
-                        node = Node.TwoThreeNode(fourNode.keyValue2,foundNode.parent!!.keyValue1)
-                    foundNode.keyValue2!!.key  > foundNode.parent!!.keyValue1!! ->
-                        node = Node.TwoThreeNode(foundNode.parent!!.keyValue1,fourNode.keyValue2)
+                root = Node.TwoThreeNode(fourNode!!.keyValue2).apply {
+                    addLeft (fourNode.keyValue1!!.asTwoNode())
+                    addRight(fourNode.keyValue3!!.asTwoNode())
                 }
-                with(node){
-                    left   = Node.TwoThreeNode(fourNode!!.keyValue1)
-                    middle = Node.TwoThreeNode(fourNode  .keyValue3)
+            }
+
+            /*                   two node parent                      */
+            foundNode.isThreeNode() && foundNode.parent!!.isTwoNode() -> {
+                //check if i'm going to add from left node or right node
+                if (foundNode.parent?.left == foundNode) {
+                    foundNode.parent?.addToNode(fourNode?.keyValue2!!)
+                    with(foundNode.parent!!){
+                        addMiddle (fourNode?.keyValue3!!.asTwoNode())
+                        addLeft   (fourNode .keyValue1!!.asTwoNode())
+                    }
+                } else if (foundNode.parent?.middle == foundNode) { // middle is Right if TwoNode
+                    foundNode.parent?.addToNode(fourNode?.keyValue2!!)
+                    with(foundNode.parent!!){
+                        addMiddle (fourNode?.keyValue1!!.asTwoNode())
+                        addRight  (fourNode .keyValue3!!.asTwoNode())
+                    }
+                }
+
+            }
+
+        /*                  three node parent                      */
+            foundNode.isThreeNode() && foundNode.parent!!.isThreeNode() -> {
+                //let's start from the left side
+                when (foundNode) {
+                    foundNode.parent?.left -> {
+                        val parentFourNode = foundNode.parent?.toFourNode(fourNode?.keyValue2!!)
+                        with(parentFourNode as Node.FourNode){
+                            addLeft    (fourNode!!.keyValue1!!.asTwoNode())
+                            addMiddle  (fourNode  .keyValue3!!.asTwoNode())
+                            addMiddle2 (foundNode.parent?.middle!!)
+                            addRight   (foundNode.parent?.right !!)
+                        }
+                        foundNode.parent = parentFourNode
+                    }
+
+                    foundNode.parent?.middle -> {
+                        val parentFourNode = foundNode.parent?.toFourNode(fourNode?.keyValue2!!)
+                        with(parentFourNode as Node.FourNode){
+                            addLeft    (foundNode.parent?.left !!)
+                            addMiddle  (fourNode!!.keyValue1!!.asTwoNode())
+                            addMiddle2 (fourNode  .keyValue3!!.asTwoNode())
+                            addRight   (foundNode.parent?.right !!)
+                        }
+                        foundNode.parent = parentFourNode
+                    }
+                    foundNode.parent?.right -> {
+                        val parentFourNode = foundNode.parent?.toFourNode(fourNode?.keyValue2!!)
+                        with(parentFourNode as Node.FourNode){
+                            addLeft    (fourNode!!.keyValue1!!.asTwoNode())
+                            addMiddle  (fourNode  .keyValue3!!.asTwoNode())
+                            addMiddle2 (foundNode.parent?.middle!!)
+                            addRight   (foundNode.parent?.right !!)
+                        }
+                        foundNode.parent = parentFourNode
+                    }
+                }
+            }
+
+            foundNode.parent!!.isTwoNode() -> {
+                var node = Node.TwoThreeNode<K, V>()
+                when {
+                    fourNode!!.keyValue2!!.key < foundNode.parent!!.keyValue1!! ->
+                        node = Node.TwoThreeNode(fourNode.keyValue2, foundNode.parent!!.keyValue1)
+                    foundNode.keyValue2!!.key > foundNode.parent!!.keyValue1!! ->
+                        node = Node.TwoThreeNode(foundNode.parent!!.keyValue1, fourNode.keyValue2)
+                }
+
+                with(node) {
+                    left   = fourNode!!.keyValue1?.asTwoNode()
+                    middle = fourNode  .keyValue3?.asTwoNode()
                     right  = foundNode.parent!!.right
-                foundNode.parent=node
+                    foundNode.parent = node
                 }
 
             }
         }
     }
 
-    private operator fun K.compareTo(keyValue: KeyValue<K,V>) =  this.compareTo(keyValue.key)
+    private operator fun K.compareTo(keyValue: KeyValue<K, V>) = this.compareTo(keyValue.key)
+
+    private fun Node<K , V>.toFourNode(key: KeyValue<K, V>) = if(isThreeNode()){
+        when {
+            key.key < this.keyValue1!! ->  FourNode(key, this.keyValue1, this.keyValue2)
+            key.key > this.keyValue1!! && key.key < this.keyValue2!! ->  FourNode(this.keyValue1, key, this.keyValue2)
+            key.key > this.keyValue2!! -> FourNode(this.keyValue1, this.keyValue2, key)
+            else -> throw IllegalStateException("can't make four node")
+        }
+    } else throw IllegalStateException("can't make four node from two node")
 
     internal fun getNode(key: K, startNode: Node<K, V>): Node<K, V> {
         return when {
-            startNode.left == null            -> startNode
-            startNode.keyValue1!!.key == key  -> startNode
-            key < startNode.keyValue1!!.key   -> getNode(key, startNode.left!!)
-            startNode.isTwoNode()             -> getNode(key, startNode.middle!!)
-            startNode.isThreeNode()           -> when {
-                key == startNode.keyValue2          -> startNode
-                key > startNode.keyValue2!!.key     -> getNode(key, startNode.right!!)
+            startNode.left == null -> startNode
+            startNode.keyValue1!!.key == key -> startNode
+            key < startNode.keyValue1!!.key -> getNode(key, startNode.left!!)
+            startNode.isTwoNode() -> getNode(key, startNode.middle!!)
+            startNode.isThreeNode() -> when {
+                key == startNode.keyValue2 -> startNode
+                key > startNode.keyValue2!!.key -> getNode(key, startNode.right!!)
                 key > startNode.keyValue1!!.key
                     &&
                     key < startNode.keyValue2!!.key -> getNode(key, startNode.middle!!)
@@ -95,6 +140,7 @@ class TwoThreeTree<K:Comparable<K>,V>:Map<K,V> {
             else -> throw IllegalStateException("wat")
         }
     }
+
     override fun get(byKey: K): V? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

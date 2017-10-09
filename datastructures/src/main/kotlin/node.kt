@@ -7,11 +7,26 @@ sealed class Node<K : Comparable<K>, V>{
     abstract var right     : Node    <K, V>?
     abstract var middle    : Node    <K, V>?
     abstract var parent    : Node    <K, V>?
+
+    fun addLeft(node:Node<K,V>){
+        node.parent=this
+        left=node
+    }
+
+    fun addRight(node:Node<K,V>){
+        node.parent=this
+        right=node
+    }
+
+     fun addMiddle(node:Node<K,V>){
+        node.parent=this
+        middle=node
+    }
+    abstract fun addToNode(keyValue2: KeyValue<K,V>): V
+
     fun isTwoNode()   = keyValue2==null
     fun isThreeNode() = !isTwoNode()
-    abstract fun addLeft(node:Node<K,V>)
-    abstract fun addRight(node:Node<K,V>)
-    abstract fun addMiddle(node:Node<K,V>)
+    
 
     data class TwoThreeNode<K  : Comparable<K>, V>(
         override var keyValue1 : KeyValue<K, V>? = null,
@@ -21,26 +36,25 @@ sealed class Node<K : Comparable<K>, V>{
         override var middle    : Node    <K, V>? = null,
         override var parent    : Node    <K, V>? = null
     )  :Node<K,V>(){
-        override fun addLeft(node:Node<K,V>){
-            node.parent=this
-            left=node
-        }
-        override fun addRight(node:Node<K,V>){
-            node.parent=this
-            right=node
-        }
-        override fun addMiddle(node:Node<K,V>){
-            node.parent=this
-            middle=node
+
+        override fun addToNode(toAdd: KeyValue<K, V>): V {
+            if (toAdd.key > keyValue1!!.key)
+                keyValue2 = toAdd
+            else {
+                keyValue2 = keyValue1
+                keyValue1 = toAdd
+            }
+            return toAdd.value
         }
 
         override fun toString()= """
-            key value1:$keyValue1
-            key value2:$keyValue2
-            left : $left
-            midde: $middle
-            right: $right
-            parent: ${parent?.keyValue1}
+
+            keys       : ${keyValue1?.key},  ${keyValue2?.key}
+            left       : ${left?.keyValue1?.  key}, ${left?.keyValue2?.key}
+            middle     : ${middle?.keyValue1?.key}, ${middle?.keyValue2?.key}
+            right      : ${right?.keyValue1?. key}, ${right?.keyValue2?.key}
+            parent     : ${parent?.keyValue1?.key}, ${parent?.keyValue2?.key}
+
             """.trimIndent()
 
         override fun equals(other: Any?): Boolean {
@@ -63,8 +77,6 @@ sealed class Node<K : Comparable<K>, V>{
             }
         }
 
-
-
     }
 
     data class FourNode <K  : Comparable<K>, V>(
@@ -77,17 +89,24 @@ sealed class Node<K : Comparable<K>, V>{
                  var middle2   : Node    <K, V>? = null,
         override var parent    : Node    <K, V>? = null
     ) :Node<K,V>() {
-        override fun addLeft(node: Node<K, V>) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        override fun addToNode(keyValue2: KeyValue<K, V>)  = throw IllegalStateException("cant add do four node")
+
+        fun addMiddle2(node:Node<K,V>){
+            node.parent=this
+            middle2=node
         }
 
-        override fun addRight(node: Node<K, V>) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
+        override fun toString()= """
 
-        override fun addMiddle(node: Node<K, V>) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
+            keys       : ${keyValue1?.key},  ${keyValue2?.key}, ${keyValue3?.key}
+            left       : ${left?.keyValue1?.  key}, ${left?.keyValue2?.key}
+            middle     : ${middle?.keyValue1?.key}, ${middle?.keyValue2?.key}
+            middle2    : ${middle2?.keyValue1?.key}, ${middle2?.keyValue2?.key}
+            right      : ${right?.keyValue1?. key}, ${right?.keyValue2?.key}
+            parent     : ${parent?.keyValue1?.key}, ${parent?.keyValue2?.key}
+
+            """.trimIndent()
     }
 
 }
@@ -99,3 +118,4 @@ sealed class Node<K : Comparable<K>, V>{
 
 data class KeyValue<K : Comparable<K>, V>(val key: K, var value: V)
 infix fun <K : Comparable<K>, V> K.with(value: V) = KeyValue(this, value)
+inline fun <K : Comparable<K>, V> KeyValue<K, V>.asTwoNode() = Node.TwoThreeNode(this)
