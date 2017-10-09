@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/datastructures.iml" filepath="$PROJECT_DIR$/.idea/modules/datastructures.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/datastructures_main.iml" filepath="$PROJECT_DIR$/.idea/modules/datastructures_main.iml" group="datastructures" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/datastructures_test.iml" filepath="$PROJECT_DIR$/.idea/modules/datastructures_test.iml" group="datastructures" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sem1.iml" filepath="$PROJECT_DIR$/.idea/modules/sem1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sem1_main.iml" filepath="$PROJECT_DIR$/.idea/modules/sem1_main.iml" group="sem1" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sem1_test.iml" filepath="$PROJECT_DIR$/.idea/modules/sem1_test.iml" group="sem1" />
+    </modules>
+  </component>
+</project>
