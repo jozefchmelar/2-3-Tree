@@ -1,8 +1,10 @@
 import Node.FourNode
-
+import kotlin.properties.ReadWriteProperty
 
 class TwoThreeTree<K : Comparable<K>, V> : Map<K, V> {
     internal var root: Node<K, V>? = null
+
+    data class MutableNode<K: Comparable<K>, V> (var value :Node<K,V>?)
 
     override fun put(key: K, value: V): V? {
         if (root == null) {
@@ -18,7 +20,10 @@ class TwoThreeTree<K : Comparable<K>, V> : Map<K, V> {
         return value
     }
 
-    private fun insertFourNode(fourNode: FourNode<K, V>?, foundNode: Node<K, V>) {
+    private fun insertFourNode(_fourNode: FourNode<K, V>?, _foundNode: Node<K, V>) {
+        var fourNode  = _fourNode
+        var foundNode = _foundNode
+
         when {
             root == null -> {
                 root = Node.TwoThreeNode(fourNode!!.keyValue2,
@@ -56,19 +61,28 @@ class TwoThreeTree<K : Comparable<K>, V> : Map<K, V> {
         /*                  three node parent                      */
             foundNode.isThreeNode() && foundNode.parent!!.isThreeNode() -> {
                 //let's start from the left side
-                when (foundNode) {
-                    foundNode.parent?.left -> {
-                        val parentFourNode = foundNode.parent?.toFourNode(fourNode?.keyValue2!!)
-                        with(parentFourNode as Node.FourNode){
+                when  {
+                    foundNode == foundNode.parent?.left -> {
+
+                        var te =foundNode.parent?.toFourNode(fourNode?.keyValue2!!)
+                        with(te as Node.FourNode){
                             addLeft    (fourNode!!.keyValue1!!.asTwoNode())
                             addMiddle  (fourNode  .keyValue3!!.asTwoNode())
                             addMiddle2 (foundNode.parent?.middle!!)
                             addRight   (foundNode.parent?.right !!)
                         }
-                        foundNode.parent = parentFourNode
+
+                        var splitThreeParent = te.toTwoNode()
+                        with(splitThreeParent){
+                            left?.addLeft  (te.left  !!)
+                            left?.addRight (te.middle!!)
+                            right?.addLeft (te.middle2!!)
+                            right?.addRight(te.right!!)
+                        }
+                        foundNode.setAsParent(null)
                     }
 
-                    foundNode.parent?.middle -> {
+                    foundNode == foundNode.parent?.middle -> {
                         val parentFourNode = foundNode.parent?.toFourNode(fourNode?.keyValue2!!)
                         with(parentFourNode as Node.FourNode){
                             addLeft    (foundNode.parent?.left !!)
@@ -76,9 +90,11 @@ class TwoThreeTree<K : Comparable<K>, V> : Map<K, V> {
                             addMiddle2 (fourNode  .keyValue3!!.asTwoNode())
                             addRight   (foundNode.parent?.right !!)
                         }
+                        println("middle")
+
                         foundNode.parent = parentFourNode
                     }
-                    foundNode.parent?.right -> {
+                    foundNode == foundNode.parent?.right -> {
                         val parentFourNode = foundNode.parent?.toFourNode(fourNode?.keyValue2!!)
                         with(parentFourNode as Node.FourNode){
                             addLeft    (fourNode!!.keyValue1!!.asTwoNode())
@@ -87,6 +103,8 @@ class TwoThreeTree<K : Comparable<K>, V> : Map<K, V> {
                             addRight   (foundNode.parent?.right !!)
                         }
                         foundNode.parent = parentFourNode
+                        println("right")
+
                     }
                 }
             }
@@ -122,8 +140,13 @@ class TwoThreeTree<K : Comparable<K>, V> : Map<K, V> {
         }
     } else throw IllegalStateException("can't make four node from two node")
 
-    internal fun getNode(key: K, startNode: Node<K, V>): Node<K, V> {
-        return when {
+
+//    internal fun getNode(key:K):Node <K,V> = getNode(key,root!!)
+
+
+    internal fun getNode(key: K, _startNode: MutableNode<K, V>): MutableNode<K, V> {
+        var startNode=_startNode.value!!
+         return when {
             startNode.left == null -> startNode
             startNode.keyValue1!!.key == key -> startNode
             key < startNode.keyValue1!!.key -> getNode(key, startNode.left!!)
@@ -149,3 +172,5 @@ class TwoThreeTree<K : Comparable<K>, V> : Map<K, V> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
+
+

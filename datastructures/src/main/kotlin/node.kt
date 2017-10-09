@@ -22,6 +22,9 @@ sealed class Node<K : Comparable<K>, V>{
         node.parent=this
         middle=node
     }
+    fun setAsParent(node:Node<K,V>?){
+        this.parent=node
+    }
     abstract fun addToNode(keyValue2: KeyValue<K,V>): V
 
     fun isTwoNode()   = keyValue2==null
@@ -119,3 +122,5 @@ sealed class Node<K : Comparable<K>, V>{
 data class KeyValue<K : Comparable<K>, V>(val key: K, var value: V)
 infix fun <K : Comparable<K>, V> K.with(value: V) = KeyValue(this, value)
 inline fun <K : Comparable<K>, V> KeyValue<K, V>.asTwoNode() = Node.TwoThreeNode(this)
+inline fun  <K : Comparable<K>, V>  Node.FourNode<K, V>.toTwoNode() = Node.TwoThreeNode(this.keyValue2
+    ,left=this.keyValue1!!.asTwoNode(),right = this.keyValue3!!.asTwoNode())

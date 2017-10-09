@@ -1,5 +1,6 @@
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
+import java.util.*
 
 //http://www.allsyllabus.com/aj/note/Computer_Science/Analysis_and_Design_of_Algorithms/Unit5/Construction%20of%20AVL%20tree.php#.WdoSaa10Dq0
 //https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/2-3_insertion.svg/2000px-2-3_insertion.svg.png
@@ -82,7 +83,7 @@ class MySpec : StringSpec() {
             tree.root = root
 
             tree.put(2,value)
-
+val tree= TreeMap<Int,Int>()
             root shouldBe resultRoot
 
         }
@@ -163,7 +164,7 @@ class MySpec : StringSpec() {
             val root  =   n(5,9)
             val left  =   n(2,4)
             val right =   n(10)
-            val middle=   n(6 )
+            val middle=   n(6)
             with(root){
                 addLeft(left)
                 addMiddle(middle)
@@ -189,7 +190,7 @@ class MySpec : StringSpec() {
             tree.root shouldBe n5
         }
 
-        "2 insert in a 3node.. 3 node parent)"{
+        /*"2 insert in a 3node.. 3 node parent)"{
             val root  =   n(3,8)
             val left  =   n(2)
             val right =   n(9)
@@ -216,7 +217,7 @@ class MySpec : StringSpec() {
             n8.addRight(n9)
 
             tree.root shouldBe n5
-        }
+        }*/
 
 
     }
