@@ -1,3 +1,8 @@
+import Tree.TwoThreeTree
+import Tree.TwoThreeTree.*
+import Tree.node.Node
+import Tree.node.*
+import extensions.emptyLinkedList
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import java.util.*
@@ -5,223 +10,269 @@ import java.util.*
 //http://www.allsyllabus.com/aj/note/Computer_Science/Analysis_and_Design_of_Algorithms/Unit5/Construction%20of%20AVL%20tree.php#.WdoSaa10Dq0
 //https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/2-3_insertion.svg/2000px-2-3_insertion.svg.png
 
-class MySpec : StringSpec() {
-    val tree= TwoThreeTree<Int,Int>()
-    val key= listOf(9, 5, 8, 3, 2, 4, 7)
-    val value = 4
+@Suppress("UNUSED_CHANGED_VALUE")
+class TestyVkladania : StringSpec() {
+    val tree = TwoThreeTree<Int, Int>()
+    val key    = listOf(9, 5, 8, 3, 2, 4, 7)
+    val k = listOf(10,20,5,114,17,8,6,9,12,3,50,123,147,9687,45)
 
-    private fun TwoThreeTree<Int,Int>.put(int:Int) = this.put(int,value)
-    private fun n(i:Int)       = Node.TwoThreeNode(i with value)
-    private fun n(i:Int,j:Int) = Node.TwoThreeNode(i with value,j with value)
+    val value = 4
+    val rnd = Random(150)
+    val seed = 4564894
+
+    internal fun TwoThreeTree<Int, Int>.put(int: Int) = this.put(int, value)
+    internal fun n(i: Int) = Node.TwoNode(i with value)
+    internal fun n(i: Int, j: Int) = Node.ThreeNode(i with value, j with value)
 
 
     init {
+     /*   "check node"{
+            tree.getNode(9) shouldBe tree.root
+        }
         "i. first node is root"{
-            tree.put(key[0])
-            tree.root shouldBe Node.TwoThreeNode(key[0] with value)
-            println(tree.root)
+            tree.put(9)
+            tree.root shouldBe n(key[0])
         }
-
+        "check node"{
+            tree.put(9)
+            tree.getNode(5) shouldBe tree.root
+        }
         "ii second input is in root"{
-            tree.put(key[0],value)
-            tree.put(key[1],value)
-            tree.root shouldBe Node.TwoThreeNode(key[1] with value,key[0] with value)
-            println(tree.root)
+            tree.put(9)
+            tree.put(5)
+            tree.root shouldBe n(key[1], key[0])
+        }
+        "iii split two node "{
+            tree.put(key[0])
+            tree.put(key[1])
+            tree.put(key[2])
+            val r = n(8)
+            r.addLeft(n(5))
+            r.addRight(n(9))
 
+            tree.root shouldBe r
+        }
+        "correct node to add to before doing IV"{
+            tree.put(key[0])
+            tree.put(key[1])
+            tree.put(key[2])
+            val r = n(8)
+            r.addLeft(n(5))
+            r.addRight(n(9))
+
+            tree.getNode(key[3]) shouldBe r.left
+        }
+        "iv "{
+            tree.put(key[0])
+            tree.put(key[1])
+            tree.put(key[2])
+            tree.put(key[3])
+            val r =  n(8)
+                .addLeft(n(3, 5))
+                .addRight(n(9))
+
+            tree.root shouldBe r
+        }
+        "check correct node"{
+            tree.put(key[0])
+            tree.put(key[1])
+            tree.put(key[2])
+            tree.put(key[3])
+            val r =  n(8)
+                .addLeft(n(3, 5))
+                .addRight(n(9))
+            tree.getNode(key[4]) shouldBe r.left
+         }
+        "V insert 2"{
+            tree.put(key[0])
+            tree.put(key[1])
+            tree.put(key[2])
+            tree.put(key[3])
+            tree.put(key[4])
+            val r = n(3,8)
+            r.addMiddle(n(5))
+            r.addLeft(n(2))
+            r.addRight(n(9))
+            tree.root shouldBe  r
         }
 
-        "iii third input puts key[2] to the top"{
-            tree.put(key[0],value)
-            tree.put(key[1],value)
-            tree.put(key[2],value)
-            val root  = Node.TwoThreeNode(8 with value)
-            val left  = Node.TwoThreeNode(5 with value)
-            val right = Node.TwoThreeNode(9 with value)
-            root.addLeft(left)
-            root.addRight(right)
-            tree.root shouldBe root
-
+        "check correct node"{
+            tree.put(key[0])
+            tree.put(key[1])
+            tree.put(key[2])
+            tree.put(key[3])
+            tree.put(key[4])
+            val r = n(3,8)
+            r.addMiddle(n(5))
+            r.addLeft(n(2))
+            r.addRight(n(9))
+            tree.getNode(key[5]) shouldBe  r.middle
         }
-        "iv insert 3 so it's in the left bottom child"{
-            tree.put(key[0],value)
-            tree.put(key[1],value)
-            tree.put(key[2],value)
-            tree.put(key[3],value)
-            val root  = Node.TwoThreeNode(8 with value)
-            val left  = Node.TwoThreeNode(3 with value,5 with  value)
-            val right = Node.TwoThreeNode(9 with value)
-            root.addLeft(left)
-            root.addRight(right)
-            this.tree.root shouldBe root
-            println(tree.root)
+        "VI insert 4"{
+            tree.put(key[0])
+            tree.put(key[1])
+            tree.put(key[2])
+            tree.put(key[3])
+            tree.put(key[4])
+            tree.put(key[5])
 
-        }
-        "v when I insert 2 get node should be 35 node wit 8 as parent"{
-            tree.put(key[0],value)
-            tree.put(key[1],value)
-            tree.put(key[2],value)
-            tree.put(key[3],value)
-            val root  = Node.TwoThreeNode(8 with value)
-            val left  = Node.TwoThreeNode(3 with value,5 with  value)
-            val right = Node.TwoThreeNode(9 with value)
-            root.addLeft(left)
-            root.addRight(right)
-            tree.getNode(key[4],tree.root!!) shouldBe root.left
-        }
-        "v insert 2 so I have  ThreeNode as parent"{
-            val resultRoot = Node.TwoThreeNode(3 with value,8 with value)
-            resultRoot.addLeft(Node.TwoThreeNode(2 with value))
-            resultRoot.addMiddle(Node.TwoThreeNode(5 with value))
-            resultRoot.addRight(Node.TwoThreeNode(9  with value))
-
-            val root  = Node.TwoThreeNode(8 with value)
-            val left  = Node.TwoThreeNode(3 with value,5 with  value)
-            val right = Node.TwoThreeNode(9 with value)
-            root.addLeft(left)
-            root.addRight(right)
-
-            tree.root = root
-
-            tree.put(2,value)
-val tree= TreeMap<Int,Int>()
-            root shouldBe resultRoot
-
+            val r = n(3,8)
+            r.addMiddle(n(4,5))
+            r.addLeft(n(2))
+            r.addRight(n(9))
+            tree.root shouldBe  r
         }
 
-        ///////////////////// wiki testy
-        "insert in  2node "{
-            //https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/2-3_insertion.svg/2000px-2-3_insertion.svg.png
-            val root =   n(5)
-            val left =   n(2)
-            val right=   n(6,9)
-            root.addLeft(left)
-            root.addRight(right)
-            tree.root = root
-            tree.put(4,value)
-            val resultRoot =   Node.TwoThreeNode(5 with value)
-            val resultLeft =   Node.TwoThreeNode(2 with value, 4 with value)
-            val resultRight=   Node.TwoThreeNode(6 with value,9 with value)
-            resultRoot.addRight(resultRight)
-            resultRoot.addLeft(resultLeft)
-            tree.root shouldBe resultRoot
-        }
-        "check if I have the correct node before inserting to 3node with 2node parent"{
+        "check correct node"{
+            tree.put(key[0])
+            tree.put(key[1])
+            tree.put(key[2])
+            tree.put(key[3])
+            tree.put(key[4])
+            tree.put(key[5])
 
-            val root =   Node.TwoThreeNode(5 with value)
-            val left =   Node.TwoThreeNode(2 with value, 4 with value)
-            val right=   Node.TwoThreeNode(6 with value,9 with value)
-            root.addLeft (left)
-            root.addMiddle(right)  //root is TwoNode so  MIDDLE is RIGHT
-            tree.root = root
-            tree.getNode(10, root) shouldBe right
-
+            val r = n(3,8)
+            r.addMiddle(n(4,5))
+            r.addLeft(n(2))
+            r.addRight(n(9))
+            tree.getNode(6) shouldBe  r.middle
         }
-        "insert in a 3node (2 node parent)"{
-            //https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/2-3_insertion.svg/2000px-2-3_insertion.svg.png
-            val root =   n(5)
-            val left =   n(2, 4)
-            val right=   n(6,9 )
-            root.addLeft(left)
-            root.addMiddle(right) //middle is right in twonode
-            tree.root = root
-            tree.put(10,value)
-            val resultRoot   = n(5  , 9 )
-            val resultLeft   = n(2  , 4 )
-            val resultMiddle = n(6  )
-            val resultRight  = n(10 )
-            resultRoot.addLeft(resultLeft)
-            resultRoot.addMiddle(resultMiddle)
-            resultRoot.addRight(resultRight)
-            tree.root shouldBe resultRoot
-        }
+        "VII insert 7"{
+            tree.put(key[0])
+            tree.put(key[1])
+            tree.put(key[2])
+            tree.put(key[3])
+            tree.put(key[4])
+            tree.put(key[5])
+            tree.put(key[6])
 
-        "1 check if I have correct node before inserting 3node in 3node parent"{
-            val root  =   n(5,9)
-            val left  =   n(2,4)
-            val right =   n(10)
-            val middle=   n(6)
-            root.addLeft(left)
-            root.addMiddle(middle)
-            root.addRight(right)
-            tree.root=root
-            tree.getNode(1, root) shouldBe left
+            val r = n(5)
+                .addLeft(
+                    n(3)
+                    .addLeft(n(2))
+                    .addRight(n(4))
+                )
+                .addRight(
+                    n(8)
+                    .addLeft(n(7))
+                    .addRight(n(9))
+                )
+            tree.root shouldBe r
+        }
+        "----------------WIKIPEDIA TESTS-----------"{
+            true shouldBe true
+        }
+        "insert in a 2-node"{
+            tree.root = n(5)
+                .addLeft(n(2))
+                .addRight(n(6,9))
+
+            tree.put(4)
+            tree.root shouldBe  n(5)
+                .addLeft (n(2,4))
+                .addRight(n(6,9))
+        }
+        "check node "{
+            tree.root =
+                n(5)
+                .addLeft (n(2,4))
+                .addRight(n(6,9))
+            tree.getNode(10) shouldBe  tree.root!!.right
         }
 
-        "2 check if I have correct node before inserting 3node in 3node parent"{
-            val root  =   n(3,8)
-            val left  =   n(2)
-            val middle=   n(4,5)
-            val right =   n(9)
-            root.addLeft(left)
-            root.addMiddle(middle)
-            root.addRight(right)
-            tree.root=root
-            tree.getNode(7, root) shouldBe middle
+        "insert in a 3node (2node parent)"{
+            tree.root =
+                n(5)
+                .addLeft (n(2,4))
+                .addRight(n(6,9))
+
+            tree.put(10)
+
+            tree.root shouldBe  n(5,9).addMiddle(n(6)).addLeft(n(2,4)).addRight(n(10))
+        }
+        "check node "{
+            tree.root = n(5,9).addMiddle(n(6)).addLeft(n(2,4)).addRight(n(10))
+            tree.getNode(1) shouldBe tree.root!!.left
+        }
+        "insert in a 3 node(3node parent) from left "{
+            tree.root =  n(5,9).addMiddle(n(6)).addLeft(n(2,4)).addRight(n(10))
+            tree.put(1)
+
+            tree.root shouldBe n(5).
+                addLeft(
+                    n(2)
+                        .addLeft (n(1))
+                        .addRight(n(4))
+                )
+                .addRight(
+                    n(9)
+                        .addLeft (n(6))
+                        .addRight(n(10))
+                )
+
+        }
+        "insert in a 3 node (3 node parent) from right"{
+            tree.root = n(3,8)
+                .addMiddle  (n(5))
+                .addLeft    (n(2))
+                .addRight   (n(9,10))
+            tree.put(12)
+
+            tree.root shouldBe n(8)
+                .addLeft(
+                    n(3)
+                        .addLeft (n(2))
+                        .addRight(n(5))
+                )
+                .addRight(
+                    n(10)
+                        .addLeft (n(9))
+                        .addRight(n(12))
+                )
         }
 
-        "insert in a 3node.. 3 node parent)"{
-            //https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/2-3_insertion.svg/2000px-2-3_insertion.svg.png
-            val root  =   n(5,9)
-            val left  =   n(2,4)
-            val right =   n(10)
-            val middle=   n(6)
-            with(root){
-                addLeft(left)
-                addMiddle(middle)
-                addRight(right)
-            }
-            tree.root = root
-            tree.put(1,value)
+        "test inorder with sorting algorithm"{
+            val values = listOf(3,8,5,2,9,10)
+            tree.root = n(3,8)
+                .addMiddle  (n(5))
+                .addLeft    (n(2))
+                .addRight   (n(9,10))
 
-            val n5  = n(5)
-            val n2  = n(2)
-            val n9  = n(9)
-            val n1  = n(1)
-            val n4  = n(4)
-            val n6  = n(6)
-            val n10 = n(10)
-            n2.addLeft(n1)
-            n2.addRight(n4)
-            n9.addLeft(n6)
-            n9.addRight(n10)
-            n5.addRight(n9)
-            n5.addLeft(n2)
+            val iterative = emptyLinkedList<Int>()
+            tree.inorder2(tree.root,{
+                when(it){
+                    is Node.TwoNode   -> iterative.push(it.keyValue1.key)
+                    is Node.ThreeNode -> {
+                        iterative.push(it.keyValue1.key)
+                        iterative.push(it.keyValue2.key)
+                    }
+                }
+            })
 
-            tree.root shouldBe n5
-        }
-
-        /*"2 insert in a 3node.. 3 node parent)"{
-            val root  =   n(3,8)
-            val left  =   n(2)
-            val right =   n(9)
-            val middle=   n(4 ,5)
-            root.addLeft(left)
-            root.addMiddle(middle)
-            root.addRight(right)
-            tree.root=root
-            tree.put(7,value)
-
-            val n5  = n(5)
-            val n3  = n(3)
-            val n8  = n(8)
-            val n2  = n(2)
-            val n4  = n(4)
-            val n7  = n(7)
-            val n9  = n(9)
-
-            n5.addLeft(n3)
-            n3.addLeft(n2)
-            n3.addRight(n4)
-            n5.addRight(n8)
-            n8.addLeft(n7)
-            n8.addRight(n9)
-
-            tree.root shouldBe n5
+            val sorted = values.sorted().reversed()
+            iterative shouldBe sorted
         }*/
 
+        "test "{
+            var i = 0
+            k.forEachIndexed{index,item ->
+                if (index <= k.indexOf(9687) )
+                    tree.put(item)
+            }
+
+            val xpcted = n(10).addLeft(
+                n(6)
+                    .addLeft (n(3,5))
+                    .addRight(n(8,9))
+            ).addRight(
+                n(20,144)
+                    .addMiddle(n(50))
+                    .addLeft  (n(12,17))
+                    .addRight (n(123))
+            )
+
+           tree.root shouldBe xpcted
+        }
 
     }
-
-
-
 }
