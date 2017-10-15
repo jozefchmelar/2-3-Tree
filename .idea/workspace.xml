@@ -2,27 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dec249bb-ad2a-4b84-841c-7c26cdb0acfe" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/extensions/Any.kt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/extensions/collections.kt" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/Chmelar.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/KeyValue.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/Node$FourNode.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/Node$TwoThreeNode.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/Node.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/NodeKt.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/TwoThreeTree.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datastructures/out/test/classes/MySpec.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/out/production/classes/META-INF/datastructures_main.kotlin_module" afterPath="$PROJECT_DIR$/datastructures/out/production/classes/META-INF/datastructures_main.kotlin_module" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/main/kotlin/two_three_tree.kt" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/two_three_tree.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt" afterPath="$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -56,8 +38,8 @@
       <file leaf-file-name="node.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2080">
-              <caret line="193" column="35" lean-forward="false" selection-start-line="193" selection-start-column="35" selection-end-line="193" selection-end-column="35" />
+            <state relative-caret-position="0">
+              <caret line="0" column="11" lean-forward="true" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="11" />
               <folding>
                 <element signature="e#59#1885#0" expanded="false" />
               </folding>
@@ -68,34 +50,14 @@
       <file leaf-file-name="TwoThreeTree.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="507">
-              <caret line="173" column="5" lean-forward="false" selection-start-line="173" selection-start-column="5" selection-end-line="173" selection-end-column="5" />
+            <state relative-caret-position="139">
+              <caret line="111" column="35" lean-forward="true" selection-start-line="111" selection-start-column="35" selection-end-line="111" selection-end-column="35" />
               <folding>
-                <element signature="e#13#205#0" expanded="true" />
+                <element signature="e#13#325#0" expanded="true" />
                 <element signature="n#!!block;n#insert#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
                 <element signature="n#!!block;n#getNode#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
-                <element signature="n#!!block;n#traverse#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+                <element signature="n#!!block;n#traverseTree#1;n#!!block;n#TwoThreeTree#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Map.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/Map.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="64">
-              <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Spec.kt" pinned="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.kotlintest/kotlintest/2.0.6/a342e6c37339649575d74f04a5a3c468eb9afe33/kotlintest-2.0.6-sources.jar!/io/kotlintest/Spec.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1856">
-              <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -103,11 +65,12 @@
       <file leaf-file-name="tree.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="768">
-              <caret line="273" column="0" lean-forward="false" selection-start-line="273" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
+            <state relative-caret-position="171">
+              <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
               <folding>
                 <element signature="e#0#222#0" expanded="true" />
-                <element signature="e#996#7330#0" expanded="false" />
+                <element signature="e#1002#7336#0" expanded="false" />
+                <element signature="e#7405#7514#2" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -131,11 +94,13 @@
       <find>println</find>
       <find>23</find>
       <find>setAs</find>
+      <find>keyvalues</find>
     </findStrings>
     <replaceStrings>
       <replace>= TODO()</replace>
       <replace>this</replace>
       <replace>key</replace>
+      <replace>keyValue</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -907,9 +872,9 @@
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/node2.kt" />
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/extensions/collections.kt" />
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/extensions/Any.kt" />
-        <option value="$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt" />
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt" />
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt" />
+        <option value="$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt" />
       </list>
     </option>
   </component>
@@ -1350,38 +1315,45 @@
       <option name="project" value="LOCAL" />
       <updated>1507587263787</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="nova verzia">
+      <created>1508020077167</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1508020077167</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="TestyVkladania - 2017.10.14 at 23h 09m 41s.xml">
+    <history-entry file="TestyVkladania - 2017.10.15 at 14h 21m 05s.xml">
       <configuration name="TestyVkladania" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestyVkladania - 2017.10.14 at 23h 10m 38s.xml">
+    <history-entry file="TestyVkladania - 2017.10.15 at 14h 23m 07s.xml">
       <configuration name="TestyVkladania" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestyVkladania - 2017.10.14 at 23h 12m 05s.xml">
+    <history-entry file="TestyVkladania - 2017.10.15 at 14h 27m 26s.xml">
       <configuration name="TestyVkladania" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestyVkladania - 2017.10.14 at 23h 12m 42s.xml">
+    <history-entry file="TestyVkladania - 2017.10.15 at 14h 28m 00s.xml">
       <configuration name="TestyVkladania" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestyVkladania - 2017.10.14 at 23h 18m 15s.xml">
+    <history-entry file="TestyVkladania - 2017.10.15 at 14h 36m 47s.xml">
       <configuration name="TestyVkladania" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestyVkladania - 2017.10.14 at 23h 41m 17s.xml">
+    <history-entry file="TestyVkladania - 2017.10.15 at 14h 47m 32s.xml">
       <configuration name="TestyVkladania" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestyVkladania - 2017.10.14 at 23h 44m 43s.xml">
+    <history-entry file="TestyVkladania - 2017.10.15 at 14h 59m 52s.xml">
       <configuration name="TestyVkladania" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestyVkladania - 2017.10.14 at 23h 47m 03s.xml">
+    <history-entry file="TestyVkladania - 2017.10.15 at 15h 00m 37s.xml">
       <configuration name="TestyVkladania" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestyVkladania - 2017.10.14 at 23h 55m 20s.xml">
+    <history-entry file="TestyVkladania - 2017.10.15 at 15h 01m 20s.xml">
       <configuration name="TestyVkladania" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TestyVkladania - 2017.10.14 at 23h 58m 08s.xml">
+    <history-entry file="TestyVkladania - 2017.10.15 at 15h 02m 57s.xml">
       <configuration name="TestyVkladania" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -1391,6 +1363,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32837406" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1407,13 +1380,12 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3995749" sideWeight="0.49791667" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3995749" sideWeight="0.49791667" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32837406" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296875" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32943678" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1430,37 +1402,21 @@
     <MESSAGE value="some functions in node, and handled cases when inserting to tree 11/13 tests passed" />
     <MESSAGE value="git ignore shit" />
     <MESSAGE value="asi ma jebne...mutable wrapper nad nodom" />
-    <option name="LAST_COMMIT_MESSAGE" value="asi ma jebne...mutable wrapper nad nodom" />
+    <MESSAGE value="nova verzia" />
+    <option name="LAST_COMMIT_MESSAGE" value="nova verzia" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt</url>
-          <line>273</line>
-          <properties />
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
+          <condition expression="key == 15" language="kotlin" />
           <url>file://$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt</url>
-          <line>129</line>
+          <line>27</line>
           <properties />
-          <option name="timeStamp" value="133" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt</url>
-          <line>124</line>
-          <properties />
-          <option name="timeStamp" value="134" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt</url>
-          <line>120</line>
-          <properties />
-          <option name="timeStamp" value="135" />
+          <option name="timeStamp" value="158" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="136" />
+      <option name="time" value="160" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1478,10 +1434,10 @@
         <state relative-caret-position="304">
           <caret line="19" column="40" lean-forward="false" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
           <folding>
-            <element signature="e#13#205#0" expanded="true" />
+            <element signature="e#13#325#0" expanded="true" />
             <element signature="n#!!block;n#insert#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
             <element signature="n#!!block;n#getNode#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
-            <element signature="n#!!block;n#traverse#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#traverseTree#1;n#!!block;n#TwoThreeTree#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1518,7 +1474,8 @@
           <caret line="5" column="141" lean-forward="true" selection-start-line="5" selection-start-column="2" selection-end-line="5" selection-end-column="141" />
           <folding>
             <element signature="e#0#222#0" expanded="true" />
-            <element signature="e#996#7330#0" expanded="false" />
+            <element signature="e#1002#7336#0" expanded="false" />
+            <element signature="e#7405#7514#2" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1536,10 +1493,10 @@
         <state relative-caret-position="176">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding>
-            <element signature="e#13#205#0" expanded="true" />
+            <element signature="e#13#325#0" expanded="true" />
             <element signature="n#!!block;n#insert#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
             <element signature="n#!!block;n#getNode#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
-            <element signature="n#!!block;n#traverse#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#traverseTree#1;n#!!block;n#TwoThreeTree#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1611,7 +1568,8 @@
           <caret line="46" column="11" lean-forward="false" selection-start-line="46" selection-start-column="11" selection-end-line="46" selection-end-column="11" />
           <folding>
             <element signature="e#0#222#0" expanded="true" />
-            <element signature="e#996#7330#0" expanded="false" />
+            <element signature="e#1002#7336#0" expanded="false" />
+            <element signature="e#7405#7514#2" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1633,13 +1591,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/settings.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/datastructures/settings.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1809,10 +1760,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/datastructures/settings.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.kotlintest/kotlintest/2.0.6/a342e6c37339649575d74f04a5a3c468eb9afe33/kotlintest-2.0.6-sources.jar!/io/kotlintest/Spec.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2080">
-          <caret line="193" column="35" lean-forward="false" selection-start-line="193" selection-start-column="35" selection-end-line="193" selection-end-column="35" />
+        <state relative-caret-position="0">
+          <caret line="0" column="11" lean-forward="true" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="11" />
           <folding>
             <element signature="e#59#1885#0" expanded="false" />
           </folding>
@@ -1821,32 +1788,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="768">
-          <caret line="273" column="0" lean-forward="false" selection-start-line="273" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
+        <state relative-caret-position="171">
+          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding>
             <element signature="e#0#222#0" expanded="true" />
-            <element signature="e#996#7330#0" expanded="false" />
+            <element signature="e#1002#7336#0" expanded="false" />
+            <element signature="e#7405#7514#2" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.kotlintest/kotlintest/2.0.6/a342e6c37339649575d74f04a5a3c468eb9afe33/kotlintest-2.0.6-sources.jar!/io/kotlintest/Spec.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1856">
-          <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="507">
-          <caret line="173" column="5" lean-forward="false" selection-start-line="173" selection-start-column="5" selection-end-line="173" selection-end-column="5" />
+        <state relative-caret-position="139">
+          <caret line="111" column="35" lean-forward="true" selection-start-line="111" selection-start-column="35" selection-end-line="111" selection-end-column="35" />
           <folding>
-            <element signature="e#13#205#0" expanded="true" />
+            <element signature="e#13#325#0" expanded="true" />
             <element signature="n#!!block;n#insert#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
             <element signature="n#!!block;n#getNode#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
-            <element signature="n#!!block;n#traverse#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#traverseTree#1;n#!!block;n#TwoThreeTree#0" expanded="false" />
           </folding>
         </state>
       </provider>

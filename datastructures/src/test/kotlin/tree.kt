@@ -14,7 +14,7 @@ import java.util.*
 class TestyVkladania : StringSpec() {
     val tree = TwoThreeTree<Int, Int>()
     val key    = listOf(9, 5, 8, 3, 2, 4, 7)
-    val k = listOf(10,20,5,114,17,8,6,9,12,3,50,123,147,9687,45)
+    val k = listOf(10,20,5,114,17,8,6,9,12,3,50,123,147,9687,45,46,15)
 
     val value = 4
     val rnd = Random(150)
@@ -256,7 +256,7 @@ class TestyVkladania : StringSpec() {
         "test "{
             var i = 0
             k.forEachIndexed{index,item ->
-                if (index <= k.indexOf(9687) )
+                if (index <= k.indexOf(123) )
                     tree.put(item)
             }
 
@@ -265,13 +265,29 @@ class TestyVkladania : StringSpec() {
                     .addLeft (n(3,5))
                     .addRight(n(8,9))
             ).addRight(
-                n(20,144)
+                n(20,114)
                     .addMiddle(n(50))
                     .addLeft  (n(12,17))
                     .addRight (n(123))
             )
 
-           tree.root shouldBe xpcted
+            val ll = emptyLinkedList<KeyValue<Int,Int>>()
+            val rr = emptyLinkedList<KeyValue<Int,Int>>()
+            tree.traverseTree(tree.root!!,ll)
+            tree.traverseTree(xpcted,rr)
+            println(ll)
+            ll shouldBe   rr
+        }.config(enabled = false)
+
+        "test2 "{
+            var i = 0
+            k.forEachIndexed{index,item ->
+                if (index <= k.indexOf(15) )
+                    tree.put(item)
+            }
+
+            println()
+        //    ll shouldBe   rr
         }
 
     }

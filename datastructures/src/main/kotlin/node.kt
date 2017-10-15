@@ -71,10 +71,10 @@ class FourNode<K : Comparable<K>, V> : ThreeNode<K, V> {
 
 sealed class Node<K : Comparable<K>, V> {
 
-    abstract var keyValue1: KeyValue<K, V>
-    abstract var left: Node<K, V>?
-    abstract var right: Node<K, V>?
-    abstract var parent: Node<K, V>?
+    abstract var keyValue1 : KeyValue<K, V>
+    abstract var left      : Node<K, V>?
+    abstract var right     : Node<K, V>?
+    abstract var parent    : Node<K, V>?
     abstract override fun toString(): String
     abstract override fun equals(other: Any?): Boolean
 
@@ -100,6 +100,8 @@ sealed class Node<K : Comparable<K>, V> {
         left = node
         return this
     }
+
+    fun isLeaf() = left == null && right == null
 
     fun addLeft(keyValue: KeyValue<K,V>) = addLeft(TwoNode(keyValue))
 
@@ -135,7 +137,10 @@ sealed class Node<K : Comparable<K>, V> {
                     middle = right,
                     right = null,
                     parent = parent
-                )
+                ).apply {
+                    left  ?.parent = this
+                    right ?.parent = this
+                }
             else
                 ThreeNode(
                     toAdd,
@@ -144,7 +149,10 @@ sealed class Node<K : Comparable<K>, V> {
                     middle = right,
                     right = null,
                     parent = parent
-                )
+                ).apply {
+                    left  ?.parent = this
+                    right ?.parent = this
+                }
 
         override fun toString(): String = "$keyValue1"
 
@@ -193,7 +201,12 @@ sealed class Node<K : Comparable<K>, V> {
                     right   = right,
                     middle2 = null,
                     parent  = parent
-                )
+                ).apply {
+                    left  ?.parent = this
+                    middle?.parent = this
+                    right ?.parent = this
+                }
+
                 toAdd.key > keyValue1.key && toAdd.key < keyValue2.key -> FourNode(
                     keyValue1,
                     toAdd,
@@ -203,7 +216,12 @@ sealed class Node<K : Comparable<K>, V> {
                     right   = right,
                     middle2 = null,
                     parent  = parent
-                )
+                ).apply {
+                    left  ?.parent = this
+                    middle?.parent = this
+                    right ?.parent = this
+                }
+
                 toAdd.key > keyValue2.key -> FourNode(
                     keyValue1,
                     keyValue2,
@@ -213,9 +231,13 @@ sealed class Node<K : Comparable<K>, V> {
                     middle2 = right,
                     right   = null,
                     parent  = parent
-                )
-                else -> throw IllegalStateException("Key's can't be equal")
+                ).apply {
+                    left  ?.parent = this
+                    middle?.parent = this
+                    right ?.parent = this
+                }
 
+                else -> throw IllegalStateException("Key's can't be equal")
             }
 
     }
