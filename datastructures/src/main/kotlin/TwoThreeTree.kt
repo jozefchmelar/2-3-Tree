@@ -6,8 +6,6 @@ import Tree.node.Node.TwoNode
 import Tree.node.Node.ThreeNode
 import Tree.node.with
 import extensions.emptyLinkedList
-import extensions.isNotNull
-import org.jetbrains.jps.api.CmdlineRemoteProto.Message.KeyValuePair
 import java.util.*
 
 
@@ -17,9 +15,10 @@ class TwoThreeTree<K:Comparable<K>,V>{
     val insertedKeys = emptyLinkedList<K>()
 
     fun put(key:K,value:V){
-        insertedKeys.add(key)
+
         if(root ==null) {
             root = (Node.TwoNode(key with value))
+            insertedKeys.add(key)
             return
         }
 
@@ -30,6 +29,8 @@ class TwoThreeTree<K:Comparable<K>,V>{
             is Node.ThreeNode -> insert(foundNode,key,value)
             is Node.FourNode  -> throw FourNodeInsertionException()
         }
+        insertedKeys.add(key)
+
         println()
     }
 
@@ -38,13 +39,10 @@ class TwoThreeTree<K:Comparable<K>,V>{
         val parent    = twoNode.parent
 
         when(parent){
-            is Node.TwoNode   ->
-                twoNode.replaceWith(threeNode)
-            is Node.ThreeNode ->
-                twoNode.replaceWith(threeNode)
+            is Node.TwoNode,
+            is Node.ThreeNode -> twoNode.replaceWith(threeNode)
             is Node.FourNode  -> throw FourNodeInsertionException()
-            null              ->
-                root = threeNode
+            null              -> root = threeNode
         }
     }
 
@@ -53,136 +51,181 @@ class TwoThreeTree<K:Comparable<K>,V>{
         val parent   = threeNode.parent
 
         when(parent){
-
             is Node.TwoNode    -> {
-                val addingFromLeft   = threeNode == parent.left
-                val addingFromRight  = threeNode == parent.right
+                val originPosition = getNodePosition(fourNode)
 
-                val newParent =
-                    when {
-                        addingFromLeft ->
+                val newParent = when(originPosition) {
+                        Position.Left ->
                             parent.toThreeNode(fourNode.keyValue2)
                                 .addMiddle  (fourNode.keyValue3)
                                 .addLeft    (fourNode.keyValue1)
                                 .addRight   (parent.right!!)
 
-                        addingFromRight ->
+                        Position.Right ->
                             parent.toThreeNode(fourNode.keyValue2)
                                 .addMiddle  (fourNode.keyValue1)
                                 .addLeft    (parent.left!!)
                                 .addRight   (fourNode.keyValue3)
 
-                        else -> throw IllegalStateException()
-
+                        Position.Middle -> throw IllegalStateException()
                     }
 
                 if(parent==root)
                     root = newParent
                 else
-                    threeNode.parent!!.replace(newParent)
+                    fourNode.parent!!.replace(newParent)
 
             }
-            is Node.ThreeNode  -> {
-                val addingFromLeft   = threeNode == parent.left
-                val addingFromMiddle = threeNode == parent.middle
-                val addingFromRight  = threeNode == parent.right
 
-                val tempFourNode = when {
-                    addingFromLeft ->
+            is Node.ThreeNode  -> {
+
+                val originPosition = getNodePosition(fourNode)
+
+                val tempFourNode = when(originPosition) {
+                    Position.Left ->
                         parent.toFourNode(fourNode.keyValue2)
                         .addMiddle2 (parent.middle!!)
                         .addMiddle  (fourNode.keyValue3)
                         .addLeft    (fourNode.keyValue1)
                         .addRight   (parent.right!!)
 
-                    addingFromMiddle ->
+                    Position.Middle ->
                         parent.toFourNode(fourNode.keyValue2)
                         .addMiddle2 (fourNode.keyValue3)
                         .addMiddle  (fourNode.keyValue1)
                         .addLeft    (parent.left!!)
                         .addRight   (parent.right!!)
 
-                    addingFromRight ->
+                    Position.Right ->
                         parent.toFourNode(fourNode.keyValue2)
                         .addMiddle2 (fourNode.keyValue1)
                         .addMiddle  (parent.middle!!)
                         .addLeft    (parent.left!!)
                         .addRight   (fourNode.keyValue3)
-                    else -> throw IllegalStateException()
+
                 } as FourNode<K, V>
 
-                insert(tempFourNode,parent, key,value)
+                insert(tempFourNode, key,value)
 
             }
 
             is Node.FourNode   -> throw FourNodeInsertionException()
 
-            null               -> {
-                val newParent = TwoNode(fourNode.keyValue2)
-                newParent.addLeft  (fourNode.keyValue1)
-                newParent.addRight (fourNode.keyValue3)
-                root = (newParent)
+            null               ->
+                root = TwoNode(fourNode.keyValue2)
+                        .addLeft  (fourNode.keyValue1)
+                        .addRight (fourNode.keyValue3)
+
+        }
+    }
+
+    private fun getNodePosition(node: Node<K, V>):Position {
+        val parent = node.parent!!
+        return  when (node) {
+            is Node.TwoNode -> when (parent) {
+                is Node.TwoNode -> TODO()
+                is Node.ThreeNode -> TODO()
+                is Node.FourNode -> TODO()
+            }
+            is Node.ThreeNode -> when (parent) {
+                is Node.TwoNode -> TODO()
+                is Node.ThreeNode -> TODO()
+                is Node.FourNode -> TODO()
+            }
+            is Node.FourNode -> when (parent) {
+                is Node.TwoNode -> {
+                    val leftKeyVal = node.parent!!.left!!.keyValue1
+                    val rightKeyVal = node.parent!!.right!!.keyValue1
+                    val addingFromLeft = leftKeyVal == node.keyValue1 || leftKeyVal == node.keyValue2 || leftKeyVal == node.keyValue3
+                    val addingFromRight = rightKeyVal == node.keyValue1 || rightKeyVal == node.keyValue2 || rightKeyVal == node.keyValue3
+                    when {
+                        addingFromLeft  -> Position.Left
+                        addingFromRight -> Position.Right
+                        else -> throw IllegalStateException("This node is not a child of it's parent")
+                    }
+                }
+                is Node.ThreeNode -> {
+                    val leftKeyVal = parent.left!!.keyValue1
+                    val midKeyVal = parent.middle!!.keyValue1
+                    val rightKeyVal = parent.right!!.keyValue1
+
+                    val addingFromLeft = leftKeyVal == node.keyValue1 || leftKeyVal == node.keyValue2 || leftKeyVal == node.keyValue3
+                    val addingFromMid = midKeyVal == node.keyValue1 || midKeyVal == node.keyValue2 || midKeyVal == node.keyValue3
+                    val addingFromRight = rightKeyVal == node.keyValue1 || rightKeyVal == node.keyValue2 || rightKeyVal == node.keyValue3
+
+                    when {
+                        addingFromLeft -> Position.Left
+                        addingFromMid -> Position.Middle
+                        addingFromRight -> Position.Right
+                        else -> throw IllegalStateException("This node is not a child of it's parent")
+                    }
+                }
+                is Node.FourNode -> TODO()
             }
         }
     }
 
-    private fun insert(fourNode: Node.FourNode   <K,V>,threeNode: Node.ThreeNode <K,V>,  key: K, value: V) {
+    private  fun insert(fourNode: Node.FourNode   <K,V>,  key: K, value: V) {
         val parent = fourNode.parent
         when(parent){
             is TwoNode   -> {
-                val leftKeyVal       = fourNode.parent!!.left !!.keyValue1
-                val rightKeyVal      = fourNode.parent!!.right!!.keyValue1
-                val addingFromLeft   = leftKeyVal  == fourNode.keyValue1  ||  leftKeyVal  == fourNode.keyValue2  || leftKeyVal  == fourNode.keyValue3
-                val addingFromRight  = rightKeyVal == fourNode.keyValue1  ||  rightKeyVal == fourNode.keyValue2  || rightKeyVal == fourNode.keyValue3
+                val originPosition = getNodePosition(fourNode)
+
+                val splitted = fourNode.split()
 
                 val newParent = parent.toThreeNode(fourNode.keyValue2)
-                val splitted: TwoNode<K, V> = fourNode.split() as TwoNode<K, V>
 
-                when{
-                    addingFromLeft  -> newParent.addMiddle(splitted.right!!).addLeft (splitted.left!!)
-                    addingFromRight -> newParent.addMiddle(splitted.left!!) .addRight(splitted.right!!)
-                    else            -> IllegalStateException("must add to parent from some side.")
+                when(originPosition){
+                    Position.Left   -> newParent.addMiddle(splitted.right!!).addLeft (splitted.left !!).addRight(parent.right!!)
+                    Position.Right  -> newParent.addMiddle(splitted.left !!).addRight(splitted.right!!).addLeft(parent.left !!)
+                    Position.Middle -> IllegalStateException("must add to parent from some side.")
                 }
                 if(parent==root)
                     root= newParent
                 else
-                    TODO()
+                    fourNode.parent!!.replace(newParent)
 
             }
             is ThreeNode -> {
-                val newParent = parent.toFourNode(fourNode.keyValue2)
-          //      insert(newParent,key,value)
+
+                val originPosition = getNodePosition(fourNode)
+
+                val splitted = fourNode.split()
+
+                val newFourNodeParent = when(originPosition) {
+                    Position.Left  -> {
+                        parent.toFourNode(fourNode.keyValue2)
+                            .addMiddle2(parent  .middle!!)
+                            .addMiddle (splitted.right !!)
+                            .addLeft   (splitted.left  !!)
+                            .addRight  (parent  .right !!)
+                    }
+
+                    Position.Middle   -> {
+                        parent.toFourNode(fourNode.keyValue2)
+                            .addMiddle2 (splitted.right!!)
+                            .addMiddle  (splitted.left !!)
+                            .addLeft    (parent  .left !!)
+                            .addRight   (parent  .right!!)
+                    }
+
+                    Position.Right  -> {
+                        parent.toFourNode(fourNode.keyValue2)
+                            .addMiddle2(splitted.left  !!)
+                            .addMiddle (parent  .middle!!)
+                            .addLeft   (parent  .left  !!)
+                            .addRight  (splitted.right !!)
+                    }
+
+                } as FourNode
+
+                insert(newFourNodeParent,key,value)
+
             }
             is FourNode  -> throw FourNodeInsertionException()
             null -> root =  fourNode.split()
         }
     }
-
-    private fun splitFourNode(fourNode:Node.FourNode<K,V>): Node.TwoNode<K, V> =
-        TwoNode(fourNode.keyValue2)
-            .addLeft(
-                TwoNode(fourNode.keyValue1)
-                    .addLeft    (fourNode.left  !!.keyValue1)
-                    .addRight   (fourNode.middle!!.keyValue1)
-            )
-            .addRight(
-                TwoNode(fourNode.keyValue3)
-                    .addLeft    (fourNode.middle2!!.keyValue1)
-                    .addRight   (fourNode.right  !!.keyValue1)
-            ) as TwoNode
-
-    private fun Node.FourNode<K,V>.split() =
-        TwoNode(this.keyValue2)
-            .addLeft(
-                TwoNode(this.keyValue1)
-                    .addLeft    (this.left  !!)
-                    .addRight   (this.middle!!)
-            )
-            .addRight(
-                TwoNode(this.keyValue3)
-                    .addLeft    (this.middle2!!)
-                    .addRight   (this.right  !!)
-            )
 
     fun getNode(key: K) : Node<K, V>? {
         var parent: Node<K, V>? = root
@@ -276,9 +319,8 @@ class TwoThreeTree<K:Comparable<K>,V>{
         }
     }
 
+    private enum class Position{Left,Middle,Right}
 
-    enum class Direction{Left,Middle,Right}
-}
+ }
 class FourNodeInsertionException : Exception ("You shouldn't insert values into four node ")
 class FourNodeException          : Exception ("Four node can't be in 23 tree")
-

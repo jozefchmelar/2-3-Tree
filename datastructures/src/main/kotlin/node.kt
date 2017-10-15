@@ -103,6 +103,11 @@ sealed class Node<K : Comparable<K>, V> {
 
     fun isLeaf() = left == null && right == null
 
+    fun clearParent(): Node<K, V> {
+        parent=null
+        return this
+    }
+
     fun addLeft(keyValue: KeyValue<K,V>) = addLeft(TwoNode(keyValue))
 
     fun addRight(node: Node<K, V>)  : Node<K, V> {
@@ -133,9 +138,9 @@ sealed class Node<K : Comparable<K>, V> {
                 ThreeNode(
                     this.keyValue1,
                     toAdd,
-                    left = left,
+                    left   = left,
                     middle = right,
-                    right = null,
+                    right  = null,
                     parent = parent
                 ).apply {
                     left  ?.parent = this
@@ -145,10 +150,10 @@ sealed class Node<K : Comparable<K>, V> {
                 ThreeNode(
                     toAdd,
                     this.keyValue1,
-                    left = left,
-                    middle = right,
-                    right = null,
-                    parent = parent
+                    left    = left,
+                    middle  = right,
+                    right   = null,
+                    parent  = parent
                 ).apply {
                     left  ?.parent = this
                     right ?.parent = this
@@ -166,8 +171,8 @@ sealed class Node<K : Comparable<K>, V> {
         override var keyValue1  : KeyValue<K, V>,
                  var keyValue2  : KeyValue<K, V>,
         override var left       : Node<K, V>? = null,
-        override var right      : Node<K, V>? = null,
                  var middle     : Node<K, V>? = null,
+        override var right      : Node<K, V>? = null,
         override var parent     : Node<K, V>? = null
     )                           : Node<K, V>() {
 
@@ -247,9 +252,9 @@ sealed class Node<K : Comparable<K>, V> {
                  var keyValue2  : KeyValue<K, V>,
                  var keyValue3  : KeyValue<K, V>,
         override var left       : Node<K, V>? = null,
-        override var right      : Node<K, V>? = null,
                  var middle     : Node<K, V>? = null,
                  var middle2    : Node<K, V>? = null,
+        override var right      : Node<K, V>? = null,
         override var parent     : Node<K, V>? = null
     ) : Node<K, V>() {
 
@@ -280,6 +285,19 @@ sealed class Node<K : Comparable<K>, V> {
 
         fun addMiddle(keyValue: KeyValue<K,V>) = addMiddle(TwoNode(keyValue))
 
+        fun split(): TwoNode<K, V> =
+            TwoNode(this.keyValue2)
+                .addLeft(
+                    TwoNode(this.keyValue1)
+                        .addLeft    (this.left  !!)
+                        .addRight   (this.middle!!)
+                )
+                .addRight(
+                    TwoNode(this.keyValue3)
+                        .addLeft    (this.middle2!!)
+                        .addRight   (this.right  !!)
+                ) as TwoNode
+
     }
 
 
@@ -304,16 +322,7 @@ sealed class Node<K : Comparable<K>, V> {
             null -> throw Exception("you must replace root with inserted node")
         }
     }
-
-
 }
-
-
-
-
-
-
-
 
 
 data class KeyValue<K : Comparable<K>, V>(val key: K, var value: V) {

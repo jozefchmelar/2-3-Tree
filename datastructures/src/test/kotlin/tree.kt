@@ -13,8 +13,8 @@ import java.util.*
 @Suppress("UNUSED_CHANGED_VALUE")
 class TestyVkladania : StringSpec() {
     val tree = TwoThreeTree<Int, Int>()
-    val key    = listOf(9, 5, 8, 3, 2, 4, 7)
-    val k = listOf(10,20,5,114,17,8,6,9,12,3,50,123,147,9687,45,46,15)
+    val key  = listOf(9, 5, 8, 3, 2, 4, 7)
+    val k    =   listOf(10,20,5,114,17,8,6,9,12,3,50,123,147,9687,45,46,4,150,180,200,190,7,13,9688,9689,11,14,19,15,16,149,148,1,2)
 
     val value = 4
     val rnd = Random(150)
@@ -282,7 +282,7 @@ class TestyVkladania : StringSpec() {
         "test2 "{
             var i = 0
             k.forEachIndexed{index,item ->
-                if (index <= k.indexOf(15) )
+              //  if (index <= k.indexOf(4) )
                     tree.put(item)
             }
 
