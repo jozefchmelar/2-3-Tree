@@ -78,17 +78,21 @@ sealed class Node<K : Comparable<K>, V> {
     abstract override fun toString(): String
     abstract override fun equals(other: Any?): Boolean
 
-    fun replace(node:Node<K,V>){
+    fun replaceWith(node:Node<K,V>){
         val nodeParent = node.parent
         when(nodeParent){
             is Node.TwoNode -> when {
                 this == nodeParent.left     -> nodeParent.addLeft (node)
                 this == nodeParent.right    -> nodeParent.addRight(node)
+                else                        -> throw IllegalArgumentException("can't replace this node, cause he doesn't belong to any parent ")
+
             }
             is Node.ThreeNode -> when {
                 this == nodeParent.left     -> nodeParent.addLeft(node)
                 this == nodeParent.middle   -> nodeParent.addMiddle(node)
                 this == nodeParent.right    -> nodeParent.addRight(node)
+                else                        -> throw IllegalArgumentException("can't replace this node, cause he doesn't belong to any parent ")
+
             }
             is Node.FourNode -> throw FourNodeInsertionException()
             null -> TODO()
@@ -194,7 +198,7 @@ sealed class Node<K : Comparable<K>, V> {
         }
 
         fun addMiddle(keyValue: KeyValue<K,V>) = addMiddle(TwoNode(keyValue))
-
+        //region too long stuff
         fun toFourNode(toAdd: KeyValue<K, V>) =
             when {
                 toAdd.key < keyValue1.key -> FourNode(
@@ -244,7 +248,7 @@ sealed class Node<K : Comparable<K>, V> {
 
                 else -> throw IllegalStateException("Key's can't be equal")
             }
-
+        //endregion
     }
 
     data class FourNode<K : Comparable<K>, V>(
@@ -300,28 +304,6 @@ sealed class Node<K : Comparable<K>, V> {
 
     }
 
-
-
-    fun replaceWith(node: Node.ThreeNode<K, V>) {
-        val nodeParent = node.parent
-        when(nodeParent){
-            is Node.TwoNode   -> when{
-                this == nodeParent.left   -> nodeParent.addLeft   (node)
-                this == nodeParent.right  -> nodeParent.addRight  (node)
-                else                      -> throw IllegalArgumentException("can't replace this node, cause he doesn't belong to any parent ")
-            }
-            is Node.ThreeNode -> when{
-                this == nodeParent.left   -> nodeParent.addLeft   (node)
-                this == nodeParent.middle -> nodeParent.addMiddle (node)
-                this == nodeParent.right  -> nodeParent.addRight  (node)
-                else                      -> throw IllegalArgumentException("can't replace this node, cause he doesn't belong to any parent ")
-
-            }
-            is Node.FourNode  -> TODO()
-
-            null -> throw Exception("you must replace root with inserted node")
-        }
-    }
 }
 
 
