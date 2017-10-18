@@ -18,10 +18,10 @@ class TestyVkladania : StringSpec() {
     val k    =   listOf(
         10,20,5,114,17,8,6,9,12,3,50,123,147,
         9687,45,46,9688
-//        ,
-//        4,150,180,200,190,7,13,9688,
-//        9689,11,14,19,15,16,149,148,1,2,201,202,
-//        220,230,240,250,55,56,57,58
+        ,
+        4,150,180,200,190,7,13,9688,
+        9689,11,14,19,15,16,149,148,1,2,201,202,
+        220,230,240,250,55,56,57,58
     )
 
     val value = 4
@@ -299,7 +299,7 @@ class TestyVkladania : StringSpec() {
 //            println()
             tree.printInOrder()
 //            println()
-            println(tree.insertedKeys.sorted().joinToString(", "))
+            println("[" + tree.insertedKeys.sorted().joinToString(", ") + "]")
 //            println(tree.insertedKeys.joinToString(", "))
 
         //    ll shouldBe   rr

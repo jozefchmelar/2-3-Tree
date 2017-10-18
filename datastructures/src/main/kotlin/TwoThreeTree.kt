@@ -126,8 +126,17 @@ class TwoThreeTree<K:Comparable<K>,V>{
     }
 
     private fun insert(fourNode: Node.FourNode<K, V>, key: K, value: V) {
+        var n = fourNode as Node<K,V>?
+        val s = emptyLinkedList<Node<K,V>>()
+        while(n!=null){
+            s.push(n)
+            n=n.parent
+        }
+        s.reverse()
+        while(s.isNotEmpty()) {
+            val parent = s.pop().parent
 
-        val parent = fourNode.parent
+     //   val parent = fourNode.parent
 
         when(parent){
             is TwoNode   -> {
@@ -149,25 +158,34 @@ class TwoThreeTree<K:Comparable<K>,V>{
 
                     Middle -> IllegalStateException("must add to parent from some side.")
                 }
-                if (parent == root)
+                if (parent == root){
                     root = newParent
-                else
+                    return
+                }
+                else{
                     fourNode.parent!!.replaceWith(newParent)
+                return
+                }
 
             }
             is ThreeNode -> {
                 val originPosition    = getNodePosition(fourNode)
-                val newFourNodeParent = parent.merge(originPosition, fourNode)
+                val newFourNodeParent = parent.merge(originPosition, fourNode) as FourNode
+                println()
+                if (parent == root){
+                    root = newFourNodeParent.split()
+                    return
+                }
+                else
+                    fourNode.parent!!.replaceWith(newFourNodeParent)
 
-                //val
-
-
-                insert(newFourNodeParent, key, value)
             }
 
             is FourNode  -> throw FourNodeInsertionException()
             null         -> root =  fourNode.split()
         }
+        }
+
     }
 
     private fun ThreeNode<K, V>.merge(fromSide: Position, fourNode:FourNode<K,V>): FourNode<K, V> {
@@ -233,12 +251,14 @@ class TwoThreeTree<K:Comparable<K>,V>{
 
     fun printInOrder(){
         val list = emptyLinkedList<Node<K,V>>()
-
-        println(inorder(/*root*/))
+        inorder(root!!,{
+            list.add(it)
+        })
+        println(list)
     }
 
 
-    fun inorder(): List<Node<K, V>> {
+    fun inorder(node:Node<K,V>,visit : (Node<K,V>) -> Unit) {
 
         val stack = emptyLinkedList<Node<K, V>>()
         val pushLeft = { _node: Node<K, V>? ->
@@ -246,10 +266,10 @@ class TwoThreeTree<K:Comparable<K>,V>{
             while (node != null) {
                 if (node is ThreeNode) {
                     stack.push(
-                        TwoNode(keyValue1 = node.keyValue2,left =  null, right =  node.right)
+                        TwoNode(keyValue1 = node.keyValue2, left = null, right = node.right)
                     )
                     stack.push(
-                        TwoNode(keyValue1 = node.keyValue1,left =  null, right = node.middle)
+                        TwoNode(keyValue1 = node.keyValue1, left = null, right = node.middle)
                     )
                     node = node.left
                 } else {
@@ -260,14 +280,13 @@ class TwoThreeTree<K:Comparable<K>,V>{
         }
 
         var n: Node<K, V>?
-        val result = emptyLinkedList<Node<K, V>>()
-        pushLeft(root)
+        pushLeft(node)
         while (stack.isNotEmpty()) {
             n = stack.pop()
-            result.add(n)
+            visit(n)
             pushLeft(n.right)
         }
-        return result
+
     }
 
 
