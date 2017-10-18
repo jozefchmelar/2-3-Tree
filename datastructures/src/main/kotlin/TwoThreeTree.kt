@@ -8,7 +8,11 @@ import Tree.node.Node.ThreeNode
 import Tree.node.with
 import extensions.emptyLinkedList
 import org.jetbrains.annotations.ReadOnly
+import java.security.Key
 import java.util.*
+import java.util.LinkedList
+
+
 
 
 class TwoThreeTree<K:Comparable<K>,V>{
@@ -122,7 +126,9 @@ class TwoThreeTree<K:Comparable<K>,V>{
     }
 
     private fun insert(fourNode: Node.FourNode<K, V>, key: K, value: V) {
+
         val parent = fourNode.parent
+
         when(parent){
             is TwoNode   -> {
                 val originPosition = getNodePosition(fourNode)
@@ -152,6 +158,10 @@ class TwoThreeTree<K:Comparable<K>,V>{
             is ThreeNode -> {
                 val originPosition    = getNodePosition(fourNode)
                 val newFourNodeParent = parent.merge(originPosition, fourNode)
+
+                //val
+
+
                 insert(newFourNodeParent, key, value)
             }
 
@@ -221,64 +231,45 @@ class TwoThreeTree<K:Comparable<K>,V>{
         }
     }
 
-    fun traverseTree( visit  : (KeyValue<K,V>)  -> Unit){
-        val stack = LinkedList<KeyValue<K,V>>()
-        var node = root!!
-        while(node.left!=null){
-            when{
-                node.left == null -> when(node){
-                    is Node.TwoNode   -> stack.push(node.keyValue1)
-                    is Node.ThreeNode -> {
-                        stack.push(node.keyValue1)
-                        stack.push(node.keyValue2)
-                    }
-                }
-                node is TwoNode ->{
-                    node = node.left!!
-                    stack.push(node.keyValue1)
-                    node = node.right!!
-        //            stack.
+    fun printInOrder(){
+        val list = emptyLinkedList<Node<K,V>>()
 
+        println(inorder(/*root*/))
+    }
+
+
+    fun inorder(): List<Node<K, V>> {
+
+        val stack = emptyLinkedList<Node<K, V>>()
+        val pushLeft = { _node: Node<K, V>? ->
+            var node = _node
+            while (node != null) {
+                if (node is ThreeNode) {
+                    stack.push(
+                        TwoNode(keyValue1 = node.keyValue2,left =  null, right =  node.right)
+                    )
+                    stack.push(
+                        TwoNode(keyValue1 = node.keyValue1,left =  null, right = node.middle)
+                    )
+                    node = node.left
+                } else {
+                    stack.push(node)
+                    node = node.left
                 }
             }
         }
-    }
 
-    fun traverseTree(curNode: Node<K,V>, treeItems: LinkedList<KeyValue<K, V>>) {
-
-        //If leaf node.
-        when {
-            curNode.left == null -> when(curNode){
-                is Node.TwoNode   ->  treeItems.add(curNode.keyValue1)
-
-                is Node.ThreeNode -> {
-                    treeItems.add(curNode.keyValue1)
-                    treeItems.add(curNode.keyValue2)
-                }
-            }
-            curNode is TwoNode
-                //If TwoNode.
-            -> {
-                val left = curNode.left!!
-                traverseTree(left, treeItems) //Add lesser values first.
-                treeItems.add(curNode.keyValue1) //Then this value.
-                val right = curNode.right!!
-                traverseTree(right, treeItems) //And greater values.
-            }
-            curNode is Node.ThreeNode -> {
-                val left = curNode.left!!
-                traverseTree(left, treeItems) //Lesser values.
-                treeItems.add(curNode.keyValue1) //Low value.
-
-                val middle = curNode.middle!!
-                traverseTree(middle, treeItems) //Middle values.
-                treeItems.add(curNode.keyValue2) //High value.
-
-                val right = curNode.right!!
-                traverseTree(right, treeItems) //Higher values.
-            }
+        var n: Node<K, V>?
+        val result = emptyLinkedList<Node<K, V>>()
+        pushLeft(root)
+        while (stack.isNotEmpty()) {
+            n = stack.pop()
+            result.add(n)
+            pushLeft(n.right)
         }
+        return result
     }
+
 
     private fun getNodePosition(node: Node<K, V>):Position {
         val parent = node.parent!!
@@ -296,9 +287,9 @@ class TwoThreeTree<K:Comparable<K>,V>{
                     }
                 }
                 is Node.ThreeNode -> {
-                    val leftKeyVal      = parent.left!!.keyValue1
+                    val leftKeyVal      = parent.left  !!.keyValue1
                     val midKeyVal       = parent.middle!!.keyValue1
-                    val rightKeyVal     = parent.right!!.keyValue1
+                    val rightKeyVal     = parent.right !!.keyValue1
 
                     val addingFromLeft  = leftKeyVal  == node.keyValue1 || leftKeyVal  == node.keyValue2 || leftKeyVal  == node.keyValue3
                     val addingFromMid   = midKeyVal   == node.keyValue1 || midKeyVal   == node.keyValue2 || midKeyVal   == node.keyValue3

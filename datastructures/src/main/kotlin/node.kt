@@ -105,7 +105,8 @@ sealed class Node<K : Comparable<K>, V> {
         return this
     }
 
-    fun isLeaf() = left == null && right == null
+    fun isLeaf   () = left == null && right == null
+    fun isNotLeaf() = !isLeaf()
 
     fun clearParent(): Node<K, V> {
         parent=null
