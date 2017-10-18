@@ -12,14 +12,11 @@ import java.util.*
 
 @Suppress("UNUSED_CHANGED_VALUE")
 class TestyVkladania : StringSpec() {
-
     val tree = TwoThreeTree<Int, Int>()
     val key  = listOf(9, 5, 8, 3, 2, 4, 7)
     val k    =   listOf(
         10,20,5,114,17,8,6,9,12,3,50,123,147,
-        9687,45,46,9688
-        ,
-        4,150,180,200,190,7,13,9688,
+        9687,45,46,4,150,180,200,190,7,13,9688,
         9689,11,14,19,15,16,149,148,1,2,201,202,
         220,230,240,250,55,56,57,58
     )
@@ -32,8 +29,6 @@ class TestyVkladania : StringSpec() {
     internal fun n(i: Int) = Node.TwoNode(i with value)
     internal fun n(i: Int, j: Int) = Node.ThreeNode(i with value, j with value)
 
-  //TODO pridat testy na overnie po kazdom vkladani ci su splnene podmienky dva tri stromu ( po kazdom vkladani overit ze dlzka listov je vzdy rovnaka)
-  //TODO nahodny generator vkladania a mazania s velkym mnozstvom dat
 
     init {
      /*   "check node"{
@@ -283,9 +278,9 @@ class TestyVkladania : StringSpec() {
 
             val ll = emptyLinkedList<KeyValue<Int,Int>>()
             val rr = emptyLinkedList<KeyValue<Int,Int>>()
-//            tree.traverseTree(tree.root!!,ll)
-//            tree.traverseTree(xpcted,rr)
-//            println(ll)
+            tree.traverseTree(tree.root!!,ll)
+            tree.traverseTree(xpcted,rr)
+            println(ll)
             ll shouldBe   rr
         }.config(enabled = false)
 
@@ -296,12 +291,7 @@ class TestyVkladania : StringSpec() {
                     tree.put(item)
             }
 
-//            println()
-            tree.printInOrder()
-//            println()
-            println("[" + tree.insertedKeys.sorted().joinToString(", ") + "]")
-//            println(tree.insertedKeys.joinToString(", "))
-
+            println()
         //    ll shouldBe   rr
         }
 
