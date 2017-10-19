@@ -122,7 +122,109 @@ class TwoThreeTree<K:Comparable<K>,V>{
     }
 
     private fun insert(fourNode: Node.FourNode<K, V>, key: K, value: V) {
-        val parent = fourNode.parent
+        //val parent = fourNode//.parent
+        var fourNode = fourNode
+        var n = fourNode.parent
+        val stack = emptyLinkedList<Node<K,V>?>()
+
+        while(n!=null){
+            stack.add(n)
+            n=n.parent
+        }
+
+
+        if(stack.isEmpty()){
+            val parent = fourNode.parent
+            when(parent){
+                is Node.TwoNode   -> {
+                    val originPosition = getNodePosition(fourNode)
+                    val splitted = fourNode.split()
+                    val newParent = parent.toThreeNode(fourNode.keyValue2)
+                    when(originPosition){
+                        Left   -> newParent
+                            .addMiddle (splitted.right!!)
+                            .addLeft   (splitted.left !!)
+                            .addRight  (parent  .right!!)
+                        Right  -> newParent
+                            .addMiddle (splitted.left !!)
+                            .addRight  (splitted.right!!)
+                            .addLeft   (parent  .left !!)
+
+                        Middle -> IllegalStateException("must add to parent from some side.")
+                    }
+                    if (parent == root)
+                        root = newParent
+                    else
+                        fourNode.parent!!.replaceWith(newParent)
+                    return
+                }
+                is Node.ThreeNode -> {
+                    val originPosition    = getNodePosition(fourNode)
+                    val newFourNodeParent = parent.merge(originPosition, fourNode)
+
+                    println()
+                }
+                null ->{
+                    val splitted = fourNode.split()
+                    root= splitted
+                }
+            }
+        }else{
+
+        }
+        while(stack.isNotEmpty()){
+            val parent = stack.pop()//?.parent
+            when(parent){
+                is Node.TwoNode   -> {
+                    val originPosition = getNodePosition(fourNode)
+
+                    val splitted = fourNode.split()
+
+                    val newParent = parent.toThreeNode(fourNode.keyValue2)
+
+                    when(originPosition){
+                        Left   -> newParent
+                            .addMiddle (splitted.right!!)
+                            .addLeft   (splitted.left !!)
+                            .addRight  (parent  .right!!)
+                        Right  -> newParent
+                            .addMiddle (splitted.left !!)
+                            .addRight  (splitted.right!!)
+                            .addLeft   (parent  .left !!)
+
+                        Middle -> IllegalStateException("must add to parent from some side.")
+                    }
+                    if (parent == root)
+                        root = newParent
+                    else
+                        fourNode.parent!!.replaceWith(newParent)
+                    return
+                }
+                is Node.ThreeNode -> {
+                    val originPosition    = getNodePosition(fourNode)
+                    val newFourNodeParent = parent.merge(originPosition, fourNode)
+                    fourNode = newFourNodeParent
+                    if(parent == root ){
+                        root = fourNode.split()
+                    }else{
+                       // fourNode.parent!!.replaceWith(newFourNodeParent)
+                        fourNode = newFourNodeParent
+                      //  stack.push(parent)
+                    }
+                }
+                is Node.FourNode  -> {
+
+                }
+                null ->{
+                    //this means my four node is on the top of the tree
+                    root= (fourNode as FourNode).split()
+                }
+            }
+        }
+
+
+        /* stack.reverse()
+        if(stack.isEmpty())
         when(parent){
             is TwoNode   -> {
                 val originPosition = getNodePosition(fourNode)
@@ -157,10 +259,83 @@ class TwoThreeTree<K:Comparable<K>,V>{
 
             is FourNode  -> throw FourNodeInsertionException()
             null         -> root =  fourNode.split()
-        }
+        }else{
+            var fourNode = fourNode
+            while(stack.isNotEmpty()) {
+
+            val parent = stack.pop()
+            when(parent) {
+                is TwoNode -> {
+                    val originPosition = getNodePosition(fourNode)
+
+                    val splitted = fourNode.split()
+
+                    val newParent = parent.toThreeNode(fourNode.keyValue2)
+
+                    when (originPosition) {
+                        Left -> newParent
+                            .addMiddle(splitted.right!!)
+                            .addLeft(splitted.left!!)
+                            .addRight(parent.right!!)
+                        Right -> newParent
+                            .addMiddle(splitted.left!!)
+                            .addRight(splitted.right!!)
+                            .addLeft(parent.left!!)
+
+                        Middle -> IllegalStateException("must add to parent from some side.")
+                    }
+                    if (parent == root)
+                        root = newParent
+                    else
+                        fourNode.parent!!.replaceWith(newParent)
+                    return
+                }
+                is Node.ThreeNode   -> {
+                    val originPosition    = getNodePosition(fourNode)
+                    val splitted = fourNode.split()
+                    val newParent = parent.toFourNode(splitted.keyValue1)
+
+                    when (originPosition) {
+                        Left ->
+                            newParent
+                                .addMiddle2(parent.middle!!)
+                                .addMiddle(fourNode.keyValue3)
+                                .addLeft(fourNode.keyValue1)
+                                .addRight(parent.right!!)
+
+                        Middle ->
+                            newParent
+                                .addMiddle2(fourNode.keyValue3)
+                                .addMiddle(fourNode.keyValue1)
+                                .addLeft(parent.left!!)
+                                .addRight(parent.right!!)
+
+                        Right ->
+                            newParent
+                                .addMiddle2(fourNode.keyValue1)
+                                .addMiddle(parent.middle!!)
+                                .addLeft(parent.left!!)
+                                .addRight(fourNode.keyValue3)
+                    }
+
+
+                    if (parent == root) {
+                        root = newParent.split()
+                    }else{
+                        fourNode = newParent
+                        println()
+                        //TODO()
+                    }
+                }
+
+                is Node.FourNode    -> TODO()
+            }
+            }
+        }*/
+
     }
 
-    private fun ThreeNode<K, V>.merge(fromSide: Position, fourNode:FourNode<K,V>): FourNode<K, V> {
+     private fun ThreeNode<K, V>.merge(fromSide: Position, fourNode:FourNode<K,V>): FourNode<K, V> {
         val splitted = fourNode.split()
         return  when (fromSide) {
             Left -> {
@@ -221,62 +396,41 @@ class TwoThreeTree<K:Comparable<K>,V>{
         }
     }
 
-    fun traverseTree( visit  : (KeyValue<K,V>)  -> Unit){
-        val stack = LinkedList<KeyValue<K,V>>()
-        var node = root!!
-        while(node.left!=null){
-            when{
-                node.left == null -> when(node){
-                    is Node.TwoNode   -> stack.push(node.keyValue1)
-                    is Node.ThreeNode -> {
-                        stack.push(node.keyValue1)
-                        stack.push(node.keyValue2)
-                    }
-                }
-                node is TwoNode ->{
-                    node = node.left!!
-                    stack.push(node.keyValue1)
-                    node = node.right!!
-        //            stack.
+    fun printInOrder(){
+        val list = emptyLinkedList<Node<K,V>>()
+        inorder(root!!,{
+            list.add(it)
+        })
+        println(list)
+    }
 
+    fun inorder(node:Node<K,V>,visit : (Node<K,V>) -> Unit) {
+
+        val stack = emptyLinkedList<Node<K, V>>()
+        val pushLeft = { _node: Node<K, V>? ->
+            var node = _node
+            while (node != null) {
+                if (node is ThreeNode) {
+                    stack.push(
+                        TwoNode(keyValue1 = node.keyValue2, left = null, right = node.right)
+                    )
+                    stack.push(
+                        TwoNode(keyValue1 = node.keyValue1, left = null, right = node.middle)
+                    )
+                    node = node.left
+                } else {
+                    stack.push(node)
+                    node = node.left
                 }
             }
         }
-    }
 
-    fun traverseTree(curNode: Node<K,V>, treeItems: LinkedList<KeyValue<K, V>>) {
-
-        //If leaf node.
-        when {
-            curNode.left == null -> when(curNode){
-                is Node.TwoNode   ->  treeItems.add(curNode.keyValue1)
-
-                is Node.ThreeNode -> {
-                    treeItems.add(curNode.keyValue1)
-                    treeItems.add(curNode.keyValue2)
-                }
-            }
-            curNode is TwoNode
-                //If TwoNode.
-            -> {
-                val left = curNode.left!!
-                traverseTree(left, treeItems) //Add lesser values first.
-                treeItems.add(curNode.keyValue1) //Then this value.
-                val right = curNode.right!!
-                traverseTree(right, treeItems) //And greater values.
-            }
-            curNode is Node.ThreeNode -> {
-                val left = curNode.left!!
-                traverseTree(left, treeItems) //Lesser values.
-                treeItems.add(curNode.keyValue1) //Low value.
-
-                val middle = curNode.middle!!
-                traverseTree(middle, treeItems) //Middle values.
-                treeItems.add(curNode.keyValue2) //High value.
-
-                val right = curNode.right!!
-                traverseTree(right, treeItems) //Higher values.
-            }
+        var n: Node<K, V>?
+        pushLeft(node)
+        while (stack.isNotEmpty()) {
+            n = stack.pop()
+            visit(n)
+            pushLeft(n.right)
         }
     }
 
