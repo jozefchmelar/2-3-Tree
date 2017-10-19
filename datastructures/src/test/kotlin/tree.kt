@@ -5,6 +5,8 @@ import Tree.node.*
 import extensions.emptyLinkedList
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
+import java.lang.Math.abs
+import java.lang.Math.pow
 import java.util.*
 
 //http://www.allsyllabus.com/aj/note/Computer_Science/Analysis_and_Design_of_Algorithms/Unit5/Construction%20of%20AVL%20tree.php#.WdoSaa10Dq0
@@ -13,18 +15,9 @@ import java.util.*
 @Suppress("UNUSED_CHANGED_VALUE")
 class TestyVkladania : StringSpec() {
     val tree = TwoThreeTree<Int, Int>()
-    val key  = listOf(9, 5, 8, 3, 2, 4, 7)
-    val k    =   listOf(
-        10,20,5,114,17,8,6,9,12,3,50,123,147,
-        9687,45,46,4,150,180,200,190,7,13,9688,
-        9689,11,14,19,15,16,149,148,1,2,201,202,
-        220,230,240,250,55,56,57,58,798798,4654,654,65465,465,465,465,465,465,987,897,98,654,564,654,798768,156,4,9878,94152,1,48465465,798,798,465,465,41,3,1984198160
-        ,524,984,98,894,651,32,546596,984,984,864,98498,465465465,65,4,498,4,74,498,98498
-    ).distinct()
+    val value = Random().nextInt()
+    val numberOfGenerators = 10
 
-    val value = 4
-    val rnd = Random(150)
-    val seed = 4564894
 
     internal fun TwoThreeTree<Int, Int>.put(int: Int) = this.put(int, value)
     internal fun n(i: Int) = Node.TwoNode(i with value)
@@ -32,14 +25,60 @@ class TestyVkladania : StringSpec() {
 
 
     init {
-     "prepis testy ako clovek"{
-         true shouldBe true
-     }
-        "main"{
-            k.forEach{tree.put(it)}
-                .let { tree.insertedKeys.sorted() }
-                .let (::println)
-              tree.printInOrder()
+        val seeds = Collections.nCopies(numberOfGenerators, Any()).map { Math.abs(UUID.randomUUID().hashCode().toLong())}
+        val randomGenerators  = Collections.nCopies(numberOfGenerators, Any()).mapIndexed { index, _ -> Random(seeds[index]) }
+
+        randomGenerators.forEachIndexed { index,generator ->
+
+                "[${seeds[index]}] test inserting  " {
+
+                     val numberOfValues = pow(10.0,6.0).toInt() + generator.nextInt(1000000)
+                    print("Generating $numberOfValues keys")
+                    val keys = Collections.nCopies(numberOfValues, Any()).map { abs(generator.nextInt()) }.distinct()
+                    println(" ok")
+                    print("Putting keys in tree")
+                    keys.forEach { tree.put(it) }
+                    println(" ok")
+                    print("Sorting keys")
+                    val sortedKeys = keys.sorted()
+                    println(" ok")
+                    print("Tree inorder")
+                    val inorder = tree.getInorder()
+                    println(" ok")
+                    var ok = false
+                    if (inorder == sortedKeys && inorder.isNotEmpty() && sortedKeys.isNotEmpty()) {
+                        println("keys inserted correctly")
+                        ok = true
+                    } else {
+                        println("keys inserted INCORRECTLY")
+                    }
+
+                    val leafs = emptyLinkedList<Node<Int, Int>>()
+                    tree.inorder {
+                        if (it.isLeaf()) leafs += it
+                    }
+
+                    val levels = leafs.map {
+                        val stack = emptyLinkedList<Node<Int, Int>>()
+                        var n: Node<Int, Int>? = it
+                        while (n != null) {
+                            stack.push(n)
+                            n = n.parent
+                        }
+                        stack.size
+                    }.distinct()
+
+                    println("Leaves are on level : $levels")
+
+
+                    (ok == true && levels.size == 1) shouldBe true
+
+                    println("----------------")
+                }
+
+
+
+
         }
 
     }

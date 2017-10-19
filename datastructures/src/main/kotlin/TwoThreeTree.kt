@@ -8,6 +8,7 @@ import Tree.node.Node.ThreeNode
 import Tree.node.with
 import extensions.emptyLinkedList
 import org.jetbrains.annotations.ReadOnly
+import org.jetbrains.annotations.TestOnly
 import java.util.*
 
 
@@ -161,7 +162,6 @@ class TwoThreeTree<K:Comparable<K>,V>{
                 is Node.ThreeNode -> {
                     val originPosition    = getNodePosition(fourNode)
                     val newFourNodeParent = parent.merge(originPosition, fourNode)
-
                     println()
                 }
                 null ->{
@@ -212,126 +212,11 @@ class TwoThreeTree<K:Comparable<K>,V>{
                       //  stack.push(parent)
                     }
                 }
-                is Node.FourNode  -> {
-
-                }
                 null ->{
-                    //this means my four node is on the top of the tree
                     root= (fourNode as FourNode).split()
                 }
             }
         }
-
-
-        /* stack.reverse()
-        if(stack.isEmpty())
-        when(parent){
-            is TwoNode   -> {
-                val originPosition = getNodePosition(fourNode)
-
-                val splitted = fourNode.split()
-
-                val newParent = parent.toThreeNode(fourNode.keyValue2)
-
-                when(originPosition){
-                    Left   -> newParent
-                                .addMiddle (splitted.right!!)
-                                .addLeft   (splitted.left !!)
-                                .addRight  (parent  .right!!)
-                    Right  -> newParent
-                                .addMiddle (splitted.left !!)
-                                .addRight  (splitted.right!!)
-                                .addLeft   (parent  .left !!)
-
-                    Middle -> IllegalStateException("must add to parent from some side.")
-                }
-                if (parent == root)
-                    root = newParent
-                else
-                    fourNode.parent!!.replaceWith(newParent)
-
-            }
-            is ThreeNode -> {
-                val originPosition    = getNodePosition(fourNode)
-                val newFourNodeParent = parent.merge(originPosition, fourNode)
-                insert(newFourNodeParent, key, value)
-            }
-
-            is FourNode  -> throw FourNodeInsertionException()
-            null         -> root =  fourNode.split()
-        }else{
-            var fourNode = fourNode
-            while(stack.isNotEmpty()) {
-
-            val parent = stack.pop()
-            when(parent) {
-                is TwoNode -> {
-                    val originPosition = getNodePosition(fourNode)
-
-                    val splitted = fourNode.split()
-
-                    val newParent = parent.toThreeNode(fourNode.keyValue2)
-
-                    when (originPosition) {
-                        Left -> newParent
-                            .addMiddle(splitted.right!!)
-                            .addLeft(splitted.left!!)
-                            .addRight(parent.right!!)
-                        Right -> newParent
-                            .addMiddle(splitted.left!!)
-                            .addRight(splitted.right!!)
-                            .addLeft(parent.left!!)
-
-                        Middle -> IllegalStateException("must add to parent from some side.")
-                    }
-                    if (parent == root)
-                        root = newParent
-                    else
-                        fourNode.parent!!.replaceWith(newParent)
-                    return
-                }
-                is Node.ThreeNode   -> {
-                    val originPosition    = getNodePosition(fourNode)
-                    val splitted = fourNode.split()
-                    val newParent = parent.toFourNode(splitted.keyValue1)
-
-                    when (originPosition) {
-                        Left ->
-                            newParent
-                                .addMiddle2(parent.middle!!)
-                                .addMiddle(fourNode.keyValue3)
-                                .addLeft(fourNode.keyValue1)
-                                .addRight(parent.right!!)
-
-                        Middle ->
-                            newParent
-                                .addMiddle2(fourNode.keyValue3)
-                                .addMiddle(fourNode.keyValue1)
-                                .addLeft(parent.left!!)
-                                .addRight(parent.right!!)
-
-                        Right ->
-                            newParent
-                                .addMiddle2(fourNode.keyValue1)
-                                .addMiddle(parent.middle!!)
-                                .addLeft(parent.left!!)
-                                .addRight(fourNode.keyValue3)
-                    }
-
-
-                    if (parent == root) {
-                        root = newParent.split()
-                    }else{
-                        fourNode = newParent
-                        println()
-                        //TODO()
-                    }
-                }
-
-                is Node.FourNode    -> TODO()
-            }
-            }
-        }*/
 
     }
 
@@ -404,7 +289,17 @@ class TwoThreeTree<K:Comparable<K>,V>{
         println(list)
     }
 
-    fun inorder(node:Node<K,V>,visit : (Node<K,V>) -> Unit) {
+    fun getInorder(): List<K> {
+        val list = emptyLinkedList<K>()
+        inorder(root!!,{
+            list.add(it.keyValue1.key)
+        })
+      return list
+    }
+
+
+
+    fun inorder(node:Node<K,V> = root!!,visit : (Node<K,V>) -> Unit) {
 
         val stack = emptyLinkedList<Node<K, V>>()
         val pushLeft = { _node: Node<K, V>? ->
@@ -412,10 +307,10 @@ class TwoThreeTree<K:Comparable<K>,V>{
             while (node != null) {
                 if (node is ThreeNode) {
                     stack.push(
-                        TwoNode(keyValue1 = node.keyValue2, left = null, right = node.right)
+                        TwoNode(keyValue1 = node.keyValue2, left = null, right = node.right, parent = node.parent)
                     )
                     stack.push(
-                        TwoNode(keyValue1 = node.keyValue1, left = null, right = node.middle)
+                        TwoNode(keyValue1 = node.keyValue1, left = null, right = node.middle, parent = node.parent)
                     )
                     node = node.left
                 } else {
