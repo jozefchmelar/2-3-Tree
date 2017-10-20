@@ -1,15 +1,10 @@
 package Tree
-import Tree.TwoThreeTree.Position.*
-import Tree.node.KeyValue
+import Tree.Position.*
 import Tree.node.Node
-import Tree.node.Node.FourNode
-import Tree.node.Node.TwoNode
-import Tree.node.Node.ThreeNode
+import Tree.node.Node.*
 import Tree.node.with
+import extensions.Queue
 import extensions.emptyLinkedList
-import org.jetbrains.annotations.ReadOnly
-import org.jetbrains.annotations.TestOnly
-import java.util.*
 
 
 class TwoThreeTree<K:Comparable<K>,V>{
@@ -249,6 +244,39 @@ class TwoThreeTree<K:Comparable<K>,V>{
         } as FourNode
     }
 
+    fun find(key:K): Node<K, V>?{
+        var parent: Node<K, V>? = root
+
+        while(true){
+            when(parent){
+                is Node.TwoNode   -> {
+                    if (key == parent.keyValue1.key) return if( parent.keyValue1.key==key) parent else null
+                    if (key < parent.keyValue1.key){
+                        if(parent.left == null ) return if( parent.keyValue1.key==key) parent else null
+                        else parent = parent.left
+                    }
+                    else{
+                        if(parent.right == null ) return if( parent.keyValue1.key==key) parent else null
+                        else parent = parent.right
+                    }
+                }
+                is Node.ThreeNode -> {
+                    when{
+                        key == parent.keyValue1.key    -> return if( parent.keyValue1.key==key) parent else null
+                        key == parent.keyValue2.key     ->return if( parent.keyValue2.key==key) parent else null
+                        key < parent.keyValue1.key -> if(parent.left   != null) parent = parent.left   else return if( parent.keyValue1.key==key) parent else null
+                        key > parent.keyValue1.key
+                            &&
+                            key < parent.keyValue2.key -> if(parent.middle != null) parent = parent.middle else return if( parent.keyValue1.key==key) parent else null
+                        key > parent.keyValue2.key -> if(parent.right  != null) parent = parent.right  else return if( parent.keyValue1.key==key) parent else null
+                    }
+                }
+                is Node.FourNode  -> throw FourNodeException()
+                null              -> return (parent)
+            }
+        }
+    }
+
     fun getNode(key: K) : Node<K, V>? {
         var parent: Node<K, V>? = root
 
@@ -281,23 +309,67 @@ class TwoThreeTree<K:Comparable<K>,V>{
         }
     }
 
-    fun printInOrder(){
-        val list = emptyLinkedList<Node<K,V>>()
-        inorder(root!!,{
-            list.add(it)
-        })
-        println(list)
-    }
-
     fun getInorder(): List<K> {
         val list = emptyLinkedList<K>()
-        inorder(root!!,{
+         inorder(root!!){
             list.add(it.keyValue1.key)
-        })
+        }
       return list
     }
 
+    fun levelOrder(node: Node<K, V>?): MutableList<Node<K, V>>? {
+        val queue = Queue<Node<K, V>>(emptyLinkedList())
+        val helpQueue = Queue<Node<K, V>>(emptyLinkedList())
 
+        if (node == null) return null
+
+        var node = node
+        while (node != null) {
+            queue.enqueue(node)
+
+            if (!node.isLeaf()) when (node) {
+                is Node.TwoNode -> {
+                    helpQueue.enqueue(node.left!!)
+                    helpQueue.enqueue(node.right!!)
+                }
+                is Node.ThreeNode -> {
+                    helpQueue.enqueue(node.left!!)
+                    helpQueue.enqueue(node.middle!!)
+                    helpQueue.enqueue(node.right!!)
+                }
+            }
+            node = if (helpQueue.items.size > 0) {
+                helpQueue.dequeue()
+            } else
+                null
+        }
+        return queue.items
+    }
+
+    fun inoredSuccesor(node:Node<K,V>):Node<K,V>?{
+        var previous:Node<K,V>? = null
+        var result :Node<K,V>? = null
+        var found = false
+        var secondTime = false
+        inorder {
+
+            if (previous != null) {
+                when (node) {
+                    is Node.TwoNode -> {
+                        if (it.keyValue1 == node.keyValue1) result = it
+                        found = true
+                    }
+                    is Node.ThreeNode -> {
+                        if (it.keyValue1 == node.keyValue1 || it.keyValue1 == node.keyValue2) result = it
+                        found = true
+                    }
+                }
+            }
+
+           previous = it
+       }
+        return result
+    }
 
     fun inorder(node:Node<K,V> = root!!,visit : (Node<K,V>) -> Unit) {
 
@@ -367,9 +439,9 @@ class TwoThreeTree<K:Comparable<K>,V>{
         }
     }
 
-    private enum class Position{Left,Middle,Right}
-
  }
+
+enum class Position{Left,Middle,Right}
 
 class FourNodeInsertionException : Exception ("You shouldn't insert values into four node ")
 class FourNodeException          : Exception ("Four node can't be in 23 tree")

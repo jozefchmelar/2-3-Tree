@@ -1,73 +1,21 @@
 package Tree.node
 
+import Tree.FourNodeException
 import Tree.FourNodeInsertionException
+import Tree.Position
 
-/*
-abstract class Node<K : Comparable<K>, V>(
-    var keyValue1: KeyValue<K, V>,
-    var left: Node<K, V>?,
-    var right: Node<K, V>?,
-    var parent: Node<K, V>?
-)
 
-class TwoNode<K : Comparable<K>, V>(keyValue1: KeyValue<K, V>, left: Node<K, V>?, right: Node<K, V>?, parent: Node<K, V>?) : Node<K, V>(keyValue1,
-    left,
-    right,
-    parent) {
+sealed class Sibling {
+    data class TwoSiblings<K : Comparable<K>, V>(
+        var first           : Node<K, V>,
+        val firstPosition   : Position,
+        var second          : Node<K, V>,
+        val secondPosition  : Position
+    ) : Sibling()
 
-    override fun toString() = """
-
-            keys       : ${keyValue1.key}
-            left       : ${left?.keyValue1?.key},
-            right      : ${right?.keyValue1?.key},
-            parent     : ${parent?.keyValue1?.key},
-
-            """.trimIndent()
+    data class OneSibling<K : Comparable<K>, V>(var sibling: Node<K, V>, val side: Position) : Sibling()
+    object NoSiblings : Sibling()
 }
-
-open class ThreeNode<K : Comparable<K>, V>(
-    keyValue1: KeyValue<K, V>,
-    var keyValue2: KeyValue<K, V>,
-    left: Node<K, V>?,
-    var middle: Node<K, V>?,
-    right: Node<K, V>?,
-    parent: Node<K, V>?
-) : Node<K, V>
-(keyValue1,
-    left,
-    right,
-    parent)
-
-class FourNode<K : Comparable<K>, V> : ThreeNode<K, V> {
-    constructor(
-        keyValue1: KeyValue<K, V>,
-        keyValue2: KeyValue<K, V>,
-        left: Node<K, V>?,
-        middle: Node<K, V>?,
-        middle2: Node<K, V>?,
-        right: Node<K, V>?,
-        parent: Node<K, V>?
-    ) : super(keyValue1, keyValue2, middle,
-        left,
-        right,
-        parent)
-
-    override fun toString(): String {
-        return """
-
-            keys       : ${keyValue1?.key},  ${keyValue2?.key}, ${keyValue3?.key}
-            left       : ${left?.keyValue1?.key}, ${left?.keyValue2?.key}
-            middle     : ${middle?.keyValue1?.key}, ${middle?.keyValue2?.key}
-            middle2    : ${middle2?.keyValue1?.key}, ${middle2?.keyValue2?.key}
-            right      : ${right?.keyValue1?.key}, ${right?.keyValue2?.key}
-            parent     : ${parent?.keyValue1?.key}, ${parent?.keyValue2?.key}
-
-            """.trimIndent()
-    }
-}
-*/
-
-
 
 sealed class Node<K : Comparable<K>, V> {
 
@@ -122,9 +70,25 @@ sealed class Node<K : Comparable<K>, V> {
 
     fun addRight(keyValue: KeyValue<K,V>) = addRight(TwoNode(keyValue))
 
-    fun setAsParent(node: Node<K,V>): Node<K, V> {
-        this.parent=node
-        return this
+    fun getSiblings(): Sibling {
+        val parent = this.parent
+        return when (parent) {
+            is Node.TwoNode     -> {
+                when {
+                    parent.left ==  this -> Sibling.OneSibling(parent.right!!,Position.Right)
+                    parent.right==  this -> Sibling.OneSibling(parent.left!! ,Position.Left)
+                    else -> throw IllegalStateException("node is not a child of it's parent")
+                }
+            }
+            is Node.ThreeNode   -> when {
+                parent.left   ==    this -> Sibling.TwoSiblings(parent.middle!!, Position.Middle, parent.right!!,Position.Right)
+                parent.middle ==    this -> Sibling.TwoSiblings(parent.left!!  , Position.Left,   parent.right!!,Position.Right)
+                parent.right  ==    this -> Sibling.TwoSiblings(parent.middle!!, Position.Middle, parent.left!!,Position.Left)
+                else -> throw IllegalStateException("node is not a child of it's parent")
+            }
+            is Node.FourNode    -> throw FourNodeException()
+            null -> Sibling.NoSiblings
+        }
     }
 
     fun isOrphan() = parent == null

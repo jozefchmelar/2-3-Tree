@@ -1,13 +1,15 @@
 import Tree.TwoThreeTree
-import Tree.TwoThreeTree.*
 import Tree.node.Node
 import Tree.node.*
 import extensions.emptyLinkedList
+import extensions.powerOf
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 import java.lang.Math.abs
-import java.lang.Math.pow
 import java.util.*
+import java.text.NumberFormat
+import kotlin.collections.HashSet
+
 
 //http://www.allsyllabus.com/aj/note/Computer_Science/Analysis_and_Design_of_Algorithms/Unit5/Construction%20of%20AVL%20tree.php#.WdoSaa10Dq0
 //https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/2-3_insertion.svg/2000px-2-3_insertion.svg.png
@@ -16,7 +18,7 @@ import java.util.*
 class TestyVkladania : StringSpec() {
     val tree = TwoThreeTree<Int, Int>()
     val value = Random().nextInt()
-    val numberOfGenerators = 10
+    val numberOfGenerators = 2
 
 
     internal fun TwoThreeTree<Int, Int>.put(int: Int) = this.put(int, value)
@@ -25,61 +27,74 @@ class TestyVkladania : StringSpec() {
 
 
     init {
-        val seeds = Collections.nCopies(numberOfGenerators, Any()).map { Math.abs(UUID.randomUUID().hashCode().toLong())}
-        val randomGenerators  = Collections.nCopies(numberOfGenerators, Any()).mapIndexed { index, _ -> Random(seeds[index]) }
+        "hardcoded tree test"
 
-        randomGenerators.forEachIndexed { index,generator ->
+        val seeds = Collections.nCopies(numberOfGenerators, Any()).map { Math.abs(UUID.randomUUID().hashCode().toLong()) }
+        val randomGenerators = Collections.nCopies(numberOfGenerators, Any()).mapIndexed { index, _ -> Random(seeds[index]) }
 
-                "[${seeds[index]}] test inserting  " {
+        randomGenerators.forEachIndexed { index, generator ->
 
-                     val numberOfValues = pow(10.0,6.0).toInt() + generator.nextInt(1000000)
-                    print("Generating $numberOfValues keys")
-                    val keys = Collections.nCopies(numberOfValues, Any()).map { abs(generator.nextInt()) }.distinct()
-                    println(" ok")
-                    print("Putting keys in tree")
-                    keys.forEach { tree.put(it) }
-                    println(" ok")
-                    print("Sorting keys")
-                    val sortedKeys = keys.sorted()
-                    println(" ok")
-                    print("Tree inorder")
-                    val inorder = tree.getInorder()
-                    println(" ok")
-                    var ok = false
-                    if (inorder == sortedKeys && inorder.isNotEmpty() && sortedKeys.isNotEmpty()) {
-                        println("keys inserted correctly")
-                        ok = true
-                    } else {
-                        println("keys inserted INCORRECTLY")
-                    }
+            "[${seeds[index]}] test inserting  " {
 
-                    val leafs = emptyLinkedList<Node<Int, Int>>()
-                    tree.inorder {
-                        if (it.isLeaf()) leafs += it
-                    }
+                val numberOfValues = 10.powerOf(4)
 
-                    val levels = leafs.map {
-                        val stack = emptyLinkedList<Node<Int, Int>>()
-                        var n: Node<Int, Int>? = it
-                        while (n != null) {
-                            stack.push(n)
-                            n = n.parent
-                        }
-                        stack.size
-                    }.distinct()
-
-                    println("Leaves are on level : $levels")
-
-
-                    (ok == true && levels.size == 1) shouldBe true
-
-                    println("----------------")
+                val keys: HashSet<Int> = HashSet()
+                for (i in 0..numberOfValues) {
+                    keys += abs(generator.nextInt())
                 }
 
 
+                measureTime("Putting $numberOfValues keys in tree") {
+                    keys.forEach { tree.put(it) }
+                }
+
+                println("Sorting keys")
+                val sortedKeys = keys.sorted()
+                println("Tree inorder")
+                val inorder = tree.getInorder()
+
+                var ok = false
+
+                if (inorder == sortedKeys && inorder.isNotEmpty() && sortedKeys.isNotEmpty()) {
+                    println("keys inserted correctly")
+                    ok = true
+                } else {
+                    println("keys inserted INCORRECTLY")
+                }
+
+                val leafs = emptyLinkedList<Node<Int, Int>>()
+
+                tree.inorder { node ->
+                    if (node.isLeaf()) leafs += node
+                }
+
+                val levels = leafs.map {
+                    val stack = emptyLinkedList<Node<Int, Int>>()
+                    var n: Node<Int, Int>? = it
+                    while (n != null) {
+                        stack.push(n)
+                        n = n.parent
+                    }
+                    stack.size
+                }.distinct()
+
+                println("Leaves are on level : $levels")
+
+                (ok == true && levels.size == 1) shouldBe true
+
+                println("----------------")
+            }
 
 
         }
 
     }
+}
+
+fun measureTime(name: String, f: () -> Unit) {
+    println(name)
+    val starTime = System.currentTimeMillis() / 1000
+    f()
+    val elapsedTime = System.currentTimeMillis() / 1000 - starTime
+    println("$name took $elapsedTime seconds")
 }
