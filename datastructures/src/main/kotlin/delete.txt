@@ -1,0 +1,60 @@
+node=Find(item)
+if(node!=null)
+{
+    if(node.LeafNode and node==root)
+        root=null
+        return true
+    if(node.ThreeNode) //tu si myslim ze ma byt aj "and LeafNode"
+    {
+        node.DeleteValue(item)
+        node.ThreeNode=false
+        return true
+    }
+    else
+    {
+        compareNode=FindNahradnik()
+        if(compareNode.ThreeNode)
+        {
+            compareNode.LefValue=compareNode.right
+            node=compareNode.leftValue
+            compareNode.threeNode=false
+            return true
+        }
+        while(compareNode!=null)
+        {
+            brotherNode=FindBrother(compareNode)
+            if(bortherNode.isThreeNode)
+            {
+                node.Value=comapreNode.Value
+                bortherNode.ThreeNode=false
+                bortherNode.father.value = brotherNode.value
+                compareNode.value = borthernode.father.value
+                changeRelation()
+                return true
+            }
+            else
+            {
+                if(compareNode.Father.ThreeNode)
+                {
+                    node.Value=comapreNode.value
+                    bortherNode.value2=compareNode.father
+                    bortherNode.ThreeNode=true
+                    compareNode.Father.ThreeNode=false
+                    changeRealtion()
+                    return true
+                }
+                else
+                {
+                    brotherNode.Value2 = compaereNode.Father
+                    bortherNode.ThreeNode=true
+                    node.Value=comaperNode.Value
+                    if(count==3)
+                        return true
+                     compareNode=CompareNode.Father
+                     changeRelation()
+                }
+            }
+        }
+    }
+}
+returnfasle
