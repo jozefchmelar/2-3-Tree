@@ -3,19 +3,42 @@ package Tree.node
 import Tree.FourNodeException
 import Tree.FourNodeInsertionException
 import Tree.Position
+import Tree.getPosition
 
 
-sealed class Sibling {
+sealed class Sibling<K : Comparable<K>, V> {
+    abstract fun closestSibling():Node<K,V>
     data class TwoSiblings<K : Comparable<K>, V>(
         var first           : Node<K, V>,
         val firstPosition   : Position,
         var second          : Node<K, V>,
         val secondPosition  : Position
-    ) : Sibling()
+    ) : Sibling<K, V>() {
+        override fun closestSibling()=first
+    }
 
-    data class OneSibling<K : Comparable<K>, V>(var sibling: Node<K, V>, val side: Position) : Sibling()
-    object NoSiblings : Sibling()
+    data class OneSibling<K : Comparable<K>, V>(var sibling: Node<K, V>, val side: Position) : Sibling<K , V>() {
+        override fun closestSibling()=sibling
+    }
+
+    class NoSiblings<K : Comparable<K>,V> : Sibling<K,V>() {
+        override fun closestSibling()=throw IllegalStateException("")
+    }
 }
+
+fun <K : Comparable<K>, V> Sibling<K,V>.hasThreeNodeSibling() : Boolean = when(this){
+    is Sibling.TwoSiblings<K,V> -> this.first is Node.ThreeNode<K, V> || this.second is Node.ThreeNode<K,V>
+    is Sibling.OneSibling<K,V>  -> this.sibling is Node.ThreeNode<K,V>
+    Sibling.NoSiblings<K,V>()   -> false
+    else -> false
+}
+
+fun <K : Comparable<K>, V> Sibling<K, V>.twoThreeNodeSiblings() :Boolean = (this is Sibling.TwoSiblings && (this.first is Node.ThreeNode<K, V> && (this.first is Node.ThreeNode<K, V> || this.second is Node.ThreeNode<K, V>)))
+
+
+fun <K : Comparable<K>, V> Sibling<K,V>.hasNotThreeNodeSibling() : Boolean = !this.hasThreeNodeSibling()
+
+
 
 sealed class Node<K : Comparable<K>, V> {
 
@@ -25,6 +48,7 @@ sealed class Node<K : Comparable<K>, V> {
     abstract var parent    : Node<K, V>?
     abstract override fun toString(): String
     abstract override fun equals(other: Any?): Boolean
+    var deleted :Boolean=false
 
     fun replaceWith(node:Node<K,V>){
         val nodeParent = node.parent
@@ -43,7 +67,11 @@ sealed class Node<K : Comparable<K>, V> {
 
             }
             is Node.FourNode -> throw FourNodeInsertionException()
-            null -> TODO()
+            null -> when(node.getPosition()){
+                Position.Left -> node.parent!!.addLeft(node)
+                Position.Middle -> (node.parent as ThreeNode).addMiddle(node)
+                Position.Right -> node.parent!!.addRight(node)
+            }
         }
     }
 
@@ -64,6 +92,11 @@ sealed class Node<K : Comparable<K>, V> {
 
     fun addLeft(keyValue: KeyValue<K,V>) = addLeft(TwoNode(keyValue))
 
+    fun setNewParent(newParent:Node<K,V>): Node<K, V> {
+        this.parent=newParent
+        return this
+    }
+
     fun addRight(node: Node<K, V>)  : Node<K, V> {
         node.parent = this
         right = node
@@ -72,7 +105,8 @@ sealed class Node<K : Comparable<K>, V> {
 
     fun addRight(keyValue: KeyValue<K,V>) = addRight(TwoNode(keyValue))
 
-    fun getSiblings(): Sibling {
+    fun getSiblings(): Sibling<K,V> {
+
         val parent = this.parent
         return when (parent) {
             is Node.TwoNode     -> {
@@ -89,11 +123,16 @@ sealed class Node<K : Comparable<K>, V> {
                 else -> throw IllegalStateException("node is not a child of it's parent")
             }
             is Node.FourNode    -> throw FourNodeException()
-            null -> Sibling.NoSiblings
+            null -> Sibling.NoSiblings()
         }
     }
 
     fun isOrphan() = parent == null
+
+//    class  EmptyNode<K:Comparable<K>,V>(override var keyValue1: KeyValue<K, V>, override var left: Node<K, V>?, override var right: Node<K, V>?, override var parent: Node<K, V>?) : Node<K,V>() {
+//        override fun toString() = "Empty"
+//        override fun equals(other: Any?) = other is EmptyNode<*,*>
+//    }
 
     data class TwoNode<K : Comparable<K>, V>(
         override var keyValue1  : KeyValue<K, V>,
@@ -269,6 +308,8 @@ sealed class Node<K : Comparable<K>, V> {
                 ) as TwoNode
 
     }
+
+
 
 }
 

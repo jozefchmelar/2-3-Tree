@@ -1,3 +1,16 @@
+
+   /*
+                1. Locate node n, which contains item I
+                2. If node n is not a leaf  swap I with inorder successor
+                 deletion always begins at a leaf
+                3. If leaf node n contains another item, just delete item I
+                    else
+                try to redistribute nodes from siblings (see next slide)
+                if not possible, merge node (see next slide)
+                Del
+   */
+
+
 node=Find(item)
 if(node!=null)
 {
@@ -58,3 +71,330 @@ if(node!=null)
     }
 }
 returnfasle
+
+
+
+
+
+
+
+
+
+/*****************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public boolean vymazZaznam(D mazanyZaznam) {
+        boolean bolVymazany = vymazZaznamZoStromu(mazanyZaznam);
+        if(bolVymazany) pocetZaznamovVStrome--;
+        return bolVymazany;
+    }
+    private boolean vymazZaznamZoStromu(D mazanyZaznam) {
+        Uzlisko<D> otecZaznamu = null;
+        Uzlisko<D> bratZaznamu = null;
+        DataUzliska<D> rozdelovacZaznamov = null;
+        DataUzliska<D> nasledovnikZaznamu;
+        if (this.korenStromu == null) return false;
+        LinkedList<Uzlisko<D>> cestaKMazanemu = this.zlozCestuKMazanemu(mazanyZaznam);
+
+        if (cestaKMazanemu == null) return false;
+        if (cestaKMazanemu.size() == 0) return false;
+
+        Uzlisko<D> uzolZKtorehoMazem;
+
+        uzolZKtorehoMazem = cestaKMazanemu.removeLast();
+
+        if (uzolZKtorehoMazem.getLavehoPotomka() != null) { // nie je to list
+
+            if (jeRovnaky(uzolZKtorehoMazem.getLavyKluc(), mazanyZaznam)) {
+                nasledovnikZaznamu = this.getNasledovnikaMazaneho(uzolZKtorehoMazem.getLavyPrvokUzla()); // najdem inorder nasledovnika
+
+                if (uzolZKtorehoMazem == this.korenStromu &&
+                        jeRovnaky(mazanyZaznam, this.korenStromu.getLavyKluc())) {
+
+                    if (this.korenStromu.getLavehoPotomka() != null) {
+                        Uzlisko<D> aktualneKontrolovany = this.korenStromu.getStrednehoPotomka();
+                        while (aktualneKontrolovany.getLavehoPotomka() != null) {
+                            aktualneKontrolovany = aktualneKontrolovany.getLavehoPotomka();
+                        }
+                        nasledovnikZaznamu = aktualneKontrolovany.getLavyPrvokUzla();
+                    }
+                }
+                mazanyZaznam = nasledovnikZaznamu.getKlucHodnotu();
+                cestaKMazanemu = this.zlozCestuKMazanemu(mazanyZaznam); // najdem cestu k nasledovnikovi
+                uzolZKtorehoMazem.getLavyPrvokUzla().setKluc(nasledovnikZaznamu.getKlucHodnotu());
+                if (cestaKMazanemu.size() != 0) {
+                    uzolZKtorehoMazem = cestaKMazanemu.removeLast();
+                }
+            } else if (uzolZKtorehoMazem.getPravyPrvokUzla() != null &&
+                    jeRovnaky(uzolZKtorehoMazem.getPravyKluc(), mazanyZaznam)) {
+                nasledovnikZaznamu = this.getNasledovnikaMazaneho(uzolZKtorehoMazem.getPravyPrvokUzla()); // najdem inorder nasledovnika
+                mazanyZaznam = nasledovnikZaznamu.getKlucHodnotu();
+                cestaKMazanemu = this.zlozCestuKMazanemu(nasledovnikZaznamu.getKlucHodnotu()); // najdem cestu k nasledovnikovi
+                uzolZKtorehoMazem.getPravyPrvokUzla().setKluc(nasledovnikZaznamu.getKlucHodnotu());
+                uzolZKtorehoMazem.getPravyPrvokUzla().setLavySyn(uzolZKtorehoMazem.getStrednehoPotomka());
+                if (cestaKMazanemu.size() != 0) uzolZKtorehoMazem = cestaKMazanemu.removeLast();
+            }
+        }
+        // mazanie z lista
+        if (jeRovnaky(uzolZKtorehoMazem.getLavyKluc(), mazanyZaznam)) {
+            if (uzolZKtorehoMazem.getPravyPrvokUzla() == null) {
+                uzolZKtorehoMazem.getLavyPrvokUzla().setKluc(null);
+            } else {
+                uzolZKtorehoMazem.getLavyPrvokUzla().setKluc(uzolZKtorehoMazem.getPravyKluc());
+                uzolZKtorehoMazem.setPravyPrvokUzla(null);
+            }
+        } else uzolZKtorehoMazem.setPravyPrvokUzla(null);
+        // v uzly z ktoreho sa mazalo zostal jeden prvok
+        if (uzolZKtorehoMazem.getLavyKluc() != null) {
+            return true;
+        } else {
+            // v uzly z ktoreho sa mazalo nic nezostalo
+            while (true) {
+                if (uzolZKtorehoMazem == this.korenStromu) {
+                    if (uzolZKtorehoMazem.getPravyPrvokUzla() == null) {
+                        if (uzolZKtorehoMazem.getLavehoPotomka() != null) {
+                            if (uzolZKtorehoMazem.getLavehoPotomka().getLavyKluc() != null) {
+                                this.korenStromu = uzolZKtorehoMazem.getLavehoPotomka();
+                                return true;
+                            } else if (uzolZKtorehoMazem.getStrednehoPotomka().getLavyKluc() != null) {
+                                this.korenStromu = uzolZKtorehoMazem.getStrednehoPotomka();
+                                return true;
+                            }
+                        } else {
+                            this.korenStromu = null;
+                            return true;
+                        }
+                    }
+                    if (uzolZKtorehoMazem.getLavehoPotomka() == null) {
+                        if (jeRovnaky(uzolZKtorehoMazem.getLavyKluc(), mazanyZaznam)) {
+                            uzolZKtorehoMazem.getLavyPrvokUzla().setKluc(uzolZKtorehoMazem.getPravyKluc()); //
+                            uzolZKtorehoMazem.setPravyPrvokUzla(null);
+                            return true;
+                        } else {
+                            uzolZKtorehoMazem.setPravyPrvokUzla(null);
+                            return true;
+                        }
+                    }
+                } else {
+                    // určenie priameho brata a rozdelovača bratov
+                    otecZaznamu = cestaKMazanemu.removeLast();
+                    if (uzolZKtorehoMazem == otecZaznamu.getLavehoPotomka()) { // ak je mazany prvok lavym potomkom
+                        bratZaznamu = otecZaznamu.getStrednehoPotomka();
+                        rozdelovacZaznamov = otecZaznamu.getLavyPrvokUzla();
+                    } else if (uzolZKtorehoMazem == otecZaznamu.getStrednehoPotomka() &&
+                            otecZaznamu.getPravyPrvokUzla() != null) {
+                        if (otecZaznamu.getLavehoPotomka().getPravyPrvokUzla() != null) { // ak je lavy potomok dvojprvkovy uzol
+                            bratZaznamu = otecZaznamu.getLavehoPotomka();
+                            rozdelovacZaznamov = otecZaznamu.getLavyPrvokUzla();
+                        } else {
+                            bratZaznamu = otecZaznamu.getPravehoPotomka();
+                            rozdelovacZaznamov = otecZaznamu.getPravyPrvokUzla();
+                        }
+                    } else if (otecZaznamu.getPravyPrvokUzla() != null) {
+                        if (uzolZKtorehoMazem == otecZaznamu.getPravehoPotomka()) { // ak je mazany prvok pravym potomkom
+                            bratZaznamu = otecZaznamu.getStrednehoPotomka();
+                            rozdelovacZaznamov = otecZaznamu.getPravyPrvokUzla();
+                        }
+                    } else if (otecZaznamu.getPravyPrvokUzla() == null) {
+                        if (otecZaznamu.getLavehoPotomka() == uzolZKtorehoMazem) {
+                            bratZaznamu = otecZaznamu.getStrednehoPotomka();
+                        } else {
+                            bratZaznamu = otecZaznamu.getLavehoPotomka();
+                        }
+                        rozdelovacZaznamov = otecZaznamu.getLavyPrvokUzla();
+                    }
+                }
+                // ak je priamy brat dvojprvkovy uzol
+                if (bratZaznamu.getPravyPrvokUzla() != null) {
+                    if (bratZaznamu.getPravyKluc() != null) {
+                        uzolZKtorehoMazem.getLavyPrvokUzla().setKluc(rozdelovacZaznamov.getKlucHodnotu());
+                        if (jeMensi(rozdelovacZaznamov.getKlucHodnotu(), bratZaznamu.getLavyKluc())) {
+                            rozdelovacZaznamov.setKluc(bratZaznamu.getLavyKluc());
+                            if (uzolZKtorehoMazem.getLavehoPotomka() != null &&
+                                    uzolZKtorehoMazem.getStrednehoPotomka().getLavyKluc() == null) {
+                                uzolZKtorehoMazem.getLavyPrvokUzla().setPravySyn(bratZaznamu.getLavehoPotomka());
+                            } else if (uzolZKtorehoMazem.getStrednehoPotomka() != null) {
+                                uzolZKtorehoMazem.getLavyPrvokUzla().setLavySyn(uzolZKtorehoMazem.getStrednehoPotomka());
+                                uzolZKtorehoMazem.getLavyPrvokUzla().setPravySyn(bratZaznamu.getLavehoPotomka());
+                            }
+                            bratZaznamu.getLavyPrvokUzla().setKluc(bratZaznamu.getPravyKluc());
+                            bratZaznamu.getLavyPrvokUzla().setLavySyn(bratZaznamu.getStrednehoPotomka());
+                            bratZaznamu.getLavyPrvokUzla().setPravySyn(bratZaznamu.getPravehoPotomka());
+                            bratZaznamu.setPravyPrvokUzla(null);
+                            return true;
+                        } else {
+                            rozdelovacZaznamov.setKluc(bratZaznamu.getPravyKluc());
+                            if (uzolZKtorehoMazem.getLavehoPotomka() == null) {
+                                uzolZKtorehoMazem.getLavyPrvokUzla().setLavySyn(bratZaznamu.getPravehoPotomka());
+                            } else if (uzolZKtorehoMazem.getLavehoPotomka() != null) {
+                                if (uzolZKtorehoMazem.getLavehoPotomka().getLavyKluc() != null) {
+                                    uzolZKtorehoMazem.getLavyPrvokUzla().setPravySyn(uzolZKtorehoMazem.getLavehoPotomka());
+                                    uzolZKtorehoMazem.getLavyPrvokUzla().setLavySyn(bratZaznamu.getPravehoPotomka());
+                                } else if (uzolZKtorehoMazem.getStrednehoPotomka() != null) {
+                                    uzolZKtorehoMazem.getLavyPrvokUzla().setLavySyn(bratZaznamu.getPravehoPotomka());
+                                }
+                            }
+                            bratZaznamu.setPravyPrvokUzla(null);
+                            return true;
+                        }
+                    }
+                }
+                // ak je priamy brat jednoprvkovy uzol
+                if ((bratZaznamu.getPravyPrvokUzla() != null &&
+                        bratZaznamu.getPravyKluc() == null) || (bratZaznamu.getPravyPrvokUzla() == null)) {
+                    //kam umiestinm v priamom bratovi rozdelovac
+                    if (jeMensi(bratZaznamu.getLavyKluc(), rozdelovacZaznamov.getKlucHodnotu())) { // rozdelovac priamych(otec) bratov je vacsi
+                        bratZaznamu.setPravyPrvokUzla(new DataUzliska<>(rozdelovacZaznamov.getKlucHodnotu()));
+                        if (uzolZKtorehoMazem.getLavehoPotomka() == null) {
+                            uzolZKtorehoMazem = null;
+                        } else {
+                            if (uzolZKtorehoMazem.getLavehoPotomka().getLavyKluc() != null) {
+                                bratZaznamu.getPravyPrvokUzla().setPravySyn(uzolZKtorehoMazem.getLavehoPotomka());
+                                bratZaznamu.getPravyPrvokUzla().setLavySyn(bratZaznamu.getStrednehoPotomka());
+                            } else {
+                                bratZaznamu.getPravyPrvokUzla().setPravySyn(uzolZKtorehoMazem.getStrednehoPotomka());
+                                bratZaznamu.getPravyPrvokUzla().setLavySyn(bratZaznamu.getStrednehoPotomka());
+                            }
+                        }
+                        uzolZKtorehoMazem = otecZaznamu;
+                    } else if (jeVacsi(bratZaznamu.getLavyKluc(), rozdelovacZaznamov.getKlucHodnotu())) { // rozdelovac priamych(otec) bratov je mensi
+                        bratZaznamu.setPravyPrvokUzla(new DataUzliska<>(bratZaznamu.getLavyKluc()));
+                        bratZaznamu.getPravyPrvokUzla().setLavySyn(bratZaznamu.getLavehoPotomka());
+                        bratZaznamu.getPravyPrvokUzla().setPravySyn(bratZaznamu.getStrednehoPotomka());
+                        bratZaznamu.getLavyPrvokUzla().setKluc(rozdelovacZaznamov.getKlucHodnotu());
+                        bratZaznamu.getLavyPrvokUzla().setLavySyn(null);
+                        bratZaznamu.getLavyPrvokUzla().setPravySyn(bratZaznamu.getPravyPrvokUzla().getLavySyn());
+                        if (rozdelovacZaznamov.getLavySyn().getLavyKluc() != null) {
+                            bratZaznamu.getLavyPrvokUzla().setLavySyn(rozdelovacZaznamov.getLavySyn());
+                        } else {
+                            if (rozdelovacZaznamov.getLavySyn().getLavehoPotomka() != null) {
+                                if (rozdelovacZaznamov.getLavySyn().getLavehoPotomka().getLavyKluc() != null) {
+                                    bratZaznamu.getLavyPrvokUzla().setLavySyn(rozdelovacZaznamov.getLavySyn().getLavehoPotomka());
+                                } else if (rozdelovacZaznamov.getLavySyn().getStrednehoPotomka() != null) {
+                                    bratZaznamu.getLavyPrvokUzla().setLavySyn(rozdelovacZaznamov.getLavySyn().getStrednehoPotomka());
+                                }
+                            } else if (rozdelovacZaznamov.getLavySyn().getStrednehoPotomka() != null) {
+                                bratZaznamu.getLavyPrvokUzla().setLavySyn(rozdelovacZaznamov.getLavySyn().getLavehoPotomka());
+                            }
+                        }
+                        if (uzolZKtorehoMazem.getLavyPrvokUzla().getLavySyn() == null) {
+                            uzolZKtorehoMazem = null;
+                        }
+                        uzolZKtorehoMazem = otecZaznamu;
+                    }
+                    //uprava predchodcu odkial bol odobraty rozdelovaci prvok
+                    if (otecZaznamu.getLavyPrvokUzla() == rozdelovacZaznamov) {
+                        if (otecZaznamu.getPravyPrvokUzla() != null) {
+                            otecZaznamu.getLavyPrvokUzla().setKluc(otecZaznamu.getPravyKluc());
+                            otecZaznamu.getLavyPrvokUzla().setLavySyn(otecZaznamu.getStrednehoPotomka());
+                            otecZaznamu.getLavyPrvokUzla().setPravySyn(otecZaznamu.getPravehoPotomka());
+                            otecZaznamu.setPravyPrvokUzla(null);
+                        } else {
+                            rozdelovacZaznamov.setKluc(null);
+                        }
+                    } else {
+                        if (otecZaznamu.getStrednehoPotomka().getLavyKluc() == null) {
+                            otecZaznamu.getLavyPrvokUzla().setPravySyn(otecZaznamu.getPravehoPotomka());
+                        }
+                        otecZaznamu.setPravyPrvokUzla(null);
+                    }
+                    if (uzolZKtorehoMazem.getLavyKluc() != null) return true;
+                }
+            }
+        }
+    }
+    private LinkedList<Uzlisko<D>> zlozCestuKMazanemu(D mazanyZaznam) {
+        LinkedList<Uzlisko<D>>  prechadzaneUzly         = new LinkedList<>();
+        LinkedList<Uzlisko<D>>  zlozenaCestaKMazanemu   = new LinkedList<>();
+        Uzlisko<D>              aktualneKontrolovany;
+        prechadzaneUzly.add(this.korenStromu);
+        while (prechadzaneUzly.size() > 0) {
+            aktualneKontrolovany = prechadzaneUzly.removeFirst();
+            zlozenaCestaKMazanemu.add(aktualneKontrolovany);
+            if (aktualneKontrolovany.getPravyPrvokUzla() != null) {
+                if (jeRovnaky(mazanyZaznam, aktualneKontrolovany.getPravyKluc())) {
+                    return zlozenaCestaKMazanemu;
+                } else if (jeVacsi(mazanyZaznam, aktualneKontrolovany.getPravyKluc())) {
+                    if (aktualneKontrolovany.getPravehoPotomka() != null) {
+                        prechadzaneUzly.add(aktualneKontrolovany.getPravehoPotomka());
+                        continue;
+                    } else return null;
+                }
+            }
+            if (jeRovnaky(mazanyZaznam, aktualneKontrolovany.getLavyKluc())) {
+                return zlozenaCestaKMazanemu;
+            } else if (jeVacsi(mazanyZaznam, aktualneKontrolovany.getLavyKluc())) {
+                if (aktualneKontrolovany.getStrednehoPotomka() != null) {
+                    prechadzaneUzly.add(aktualneKontrolovany.getStrednehoPotomka());
+                } else return null;
+            } else if (jeMensi(mazanyZaznam, aktualneKontrolovany.getLavyPrvokUzla().getKlucHodnotu())) {
+                if (aktualneKontrolovany.getLavehoPotomka() != null) {
+                    prechadzaneUzly.add(aktualneKontrolovany.getLavehoPotomka());
+                } else return null;
+            }
+        }
+        return null;
+    }
+    private DataUzliska<D> getNasledovnikaMazaneho(DataUzliska<D> mazanyZaznam) {
+        LinkedList<Uzlisko<D>> cestaKZaznamu = this.zlozCestuKMazanemu(mazanyZaznam.getKlucHodnotu());
+        if (cestaKZaznamu.size() == 0) {
+            System.out.println("prvok ktory sa ide mazať sa nenašiel");
+            return null;
+        }
+        Uzlisko<D> aktualneKontrolovany = cestaKZaznamu.removeLast();
+        DataUzliska<D> hladanyZaznam ;
+        if (jeRovnaky(mazanyZaznam.getKlucHodnotu(), aktualneKontrolovany.getLavyKluc()) &&
+                aktualneKontrolovany.getPravyPrvokUzla() != null &&
+                aktualneKontrolovany.getPravyPrvokUzla().getLavySyn() == null) {
+                return aktualneKontrolovany.getPravyPrvokUzla();
+        }
+        if (mazanyZaznam.getPravySyn() != null) {
+            aktualneKontrolovany = mazanyZaznam.getPravySyn();
+            hladanyZaznam = aktualneKontrolovany.getLavyPrvokUzla();
+            while (aktualneKontrolovany != null) {
+                hladanyZaznam = aktualneKontrolovany.getLavyPrvokUzla();
+                aktualneKontrolovany = aktualneKontrolovany.getLavehoPotomka();
+            }
+            return hladanyZaznam;
+        }
+        if (aktualneKontrolovany.getPravyPrvokUzla() == null) {
+            if (jeMensi(mazanyZaznam.getKlucHodnotu(), aktualneKontrolovany.getLavyKluc()))
+                return aktualneKontrolovany.getLavyPrvokUzla();
+            return getNasledovnika(cestaKZaznamu, mazanyZaznam);
+        } else {
+            if (jeMensi(mazanyZaznam.getKlucHodnotu(), aktualneKontrolovany.getLavyKluc())) {
+                return aktualneKontrolovany.getLavyPrvokUzla();
+            } else if (jeMensi(mazanyZaznam.getKlucHodnotu(), aktualneKontrolovany.getPravyKluc())) {
+                return aktualneKontrolovany.getPravyPrvokUzla();
+            } else {
+                return getNasledovnika(cestaKZaznamu, mazanyZaznam);
+            }
+        }
+    }
+    private DataUzliska<D> getNasledovnika(LinkedList<Uzlisko<D>> cestaKPredchodcovi, DataUzliska<D> mazanyZaznam) {
+        Uzlisko<D> aktualneKontrolovany;
+        while (cestaKPredchodcovi.size() > 0) {
+            aktualneKontrolovany = cestaKPredchodcovi.removeLast();
+            if (jeVacsi(aktualneKontrolovany.getLavyKluc(), mazanyZaznam.getKlucHodnotu())) {
+                return aktualneKontrolovany.getLavyPrvokUzla();
+            } else if (aktualneKontrolovany.getPravyPrvokUzla() != null) {
+                if (jeVacsi(aktualneKontrolovany.getPravyKluc(), mazanyZaznam.getKlucHodnotu()))
+                    return aktualneKontrolovany.getPravyPrvokUzla();
+            }
+        }
+        return null;
+    }
+
