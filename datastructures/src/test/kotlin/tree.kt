@@ -452,76 +452,76 @@ class InsertionTest : StringSpec() {
             result shouldBe true
         }
 
-        "[42] new keyset "{
+        "[42] new keyset delete  "{
             val keys = listOf(80, 95, 93, 15, 19, 61, 37, 78, 31, 26, 63, 67, 62, 43, 72, 28, 32, 16, 47, 73, 6, 86, 49, 55)
             keys.forEach { tree.put(it,4)}
-            val keyToDelete = 17
-            val deleted = tree
-                .
-                    delete(keyToDelete)
+            val keyToDelete = 61
+            val deleted = tree.delete(keyToDelete)
             val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
             result shouldBe true
-            true shouldBe true
         }
 
-/*
+        "[43] testik"{
+            val keys = listOf(80, 95, 93, 15, 19, 61, 37, 78, 31, 26, 63, 67, 62, 43, 72, 28, 32, 16, 47, 73, 6, 86, 49, 55,27,40,41)
+            keys.forEach { tree.put(it,4)}
+            val keyToDelete = 19
+            val deleted = tree.delete(keyToDelete)
+            val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
+            result shouldBe true
+        }
 
-        randomGenerators.forEachIndexed { index, generator ->
+        "[44] testik"{
+            val keys = listOf(80, 95, 93, 15, 19, 61, 37, 78, 31, 26, 63, 67, 62, 43, 72, 28, 32, 16, 47, 73, 6, 86, 49, 55,27,40,41)
+            keys.forEach { tree.put(it,4)}
+            val keyToDelete = 15
+            val deleted = tree.delete(keyToDelete)
+            val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
+            result shouldBe true
+        }
 
-            "[${seeds[index]}] test inserting  " {
+        "[45] testik"{
+            val keys = listOf(80, 95, 93, 15, 19, 61, 37, 78, 31, 26, 63, 67, 62, 43, 72, 28, 32, 16, 47, 73, 6, 86, 49, 55,27,40,41)
+            keys.forEach { tree.put(it,4)}
+            val keyToDelete = 27
+            val deleted = tree.delete(keyToDelete)
+            val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
+            result shouldBe true
+        }
 
-                val numberOfValues = 10.powerOf(6)
+        "[46] testik"{
+            val keys = listOf(80, 95, 93, 15, 19, 61, 37, 78, 31, 26, 63, 67, 62, 43, 72, 28, 32, 16, 47, 73, 6, 86, 49, 55,27,40,41)
+            keys.forEach { tree.put(it,4)}
+            val keyToDelete = 95
+            val deleted = tree.delete(keyToDelete)
+            val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
+            result shouldBe true
+        }
 
-                val keys: HashSet<Int> = HashSet()
+        "[47] final test"{
+            val rnd  = Random(987)
+            val keys = Collections.nCopies(9564,Any()).map { rnd.nextInt(999) }.distinct().toMutableList()
+            println(keys)
+            keys.forEach { tree.put(it,4)}
+            val keyToDelete = keys[rnd.nextInt(keys.size)]
+            val deleted = tree.delete(keyToDelete)
+            val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
+            result shouldBe true
 
-                for (i in 0..numberOfValues) {
-                    keys += abs(generator.nextInt())
-                }
+        }
 
-                measureTime("[] Putting $numberOfValues keys in tree") {
-                    keys.forEach { tree.put(it) }
-                }
+        listOf(Random(987),Random(456),Random(8945),Random(962),Random(2659),Random(986547),Random(987987987),Random(986231),Random(789876))
+            .forEachIndexed { index,rnd ->
+            "[$index] RND test"{
+                val keys = Collections.nCopies(9564,Any()).map { rnd.nextInt(9999) }.distinct().toMutableList()
+                keys.forEach { tree.put(it,4)}
+                val keyToDelete = keys[rnd.nextInt(keys.size)]
+                val deleted = tree.delete(keyToDelete)
+                val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
+                result shouldBe true
 
-                println("Sorting keys")
-                val sortedKeys = keys.sorted()
-                println("Tree inorder")
-                val inorder = tree.getInorder()
-
-                var ok = false
-
-                if (inorder == sortedKeys && inorder.isNotEmpty() && sortedKeys.isNotEmpty()) {
-                    println("keys inserted correctly")
-                    ok = true
-                } else {
-                    println("keys inserted INCORRECTLY")
-                }
-
-                val leafs = emptyLinkedList<Node<Int, Int>>()
-
-                tree.inorder { node ->
-                    if (node.isLeaf()) leafs += node
-                }
-
-                val levels = leafs.map {
-                    val stack = emptyLinkedList<Node<Int, Int>>()
-                    var n: Node<Int, Int>? = it
-                    while (n != null) {
-                        stack.push(n)
-                        n = n.parent
-                    }
-                    stack.size
-                }.distinct()
-
-                println("Leaves are on level : $levels")
-
-                (ok == true && levels.size == 1) shouldBe true
-
-                println("----------------")
             }
-                .config(enabled = false)
-
         }
-*/
+
     }
 
     fun leavesAreOnSameLevel(tree:TwoThreeTree<Int,Int>):Boolean{

@@ -2,10 +2,8 @@ package Tree
 import Tree.Position.*
 import Tree.node.*
 import Tree.node.Node.*
-import com.intellij.util.containers.isNullOrEmpty
 import extensions.Queue
 import extensions.emptyLinkedList
-import java.util.*
 
 
 class TwoThreeTree<K:Comparable<K>,V>  {
@@ -33,855 +31,377 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         insertedKeys.add(key)
     }
 
-    fun leftMost(node:Node<K,V>): Node<K, V> {
-        if(node.right!=null){
-            var n: Node<K, V>? =node.right
-            while(n?.left!=null){
-                n=n.left
-            }
-            return n!!
-        }else return node
+
+    private fun swapKeys(deleteNode: Node<K, V>, inorderSuccesor: Node<K, V>, key: K) {
+
+        if (deleteNode is ThreeNode && deleteNode.keyValue2.key == key) {
+            val delNode = deleteNode.keyValue2
+            val inoNode = inorderSuccesor.keyValue1
+            inorderSuccesor.keyValue1=delNode
+            deleteNode.keyValue2=inoNode
+        }else{
+            val delNode = deleteNode.keyValue1
+            val inoNode = inorderSuccesor.keyValue1
+            inorderSuccesor.keyValue1=delNode
+            deleteNode.keyValue1=inoNode
+        }
 
     }
-    @Suppress("UNCHECKED_CAST")
+
+    /*
+          1. Locate node n, which contains item I
+          2. If node n is not a leaf  swap I with inorder successor
+          deletion always begins at a leaf
+          3. If leaf node n contains another item, just delete item I
+              else
+              try to redistribute nodes from siblings (see next slide)
+              if not possible, merge node (see next slide)
+              https://www.cs.drexel.edu/~amd435/courses/cs260/lectures/L-6_2-3_Trees.pdf
+      */
     fun delete(key: K): Boolean {
-        val deleteNode = find(key)
-        if (deleteNode != null) {
-            if (deleteNode.isLeaf() && root == deleteNode) {
-                root = null
-                return true
-            }
-            if (deleteNode is ThreeNode && deleteNode.isLeaf()) {
+
+        //  Locate node n, which contains item I
+        val deleteNode = find(key) ?: return false
+
+        // if delete node is leaf three node just delete the key from it
+        if (deleteNode.isLeaf()) {
+            if (deleteNode is ThreeNode) {
                 deleteNode.deleteFromNode(key)
                 return true
-            } else {
-
-                val inorderSuccessorNode = inoredSuccesor(deleteNode,key)
-                val inorderSuccessorKv   = when {
-                    key > inorderSuccessorNode?.keyValue1!!.key -> (inorderSuccessorNode as ThreeNode).keyValue2
-                    else -> inorderSuccessorNode.keyValue1
+            } else if (deleteNode is TwoNode) {
+                if (deleteFromLeaf(deleteNode, deleteNode.parent)) {
+                    return true
                 }
-
-                //swap kv with Inorder successor
-                var delKev:KeyValue<K,V>? = null
-                when(deleteNode){
-                    is Node.TwoNode   -> {
-                        delKev=deleteNode.keyValue1
-                        deleteNode.keyValue1=inorderSuccessorKv
-
-                        when(inorderSuccessorNode){
-                            is Node.TwoNode   -> inorderSuccessorNode.keyValue1 = delKev
-                            is Node.ThreeNode -> {
-                                if(key > inorderSuccessorNode.keyValue1.key )inorderSuccessorNode.keyValue2=delKev
-                                else inorderSuccessorNode.keyValue1=delKev
-                            }
-                        }
-                    }
-                    is Node.ThreeNode -> {
-                        if (inorderSuccessorKv.key > deleteNode.keyValue2.key){
-                            delKev = deleteNode.keyValue2
-                            deleteNode.keyValue2=inorderSuccessorKv
-                        }else{
-                            delKev = deleteNode.keyValue1
-                            deleteNode.keyValue1=inorderSuccessorKv
-                        }
-                        inorderSuccessorNode.keyValue1 = delKev
-                    }
-                }
-                val deletedKv = delKev!!
-                //al de
-                //ok let's delete some stuff
-                /*.
-                node element otca lavy +  pravy + lavz szn + middle syn + right syn lebo ak je sucet 4 vies to spravit
-                a ak je to viac ako 5 tiez to vies hned spravit a iba
-                ak je ich menej ako 4 idem do metody kde riesim tieto restrukturalizacne veci ...
-                 */
-                val deleteNodeParent= deleteNode.parent
-                var keyValuesCount=0
-                when(deleteNodeParent){
-                    is Node.TwoNode   -> {
-                        keyValuesCount++
-                        when(deleteNodeParent.left){
-                            is Node.TwoNode   -> keyValuesCount++
-                            is Node.ThreeNode -> keyValuesCount+=2
-                        }
-                        when(deleteNodeParent.right){
-                            is Node.TwoNode   -> keyValuesCount++
-                            is Node.ThreeNode -> keyValuesCount+=2
-                        }
-                    }
-
-                    is Node.ThreeNode -> {
-                        keyValuesCount+=2
-                        when(deleteNodeParent.left){
-                            is Node.TwoNode   -> keyValuesCount++
-                            is Node.ThreeNode -> keyValuesCount+=2
-                        }
-                        when(deleteNodeParent.middle){
-                            is Node.TwoNode   -> keyValuesCount++
-                            is Node.ThreeNode -> keyValuesCount+=2
-                        }
-                        when(deleteNodeParent.right){
-                            is Node.TwoNode   -> keyValuesCount++
-                            is Node.ThreeNode -> keyValuesCount+=2
-                        }
-                    }
-
-                }
-
-                if(keyValuesCount >= 4 ){
-                    when(deleteNodeParent){
-                        is Node.TwoNode   -> when(deleteNode){
-                            is Node.TwoNode   -> {
-
-                                if(inorderSuccessorNode is ThreeNode){
-                                  deleteNode.keyValue1=inorderSuccessorKv
-                                    inorderSuccessorNode.deleteFromNode(delKev.key)
-                                    return true
-                                }
-                                val sibling = deleteNode.getSiblings().closestSibling()
-                                when(sibling.getPosition()){
-                                    Left   -> {
-                                        (sibling as ThreeNode).deleteFromNode(sibling.keyValue2.key)
-                                        deleteNode.keyValue1=deleteNodeParent.keyValue1
-                                        deleteNodeParent.keyValue1=sibling.keyValue2
-                                        return true
-                                    }
-                                    Middle -> throw IllegalStateException()
-                                    Right  -> {
-
-                                        (sibling as ThreeNode).deleteFromNode(sibling.keyValue1.key)
-                                        deleteNodeParent.keyValue1=sibling.keyValue1
-                                        return true
-                                    }
-                                }
-
-                            }
-                            is Node.ThreeNode -> {
-                                if( deleteNode.left    == inorderSuccessorNode ||
-                                    deleteNode.middle  == inorderSuccessorNode ||
-                                    deleteNode.right   == inorderSuccessorNode ) {
-                                    when (inorderSuccessorNode.getPosition()) {
-                                        Left -> TODO()
-                                        Middle -> {
-                                            val siblings = inorderSuccessorNode.getSiblings() as Sibling.TwoSiblings
-                                            if(siblings.hasThreeNodeSibling()){
-                                                if(siblings.twoThreeNodeSiblings()){
-                                                    val delKv1=deleteNode.keyValue1
-                                                    deleteNode.keyValue1=(siblings.closestSibling() as ThreeNode).keyValue2
-                                                    deleteNode.middle!!.keyValue1=delKv1
-                                                    (siblings.closestSibling() as ThreeNode).deleteFromNode(deleteNode.keyValue1.key)
-                                                    return true
-                                                }
-                                                val newM = deleteNode.keyValue2
-                                                val newP = (siblings.second as ThreeNode).keyValue1
-                                                deleteNode.keyValue2=newP
-                                                inorderSuccessorNode.keyValue1=newM
-                                                (siblings.second as ThreeNode).deleteFromNode(newP.key)
-                                                return true
-                                            }else{
-                                                if(inorderSuccessorNode is TwoNode){
-                                                deleteNode.replaceWith(
-                                                    TwoNode(deleteNode.keyValue2, parent = deleteNodeParent)
-                                                        .addLeft(ThreeNode(deleteNode.left!!.keyValue1, deleteNode.keyValue1))
-                                                        .addRight(deleteNode.right!!)
-                                                )
-                                                return true}else{
-                                                    (inorderSuccessorNode as ThreeNode).deleteFromNode(key)
-                                                    return true
-                                                }
-                                            }
-
-                               /*             if (siblings.hasNotThreeNodeSibling()) {
-                                            //TODO IF inorderSuccesrNode is TwoNode.... takt toto co mam, inak else a daco spravit
-                                                if(inorderSuccessorNode is TwoNode)
-                                                    deleteNode.replaceWith(
-                                                        TwoNode(deleteNode.keyValue2, parent = deleteNodeParent)
-                                                            .addLeft(ThreeNode(deleteNode.left!!.keyValue1, deleteNode.keyValue1))
-                                                            .addRight(deleteNode.right!!)
-                                                    )
-                                                else
-                                                {
-                                                    (inorderSuccessorNode as ThreeNode).deleteFromNode(key)
-                                                 }
-                                                return true
-                                            } else if (siblings.hasThreeNodeSibling()) {
-                                                val sibling = siblings.closestSibling() as ThreeNode
-                                                when(sibling.getPosition()){
-                                                    Left   -> {
-                                                        val delKv1=deleteNode.keyValue1
-                                                        deleteNode.keyValue1=sibling.keyValue2
-                                                        deleteNode.middle!!.keyValue1=delKv1
-                                                        sibling.deleteFromNode(deleteNode.keyValue1.key)
-                                                        return true
-                                                    }
-                                                    Middle -> TODO()
-                                                    Right  -> TODO()
-                                                }
-                                            }*/
-
-                                        }
-                                        Right -> {
-                                            val siblings = inorderSuccessorNode.getSiblings().closestSibling()
-                                            if(inorderSuccessorNode is ThreeNode){
-                                                val newP = inorderSuccessorNode.keyValue1
-                                                deleteNode.keyValue2=inorderSuccessorKv
-                                                inorderSuccessorNode.deleteFromNode(inorderSuccessorNode.keyValue1.key)
-                                                return true
-                                            }
-                                            if (siblings is TwoNode) {
-                                                deleteNode.replaceWith(
-                                                    TwoNode(deleteNode.keyValue1, parent = deleteNodeParent)
-                                                        .addLeft(deleteNode.left!!)
-                                                        .addRight(ThreeNode(deleteNode.middle!!.keyValue1, deleteNode.keyValue2))
-                                                )
-                                                return true
-                                            }else {
-                                                val newParentKv = (siblings as ThreeNode).keyValue2
-                                                val newRightKv = deleteNode.keyValue2
-                                                inorderSuccessorNode.keyValue1=newRightKv
-                                                deleteNode.keyValue2=newParentKv
-                                                siblings.deleteFromNode(newParentKv.key)
-                                                return true
-
-                                            }
-                                        }
-                                    }
-                                }else TODO()
-
-
-                            }
-                        }
-
-                        is Node.ThreeNode -> when(deleteNode){
-                            is Node.TwoNode   -> {
-                                when(deleteNode.getPosition()){
-                                    Left   -> {
-                                        val sibling = deleteNode.getSiblings().closestSibling()
-                                        if(sibling is TwoNode){
-                                        deleteNodeParent.replaceWith(
-                                            TwoNode(keyValue1 = deleteNodeParent.keyValue2, parent = deleteNodeParent.parent)
-                                                .addLeft(ThreeNode(inorderSuccessorKv,deleteNodeParent.middle!!.keyValue1))
-                                                .addRight(deleteNodeParent.right!!)
-                                        )
-                                        return true}else{
-                                            val pKv=sibling.keyValue1
-                                            deleteNodeParent.keyValue1 = pKv
-                                            (sibling as ThreeNode).deleteFromNode(pKv.key)
-                                            return true
-                                        }
-                                    }
-                                    Middle -> {
-
-                                        val siblings = deleteNode.getSiblings() as Sibling.TwoSiblings
-                                        if (siblings.hasThreeNodeSibling()) {
-                                            if (siblings.twoThreeNodeSiblings()) {
-                                                deleteNodeParent.keyValue2=inorderSuccessorKv
-                                                deleteNode.keyValue1=deleteNodeParent.keyValue1
-                                                val sibling = siblings.first as ThreeNode
-                                                deleteNodeParent.keyValue1=sibling.keyValue2
-                                                sibling.deleteFromNode( deleteNodeParent.keyValue1.key)
-                                                return true
-                                            }
-                                            val sibling = siblings.second
-                                            deleteNodeParent.keyValue2=sibling.keyValue1
-                                            (sibling as ThreeNode).deleteFromNode(sibling.keyValue1.key)
-                                            return true
-                                        } else if (siblings.closestSibling() is TwoNode) {
-                                            deleteNodeParent.replaceWith(
-                                                TwoNode(keyValue1 = deleteNodeParent.keyValue1, parent = deleteNodeParent.parent)
-                                                    .addLeft(deleteNodeParent.left!!)
-                                                    .addRight(ThreeNode(inorderSuccessorKv, deleteNodeParent.right!!.keyValue1))
-                                            )
-                                            return true
-                                        } else {
-                                            TODO()
-
-                                        }
-                                    }
-                                    Right  -> {
-                                        val sibling = deleteNode.getSiblings().closestSibling()
-                                        if (sibling is TwoNode) {
-                                            deleteNodeParent.replaceWith(
-                                                TwoNode(keyValue1 = deleteNodeParent.keyValue1, parent = deleteNodeParent.parent)
-                                                    .addLeft(deleteNodeParent.left!!)
-                                                    .addRight(ThreeNode(deleteNodeParent.middle!!.keyValue1, deleteNodeParent.keyValue2))
-                                            )
-                                            return true
-                                        } else {
-                                            val newRight  = deleteNodeParent.keyValue2
-                                            val newParent = (sibling as ThreeNode).keyValue2
-
-                                            inorderSuccessorNode.keyValue1=newRight
-                                            deleteNodeParent.keyValue2=newParent
-                                            sibling.deleteFromNode(newParent.key)
-                                            return true
-                                        }
-                                    }
-                                }
-
-                            }
-                            is Node.ThreeNode ->TODO()
-                        }
-                    }
-
-                }else{
-                    var i = 0
-                    /*
-                     1. Locate node n, which contains item I
-                     2. If node n is not a leaf  swap I with inorder successor
-                      deletion always begins at a leaf
-                     3. If leaf node n contains another item, just delete item I
-                         else
-                     try to redistribute nodes from siblings (see next slide)
-                     if not possible, merge node (see next slide)
-                     Del
-                    */
-                    var father: Node<K, V>? = inorderSuccessorNode
-                    var deleteNode = deleteNode
-                    var once = true
-                    while(true){
-                        if (i++ > 40) throw Exception("loop")
-                        var parentlessNewNode: Node<K, V>?=null
-
-
-                        if(once) {
-                            if(inorderSuccessorNode is ThreeNode){
-                                inorderSuccessorNode.deleteFromNode(key)
-                                return true
-                            }
-                            val sibl = inorderSuccessorNode.getSiblings().closestSibling()
-                            if(sibl is ThreeNode){
-                                when(inorderSuccessorNode.getPosition()){
-                                    Left   -> {
-                                        inorderSuccessorNode.keyValue1=sibl.keyValue1
-                                        sibl.deleteFromNode(sibl.keyValue1.key)
-                                        val left =  inorderSuccessorNode.keyValue1
-                                        val par  =  inorderSuccessorNode.parent!!.keyValue1
-                                        inorderSuccessorNode.keyValue1=par
-                                        inorderSuccessorNode.parent!!.keyValue1=left
-
-                                        return true
-                                    }
-                                    Middle -> TODO()
-                                    Right  -> TODO()
-                                }
-                            }
-                            when (deleteNode) {
-                                is Node.TwoNode -> {
-                                    if(deleteNode.hasKids()){
-                                        println()
-                                        parentlessNewNode = ThreeNode(deleteNode.left!!.keyValue1,deleteNode.keyValue1,parent=deleteNode)
-                                        father=deleteNode
-
-                                    }       else
-                                    parentlessNewNode = (father!!.left as TwoNode).toThreeNode(father.right!!.keyValue1).copy(parent = inorderSuccessorNode)
-                                }
-                                is Node.ThreeNode -> TODO()
-                            }
-                            once=false
-                        }
-                        val siblings =father?.getSiblings()
-
-                        when(siblings){
-                            is Sibling.TwoSiblings -> TODO()
-                            is Sibling.OneSibling  -> {
-                                if(siblings.sibling is ThreeNode){
-                                    TODO()
-                                }else{
-                                    when(father?.getPosition()){
-                                        Left -> {
-                                            val parent  = father.parent
-                                          //  val test = parent?.getSiblings()
-                                            val sibling = siblings.sibling as TwoNode
-                                            val nejakyNode= ThreeNode(parent!!.keyValue1,sibling.keyValue1)
-                                                .addMiddle(sibling.left!!)
-                                                .addRight(sibling.right!!)
-                                                .addLeft(parentlessNewNode!!)
-
-                                            //parent.parent=parent
-                                            parent.left=nejakyNode
-
-                                            father = nejakyNode.setNewParent(parent)
-                                            deleteNode=father.parent
-                                            father=deleteNode
-                                            println()
-
-                                        }
-                                        Middle -> TODO()
-                                        Right -> {
-                                            val nejakyNode = ThreeNode(siblings.sibling.keyValue1,father.parent!!.keyValue1)
-                                                .addMiddle(siblings.sibling.right!!)
-                                                .addLeft(siblings.sibling.left!!)
-                                                .addRight(father.left!!)
-                                            nejakyNode.setNewParent(father.parent!!)
-
-                                            val newParent = nejakyNode.parent
-                                            newParent!!.addRight(nejakyNode)
-                                                newParent.left=null
-                                            father = newParent
-
-
-
-
-                                        }
-
-
-                                        null -> TODO()
-                                    }
-                                }
-                            }
-                            is Sibling.NoSiblings  -> {
-                                root=father!!.right
-                                return true
-                            }
-                        }
-
-
-                        println()
-                    }
-
-                }
-                /*
-                1. Locate node n, which contains item I
-                2. If node n is not a leaf  swap I with inorder successor
-                 deletion always begins at a leaf
-                3. If leaf node n contains another item, just delete item I
-                    else
-                try to redistribute nodes from siblings (see next slide)
-                if not possible, merge node (see next slide)
-                Del
-                 */
-                TODO()
-                var i = 0
-                while (inorderSuccessorNode != null) {
-                    if (i++ > 40) throw Exception("loop")
-
-/* posledny smutny pokus
-                    if(node.hasKids()){
-//                        when(node){
-//                            is Node.TwoNode        -> node.replaceWith(TwoNode(inorderSuccessorKv,node.left,node.right,parent = node.parent))
-//                            is Node.ThreeNode      -> when(key){
-//                                node.keyValue1.key -> node.replaceWith(ThreeNode(inorderSuccessorKv,node.keyValue2,    left = node.left,middle = node.middle,right = node.right,parent = node.parent))
-//                                node.keyValue2.key -> node.replaceWith(ThreeNode(node.keyValue1    ,inorderSuccessorKv,left = node.left,middle = node.middle,right = node.right,parent = node.parent))
-//                            }
-//                        }
-
-                    }else if(inorderSuccessorNode.isLeaf()){
-                        //ThreeNode in leaf is already managed up in the code
-                        val node     = node as TwoNode
-                        val parent   = node.parent
-                        val siblings = node.getSiblings()
-                        if(siblings.hasThreeNodeSibling()){
-                            when(parent){
-                                is Node.TwoNode   -> {
-                                    val sibling = (siblings as Sibling.OneSibling).sibling as ThreeNode
-                                    when(node.getPosition()){
-                                        Left   -> {
-                                            parent.replaceWith(
-                                                TwoNode(sibling.keyValue1,parent=parent.parent)
-                                                    .addLeft(parent.keyValue1)
-                                                    .addRight(sibling.keyValue2)
-                                            )
-                                            return true
-                                        }
-                                        Middle -> throw IllegalStateException("two node parent cant' have middle child")
-                                        Right  -> {
-                                            parent.replaceWith(
-                                                TwoNode(sibling.keyValue2,parent=parent.parent)
-                                                    .addLeft(sibling.keyValue1)
-                                                    .addRight(parent.keyValue1)
-                                            )
-                                            return true
-                                        }
-                                    }
-                                }
-                                is Node.ThreeNode -> {
-                                    val sibling  = siblings.closestSibling()
-                                    when(node.getPosition()){
-                                        Left   -> {
-                                            when(sibling)
-                                            {
-                                                is Node.TwoNode   -> {
-                                                    parent.replaceWith(
-                                                        TwoNode(parent.keyValue2,parent=parent.parent)
-                                                            .addLeft(ThreeNode(parent.keyValue1,sibling.keyValue1))
-                                                            .addRight(parent.right!!)
-                                                    )
-                                                    return true
-                                                }
-                                                is Node.ThreeNode -> {
-                                                    parent.replaceWith(
-                                                        ThreeNode(sibling.keyValue1,parent.keyValue2,parent = parent.parent)
-                                                            .addMiddle(sibling.keyValue2)
-                                                            .addLeft(parent.keyValue1)
-                                                            .addRight(parent.right!!)
-                                                    )
-                                                    return true
-                                                }
-                                            }
-                                        }
-
-                                        Middle -> {
-                                            when(siblings){
-                                                is Sibling.TwoSiblings -> {
-                                                    if(siblings.first is ThreeNode || (siblings.first is ThreeNode && siblings.second is ThreeNode)){
-                                                        parent.replaceWith(
-                                                            ThreeNode((siblings.first as ThreeNode<K, V>).keyValue2,parent.keyValue2,parent=parent.parent)
-                                                                .addMiddle(parent.keyValue1)
-                                                                .addLeft(sibling.keyValue1)
-                                                                .addRight(parent.right!!)
-                                                        )
-                                                        return true
-                                                    }else if(siblings.first !is ThreeNode && siblings.second is ThreeNode){
-                                                        parent.replaceWith(
-                                                            ThreeNode(parent.keyValue1,(siblings.second as ThreeNode<K, V>).keyValue1,parent=parent.parent)
-                                                                .addMiddle(parent.keyValue2)
-                                                                .addLeft(parent.left!!)
-                                                                .addRight((siblings.second as ThreeNode<K, V>).keyValue2)
-                                                        )
-                                                        return true
-                                                    }
-
-                                                }
-                                            }
-
-                                        }
-                                        Right  -> {
-                                            when(sibling){
-                                                is Node.TwoNode -> {
-                                                        parent.replaceWith(
-                                                            TwoNode(parent.keyValue1,parent=parent.parent)
-                                                                .addLeft(parent.left!!)
-                                                                .addRight(ThreeNode(sibling.keyValue1,parent.keyValue2))
-                                                        )
-                                                    return true
-                                                }
-                                                is Node.ThreeNode -> {
-                                                    parent.replaceWith(
-                                                        ThreeNode(parent.keyValue1,sibling.keyValue2,parent=parent.parent)
-                                                            .addMiddle(sibling.keyValue1)
-                                                            .addLeft(parent.left!!)
-                                                            .addRight(parent.keyValue2)
-                                                    )
-                                                    return true
-                                                }
-                                             }
-
-                                        }
-                                    }
-
-                                }
-                                null -> TODO()
-                            }
-                        }else {
-                            when(parent){
-                                is Node.TwoNode   -> {
-                                    TODO()
-                                }
-                                is Node.ThreeNode -> {
-                                    when(node.getPosition()){
-                                        Left    -> {
-                                            parent.replaceWith(
-                                                TwoNode(parent.keyValue2,parent=parent.parent)
-                                                    .addLeft(ThreeNode(parent.keyValue1,siblings.closestSibling().keyValue1))
-                                                    .addRight(parent.right!!)
-                                            )
-                                            return true
-                                        }
-                                        Middle  -> {
-                                            parent.replaceWith(
-                                                TwoNode(parent.keyValue2,parent=parent.parent)
-                                                    .addLeft(ThreeNode(siblings.closestSibling().keyValue1,parent.keyValue1))
-                                                    .addRight(parent.right!!)
-                                            )
-                                            return true
-                                        }
-                                        Right   -> {
-                                            parent.replaceWith(
-                                                TwoNode(parent.keyValue1,parent=parent.parent)
-                                                    .addLeft(parent.left!!)
-                                                    .addRight(ThreeNode(siblings.closestSibling().keyValue1,parent.keyValue2))
-                                            )
-                                            return true
-                                        }
-                                    }
-                                }
-                                null -> TODO()
-                            }
-                        }
-                    }
-
-                    when(inorderSuccessorNode){
-                        is Node.TwoNode   -> {
-                            val siblings = inorderSuccessorNode.getSiblings()
-                            if(siblings.closestSibling() is ThreeNode ){
-                                val sibling = siblings.closestSibling()
-                                val parent  = sibling.parent
-                                when(inorderSuccessorNode.getPosition()){
-                                    Left -> {
-                                        TODO()
-                                    }
-                                    Middle -> {
-                                        when(siblings){
-                                            is Sibling.TwoSiblings -> {
-                                                if(siblings.first is ThreeNode || (siblings.first is ThreeNode && siblings.second is ThreeNode)){
-                                                    val sibling = siblings.first as ThreeNode
-                                                    sibling.deleteFromNode(sibling.keyValue2.key)
-                                                    sibling.parent!!.keyValue1 = sibling.keyValue2
-                                                    return true
-                                                }else{
-                                                    TODO()
-                                                }
-                                            }
-                                            is Sibling.OneSibling -> TODO()
-                                        }
-                                    }
-                                    Right -> {
-                                        when(parent){
-                                            is Node.TwoNode   -> {
-                                                //parent.replaceWith()
-                                                TODO()
-                                            }
-                                            is Node.ThreeNode -> {
-                                                if(sibling.getPosition() == Middle){
-                                                    val sibling = (sibling as ThreeNode)
-                                                    (sibling as ThreeNode).deleteFromNode(sibling.keyValue2.key)
-                                                    parent.keyValue2=sibling.keyValue2
-                                                    return true
-                                                }
-                                                    parent.replaceWith(
-                                                        TwoNode(parent.keyValue1, parent = parent.parent)
-                                                            .addLeft(parent.left!!)
-                                                            .addRight(ThreeNode(parent.middle!!.keyValue1, (sibling as ThreeNode).keyValue2))
-                                                    )
-                                                    return true
-
-
-                                            }
-                                            null -> TODO()
-                                        }
-                                    }
-                                }
-                            }else{
-                                val parent  = inorderSuccessorNode.parent
-                                val insNode = inorderSuccessorNode
-                                when(parent){
-                                    is Node.TwoNode   -> TODO()
-                                    is Node.ThreeNode -> {
-                                        when(insNode.getPosition()){
-                                            Left -> TODO()
-                                            Middle -> {
-                                                parent.replaceWith(
-                                                    TwoNode(parent.keyValue2,parent=parent.parent)
-                                                        .addLeft(ThreeNode(parent.left!!.keyValue1,insNode.keyValue1))
-                                                        .addRight(parent.right!!)
-                                                )
-                                                return true
-                                            }
-                                            Right -> {
-                                                parent.replaceWith(
-                                                    TwoNode(parent.keyValue1,parent=parent.parent)
-                                                        .addLeft (parent.left!!)
-                                                        .addRight(ThreeNode(parent.middle!!.keyValue1,insNode.keyValue1))
-                                                )
-                                                return true
-                                            }
-                                        }
-                                    }
-                                    null -> TODO()
-                                }
-                            }
-                        }
-                        is Node.ThreeNode -> {
-                            inorderSuccessorNode.deleteFromNode(inorderSuccessorKv.key)
-                            return true
-                        }
-                    }
-*/
-
-/*
-//                    if (inorderSuccessorNode.getSiblings().hasNotThreeNodeSibling()) {
-//                        val parent = inorderSuccessorNode.parent
-//                        if (parent is ThreeNode) {
-//                            if (parent.keyValue1.key == key) {
-//                                val newLeft = (parent.left as TwoNode).toThreeNode(inorderSuccessorNode.keyValue1)
-//                                parent.replaceWith(TwoNode(parent.keyValue2, parent = parent.parent).addLeft(newLeft).addRight(parent.right!!))
-//                                return true
-//                            } else if (parent.keyValue2.key == key) {
-//                                val newRight = (parent.middle as TwoNode).toThreeNode(inorderSuccessorNode.keyValue1)
-//                                parent.replaceWith(TwoNode(parent.keyValue1, parent = parent.parent).addLeft(parent.left!!).addRight(newRight))
-//                                return true
-//
-//                            }
-//                        }
-//                    }
-//
-//                    if(inorderSuccessor.parent is ThreeNode){
-//                        val sibl = inorderSuccessor.getSiblings()
-//                        when(inorderSuccessor.getPosition()){
-//                            Position.Left -> TODO()
-//                            Position.Middle -> TODO()
-//                            Position.Right -> TODO()
-//                        }
-//                    }
-
-
-                    val siblings = node.getSiblings()
-                    //    if(siblings.hasThreeNodeSibling())
-                    when (siblings) {
-                        is Sibling.TwoSiblings<K, V> -> {
-                            //if i have two siblings, my parent has to be threeNode
-                            val parent = node.parent as ThreeNode
-                            val position = node.getPosition()
-                            when (position) {
-                                Left -> {
-                                    //I only care about my sibling on the right side which is in the middle one
-                                    if (siblings.first is TwoNode) {
-                                        val newLeftKv1 = parent.keyValue1
-                                        val newLeftKv2 = siblings.first.keyValue1
-                                        val parentsRightSon = parent.right!!
-                                        parent.replaceWith(
-                                            TwoNode(
-                                                keyValue1 = parent.keyValue2,
-                                                parent = parent.parent
-                                            )
-                                                .addLeft(ThreeNode(newLeftKv1, newLeftKv2))
-                                                .addRight(parentsRightSon)
-                                        )
-                                        return true
-
-                                    } else {
-                                        val sibling = siblings.first as ThreeNode<K, V>
-                                        val newLeftKv = parent.keyValue1
-                                        val newParentKv1 = sibling.keyValue1
-                                        parent.left!!.keyValue1 = newLeftKv
-                                        sibling.deleteFromNode(newParentKv1.key)
-                                        parent.keyValue1 = newParentKv1
-                                        return true
-                                    }
-                                }
-
-                                Middle -> {
-                                    if (siblings.first is ThreeNode || siblings.second is ThreeNode) {
-                                        if (siblings.first is ThreeNode) {
-                                            val sibling = siblings.first as ThreeNode<K, V>
-                                            val newMiddleKv = parent.keyValue1
-                                            val newParentKv1 = sibling.keyValue2
-                                            sibling.deleteFromNode(newParentKv1.key)
-                                            parent.middle!!.keyValue1 = newMiddleKv
-                                            parent.keyValue1 = newParentKv1
-                                            return true
-                                        } else {
-                                            //if i'm the middle of threeNode and left is 2node and right is 3node
-                                            val sibling = siblings.second as ThreeNode<K, V>
-                                            val newMiddleKv = parent.keyValue2
-                                            val newParentKv1 = parent.right!!.keyValue1
-                                            (parent.right as ThreeNode<K, V>).deleteFromNode(newParentKv1.key)
-                                            parent.middle!!.keyValue1 = newMiddleKv
-                                            parent.keyValue2 = newParentKv1
-                                            return true
-                                        }
-                                    } else {
-                                        val sibling = siblings.first as TwoNode<K, V>
-                                        val rightToKeep = sibling.parent!!.right!!
-                                        val parentKv = parent.keyValue2
-                                        val newThreeNode = ThreeNode(sibling.keyValue1, parent.keyValue1)
-
-                                        parent.replaceWith(TwoNode(parentKv, parent = parent.parent).addLeft(newThreeNode).addRight(rightToKeep))
-                                        return true
-                                    }
-                                }
-
-                                Right -> {
-                                    //I only care about my sibling on the left side which is in the middle one
-                                    if (siblings.first is TwoNode) {
-                                        val sibling = siblings.first// as ThreeNode
-                                        val newRightKv1 = sibling.keyValue1
-                                        val newRightKv2 = parent.keyValue2
-                                        val newLeft = parent.left!!
-                                        parent.replaceWith(TwoNode(
-                                            keyValue1 = parent.keyValue1,
-                                            parent = parent.parent
-                                        )
-                                            .addRight(ThreeNode(newRightKv1, newRightKv2))
-                                            .addLeft(newLeft)
-                                        )
-                                        return true
-
-                                    } else {
-                                        val sibling = siblings.first as ThreeNode<K, V>
-                                        val newRightKv = parent.keyValue2
-                                        val newParentKv2 = sibling.keyValue2
-                                        parent.right!!.keyValue1 = newRightKv
-                                        sibling.deleteFromNode(newParentKv2.key)
-                                        parent.keyValue2 = newParentKv2
-                                        return true
-                                    }
-
-                                }
-                            }
-                        }
-                        is Sibling.OneSibling -> {
-                            when (siblings.side) {
-                                Left -> {
-                                    val sibling = siblings.sibling
-                                    when (sibling) {
-                                        is Node.TwoNode -> {
-                                            println() //TODO()
-                                        }
-                                        is Node.ThreeNode -> {
-                                            val newRightKV = sibling.parent!!.keyValue1
-                                            val newParentKv = sibling.keyValue2 as KeyValue<K, V>
-                                            (sibling as ThreeNode<K, V>).deleteFromNode(newParentKv.key)
-                                            sibling.parent!!.keyValue1 = newParentKv
-                                            sibling.parent!!.right!!.keyValue1 = newRightKV as KeyValue<K, V>
-
-
-                                            return true
-                                        }
-                                    }
-                                }
-                                Middle -> TODO()
-                                Right -> {
-                                    val sibling = siblings.sibling
-                                    when (sibling) {
-                                        is Node.TwoNode -> TODO()
-                                        is Node.ThreeNode -> {
-                                            //my sibling is on right side thereofre I have twondoe parent and and I'm on the left side
-                                            // left side key is parent key, and parent key is left side of the three node sibling
-                                            val newLeftNode = sibling.parent
-                                            val newParentKv = sibling.keyValue1
-                                            val sibling = sibling as ThreeNode<K, V>
-
-                                            sibling.replaceWith(TwoNode(keyValue1 = sibling.keyValue2, parent = sibling.parent))
-                                            if (sibling.isLeaf())
-                                                node.keyValue1 = newLeftNode!!.keyValue1 as KeyValue<K, V>
-                                            else
-                                                node.replaceWith(newLeftNode as Node<K, V>)
-                                            sibling.parent!!.keyValue1 = newParentKv as KeyValue<K, V>
-                                            return true
-                                        }
-                                        else -> throw Exception("nope")
-                                    }
-
-                                }
-                            }
-                        }
-                        Sibling.NoSiblings<K, V>() -> TODO()
-                    }
-
-
-
-                    if (inorderSuccessorNode is ThreeNode && inorderSuccessorNode.hasKids()) {
-
-                    }*/
-
-                }
-
             }
         }
-        return false
+
+        // 2. If node n is not a leaf  swap I with inorder successor
+        val inorderSuccessorNode = inoredSuccesor(deleteNode, key) ?: throw Exception("successor not found ")
+        val inosKv = inorderSuccessorNode.keyValue1
+        if(!deleteNode.isLeaf())
+            swapKeys(deleteNode, inorderSuccessorNode, key)
+        val afterswap = inorderSuccessorNode.keyValue1
+
+        //If leaf node n contains another item, just delete item I
+        if (inorderSuccessorNode is ThreeNode && inorderSuccessorNode.isLeaf()) {
+            inorderSuccessorNode.deleteFromNode(afterswap)
+            return true
+        } else {
+
+            var currentDeleteNode: Node<K, V> = if(deleteNode.isLeaf()) deleteNode else if(inorderSuccessorNode.isLeaf()) inorderSuccessorNode else TODO()
+            var parentless   : Node<K,V>?     = null
+            //var i = 0
+            while (true) {
+            //    if (i++ > 40) throw Exception("loop")
+                val sibling = currentDeleteNode.getSibling()
+                val parent  = currentDeleteNode.parent
+
+                when (sibling) {
+                //try to redistribute nodes from siblings
+                    is Node.ThreeNode -> {
+                        redistribute(currentDeleteNode, sibling, parent)
+                        return true
+                    }
+                //if not possible, merge node (see next slide)
+                    is Node.TwoNode -> {
+                        when (parent) {
+                            is Node.TwoNode -> {
+                               if(currentDeleteNode.isLeaf()){
+                                   parentless        = leafMerge(currentDeleteNode,parent)
+                                   currentDeleteNode = parent
+                               } else {
+                                   parentless = internalMerge(sibling,parent,parentless!!)
+                                   currentDeleteNode = parent
+                                   println()
+                               }
+                            }
+                            is Node.ThreeNode -> {
+                                when (currentDeleteNode.getPosition()) {
+                                    Left  -> {
+                                        val newThree = sibling
+                                            .toThreeNode(parent.keyValue1)
+                                            .apply {
+                                                sibling.right?.let { addRight  (it) }
+                                                sibling.left ?.let { addMiddle (it) }
+                                                parentless   ?.let { addLeft   (it) }
+                                            }
+                                        parent.addLeft(newThree)
+                                        parent.right?.let { parent.addMiddle(it) }
+                                        if(parent!=root)
+                                            parent.deleteFromNode(parent.keyValue1)
+                                        else
+                                        {
+                                            root = TwoNode((root!! as ThreeNode).keyValue2)
+                                                .addLeft(newThree)
+                                                .addRight(root!!.right!!)
+                                            return true
+                                        }
+                                        return true
+                                    }
+
+                                    Middle -> {
+
+                                            val newThree = sibling
+                                                .toThreeNode(parent.keyValue1)
+                                                .apply {
+                                                    sibling.right?.let { addMiddle  (it) }
+                                                    sibling.left ?.let { addLeft    (it) }
+                                                    parentless   ?.let { addRight   (it) }
+                                                }
+                                            parent.addLeft(newThree)
+                                            parent.right?.let { parent.addMiddle(it) }
+                                            if(parent!=root)
+                                                parent.deleteFromNode(parent.keyValue1)
+                                            else
+                                            {
+                                                root = TwoNode((root!! as ThreeNode).keyValue2)
+                                                    .addLeft(newThree)
+                                                    .addRight(root!!.right!!)
+                                                return true
+                                            }
+                                            return true
+
+                                    }
+
+                                    Right -> {
+                                        val newThree = sibling.toThreeNode(parent.keyValue2)
+                                        parent.addRight(newThree)
+                                        parent.left?.let { parent.addMiddle(it) }
+                                        parent.deleteFromNode(parent.keyValue2)
+                                        return true
+                                    }
+
+                                }
+                            }
+                            null -> TODO()
+                        }
+                    }
+                    null -> {
+
+                        if(currentDeleteNode==root){
+                            root = parentless
+                            return true
+                        }
+                        else{
+                            TODO()
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node<K, V>?) = when(parent){
+        is Node.TwoNode   -> redistribute(deleteNode, threeNodeSibling, parent)
+        is Node.ThreeNode -> redistribute(deleteNode, threeNodeSibling, parent)
+        is Node.FourNode  -> throw FourNodeException()
+        null              -> TODO()
+    }
+
+
+
+    private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node.ThreeNode<K, V>) {
+        when(deleteNode.getPosition()) {
+            Left -> {
+                val p = parent.keyValue1
+                val s = threeNodeSibling.keyValue1
+                deleteNode.keyValue1 = p
+                parent.keyValue1 = s
+                threeNodeSibling.deleteFromNode(s)
+            }
+            Middle -> {
+                when (threeNodeSibling.getPosition()) {
+                    Left -> {
+                        val p = parent.keyValue1
+                        val s = threeNodeSibling.keyValue2
+                        deleteNode.keyValue1 = p
+                        parent.keyValue1 = s
+                        threeNodeSibling.deleteFromNode(s)
+                    }
+                    Middle -> throw IllegalStateException("middle node wont have middle sibling")
+                    Right -> {
+                        val p = parent.keyValue2
+                        val s = threeNodeSibling.keyValue1
+                        deleteNode.keyValue1 = p
+                        parent.keyValue2 = s
+                        threeNodeSibling.deleteFromNode(s)
+                    }
+                }
+            }
+            Right -> {
+                val p = parent.keyValue2
+                val s = threeNodeSibling.keyValue2
+                deleteNode.keyValue1 = p
+                parent.keyValue2 = s
+                threeNodeSibling.deleteFromNode(s)
+            }
+        }
+    }
+
+    private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node.TwoNode<K, V>) {
+        val p = parent.keyValue1
+        when(deleteNode.getPosition()){
+            Left -> {
+                val s  = threeNodeSibling.keyValue1
+                val sl = threeNodeSibling.left
+                val sm = threeNodeSibling.middle
+                val sr = threeNodeSibling.right
+                parent.keyValue1     = s
+                deleteNode.keyValue1 = p
+                sr?.let { deleteNode.addLeft(it) }
+                threeNodeSibling.deleteFromNode(s)
+
+            }
+            Right -> {
+                val s = threeNodeSibling.keyValue2
+                parent.keyValue1     = s
+                deleteNode.keyValue1 = p
+                threeNodeSibling.deleteFromNode(s)
+            }
+            Middle -> throw Exception("two node parent with middle child?")
+        }
+    }
+
+    private fun deleteFromLeaf(deleteNode: TwoNode<K, V>, parent: Node<K, V>?): Boolean = when(parent){
+        is Node.TwoNode   -> deleteFromLeaf(deleteNode,parent)
+        is Node.ThreeNode -> deleteFromLeaf(deleteNode,parent)
+        is Node.FourNode  -> throw FourNodeException()
+        null -> TODO()
+    }
+    private fun deleteFromLeaf(deleteNode: TwoNode<K, V>, parent: TwoNode<K, V>): Boolean {
+        if(deleteNode.getSiblings().hasThreeNodeSibling()){
+            val sibling = deleteNode.getSiblings().threeNodeSibling()
+            when(deleteNode.getPosition()){
+                Left   -> {
+                    val p = parent .keyValue1
+                    val s = sibling.keyValue1
+                    sibling.deleteFromNode(s)
+                    parent.keyValue1=s
+                    deleteNode.keyValue1=p
+                    return true
+                }
+                Middle -> throw IllegalStateException("TwoNode wont have a a middle child")
+                Right  -> {
+                    val p = parent .keyValue1
+                    val s = sibling.keyValue2
+                    sibling.deleteFromNode(s)
+                    parent.keyValue1=s
+                    deleteNode.keyValue1=p
+                    return true
+                }
+            }
+        }else{
+            return false
+        }
+    }
+
+    fun leafMerge(leafNode : Node<K, V>, futureEmptyParent: TwoNode<K, V>): ThreeNode<K,V> {
+        if (leafNode.hasKids()) throw IllegalArgumentException("leaf node is expected")
+        return when (leafNode.getPosition()) {
+            Left   -> ThreeNode(futureEmptyParent.keyValue1, futureEmptyParent.right!!.keyValue1)
+            Middle -> throw IllegalStateException("Should not happen")
+            Right  -> ThreeNode(futureEmptyParent.left!!.keyValue1, futureEmptyParent.keyValue1)
+        }
+    }
+
+    fun internalMerge(toMergeWith: TwoNode<K, V>, futureEmptyParent: TwoNode<K, V>, mergedChild: Node<K, V>) : ThreeNode<K,V>{
+        if (toMergeWith.isLeaf()) throw IllegalArgumentException("internal node is expected")
+        return when(toMergeWith.getPosition()){
+            Left   -> {
+                val l = toMergeWith.left
+                val r = toMergeWith.right
+                val merged =  toMergeWith.toThreeNode(futureEmptyParent.keyValue1)
+                l?.let { merged.addLeft  (it) }
+                r?.let { merged.addMiddle(it) }
+                merged.apply{ addRight(mergedChild) }
+            }
+            Middle -> throw IllegalStateException("Should not happen")
+            Right  -> {
+                val l = toMergeWith.left
+                val r = toMergeWith.right
+                val merged = toMergeWith.toThreeNode(futureEmptyParent.keyValue1)
+                r?.let { merged.addRight(it) }
+                l?.let { merged.addMiddle(it) }
+                merged.apply { addLeft(mergedChild) }
+            }
+        }
+    }
+
+    private fun deleteFromLeaf(deleteNode: TwoNode<K, V>, parent: ThreeNode<K, V>): Boolean {
+        when(deleteNode.getPosition()){
+            Left   -> {
+                val sibling = deleteNode.getSiblings().closestSibling()
+                if(sibling is ThreeNode){
+                    val p = parent .keyValue1
+                    val s = sibling.keyValue1
+                    deleteNode.keyValue1 = p
+                    parent.keyValue1     = s
+                    sibling.deleteFromNode(s)
+                    return true
+                }else{
+                    val p  = parent .keyValue1
+                    val pr = parent.right!!
+                    val s  = sibling.keyValue1
+                    parent.addLeft(ThreeNode(p, s))
+                    parent.addMiddle(pr) // middle becomes right
+                    parent.deleteFromNode(p)
+                    return true
+                }
+            }
+            Middle -> {
+                val sibling = deleteNode.getSiblings()
+                if(sibling.hasThreeNodeSibling()){
+                    val sibling = deleteNode.getSiblings().threeNodeSibling()
+                    when(sibling.getPosition()){
+                        Left  -> {
+                            val p = parent.keyValue1
+                            val s = sibling.keyValue2
+                            deleteNode.keyValue1 = p
+                            parent.keyValue1 = s
+                            sibling.deleteFromNode(s)
+                            return true
+                        }
+                        Right -> {
+                            val p = parent.keyValue2
+                            val s = sibling.keyValue1
+                            deleteNode.keyValue1 = p
+                            parent.keyValue2= s
+                            sibling.deleteFromNode(s)
+                            return true
+                        }
+                        Middle -> throw IllegalStateException("middle child cant have a middle sibling :)")
+                    }
+                } else{
+                    val p = parent.keyValue1
+                    val pr = parent.right!!
+                    val s = deleteNode.getSiblings().closestSibling() as TwoNode
+                    parent.addLeft(s.toThreeNode(p))
+                    parent.addMiddle(pr) // middle becomes right
+                    parent.deleteFromNode(p)
+                    return true
+                }
+            }
+            Right  -> {
+                val sibling = deleteNode.getSiblings().closestSibling()
+                if(sibling is ThreeNode){
+                    val p = parent .keyValue2
+                    val s = sibling.keyValue2
+                    deleteNode.keyValue1 = p
+                    parent.keyValue2     = s
+                    sibling.deleteFromNode(s)
+                    return true
+                }else{
+                    val p = parent .keyValue2
+                    val s = sibling.keyValue1
+
+                    parent.deleteFromNode(p, parent.left!!, ThreeNode(s, p))
+                    return true
+                }
+            }
+        }
     }
 
     private fun insert(twoNode: Node.TwoNode<K, V>, key: K, value: V) {
@@ -905,16 +425,16 @@ class TwoThreeTree<K:Comparable<K>,V>  {
 
                 val newParent = when (originPosition) {
                         Left ->
-                            parent.toThreeNode(fourNode.keyValue2!!)
-                                .addMiddle   (fourNode.keyValue3!!)
-                                .addLeft     (fourNode.keyValue1!!)
+                            parent.toThreeNode(fourNode.keyValue2)
+                                .addMiddle   (fourNode.keyValue3)
+                                .addLeft     (fourNode.keyValue1)
                                 .addRight    (parent.right!!)
 
                         Right ->
-                            parent.toThreeNode(fourNode.keyValue2!!)
-                                .addMiddle    (fourNode.keyValue1!!)
+                            parent.toThreeNode(fourNode.keyValue2)
+                                .addMiddle    (fourNode.keyValue1)
                                 .addLeft      (parent.left!!)
-                                .addRight     (fourNode.keyValue3!!)
+                                .addRight     (fourNode.keyValue3)
 
                         Middle -> throw IllegalStateException("Parent is a TwoNode therefore he doesn't have a middle child")
                     }
@@ -931,25 +451,25 @@ class TwoThreeTree<K:Comparable<K>,V>  {
 
                 val tempFourNode = when (originPosition) {
                     Left ->
-                        parent.toFourNode(fourNode.keyValue2!!)
+                        parent.toFourNode(fourNode.keyValue2)
                             .addMiddle2  (parent.middle!!)
-                            .addMiddle   (fourNode.keyValue3!!)
-                            .addLeft     (fourNode.keyValue1!!)
+                            .addMiddle   (fourNode.keyValue3)
+                            .addLeft     (fourNode.keyValue1)
                             .addRight    (parent.right!!)
 
                     Middle ->
-                        parent.toFourNode(fourNode.keyValue2!!)
-                            .addMiddle2  (fourNode.keyValue3!!)
-                            .addMiddle   (fourNode.keyValue1!!)
+                        parent.toFourNode(fourNode.keyValue2)
+                            .addMiddle2  (fourNode.keyValue3)
+                            .addMiddle   (fourNode.keyValue1)
                             .addLeft     (parent.left!!)
                             .addRight    (parent.right!!)
 
                     Right ->
-                        parent.toFourNode(fourNode.keyValue2!!)
-                            .addMiddle2  (fourNode.keyValue1!!)
+                        parent.toFourNode(fourNode.keyValue2)
+                            .addMiddle2  (fourNode.keyValue1)
                             .addMiddle   (parent.middle!!)
                             .addLeft     (parent.left!!)
-                            .addRight    (fourNode.keyValue3!!)
+                            .addRight    (fourNode.keyValue3)
 
                 } as FourNode<K, V>
 
@@ -960,9 +480,9 @@ class TwoThreeTree<K:Comparable<K>,V>  {
             is Node.FourNode   -> throw FourNodeInsertionException()
 
             null               ->
-                root = TwoNode    (fourNode.keyValue2!!)
-                        .addLeft  (fourNode.keyValue1!!)
-                        .addRight (fourNode.keyValue3!!)
+                root = TwoNode    (fourNode.keyValue2)
+                        .addLeft  (fourNode.keyValue1)
+                        .addRight (fourNode.keyValue3)
 
         }
     }
@@ -1058,7 +578,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                     }
                 }
                 null ->{
-                    root= (fourNode as FourNode).split()
+                    root= fourNode.split()
                 }
             }
         }
@@ -1069,7 +589,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         val splitted = fourNode.split()
         return  when (fromSide) {
             Left -> {
-                this.toFourNode (fourNode.keyValue2!!)
+                this.toFourNode (fourNode.keyValue2)
                     .addMiddle2 (this.middle!!)
                     .addMiddle  (splitted.right!!)
                     .addLeft    (splitted.left!!)
@@ -1077,7 +597,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
             }
 
             Middle -> {
-                this.toFourNode (fourNode.keyValue2!!)
+                this.toFourNode (fourNode.keyValue2)
                     .addMiddle2 (splitted.right!!)
                     .addMiddle  (splitted.left!!)
                     .addLeft    (this.left!!)
@@ -1085,7 +605,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
             }
 
             Right -> {
-                this.toFourNode (fourNode.keyValue2!!)
+                this.toFourNode (fourNode.keyValue2)
                     .addMiddle2 (splitted.left!!)
                     .addMiddle  (this.middle!!)
                     .addLeft    (this.left!!)
@@ -1100,25 +620,25 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         while(true){
             when(parent){
                 is Node.TwoNode   -> {
-                    if (key == parent.keyValue1!!.key) return if( parent.keyValue1!!.key==key) parent else null
-                    if (key < parent.keyValue1!!.key){
-                        if(parent.left == null ) return if( parent.keyValue1!!.key==key) parent else null
+                    if (key == parent.keyValue1.key) return if( parent.keyValue1.key==key) parent else null
+                    if (key < parent.keyValue1 .key){
+                        if(parent.left == null ) return if( parent.keyValue1.key==key) parent else null
                         else parent = parent.left
                     }
                     else{
-                        if(parent.right == null ) return if( parent.keyValue1!!.key==key) parent else null
+                        if(parent.right == null ) return if( parent.keyValue1.key==key) parent else null
                         else parent = parent.right
                     }
                 }
                 is Node.ThreeNode -> {
                     when{
-                        key == parent.keyValue1!!.key    -> return if( parent.keyValue1!!.key==key) parent else null
-                        key == parent.keyValue2!!.key     ->return if( parent.keyValue2!!!!.key==key) parent else null
-                        key < parent.keyValue1!!.key -> if(parent.left   != null) parent = parent.left   else return if( parent.keyValue1!!.key==key) parent else null
-                        key > parent.keyValue1!!.key
+                        key == parent.keyValue1.key    ->                                                       return if ( parent.keyValue1.key==key) parent else null
+                        key == parent.keyValue2.key    ->                                                       return if ( parent.keyValue2.key==key) parent else null
+                        key < parent.keyValue1.key     -> if(parent.left   != null) parent = parent.left   else return if ( parent.keyValue1.key==key) parent else null
+                        key > parent.keyValue1.key
                             &&
-                            key < parent.keyValue2!!.key -> if(parent.middle != null) parent = parent.middle else return if( parent.keyValue1!!.key==key) parent else null
-                        key > parent.keyValue2!!.key -> if(parent.right  != null) parent = parent.right  else return if( parent.keyValue1!!.key==key) parent else null
+                            key < parent.keyValue2.key -> if (parent.middle != null) parent = parent.middle else return if ( parent.keyValue1.key==key) parent else null
+                        key > parent.keyValue2.key     -> if (parent.right != null)  parent = parent.right  else return if ( parent.keyValue1.key==key) parent else null
                     }
                 }
                 is Node.FourNode  -> throw FourNodeException()
@@ -1133,7 +653,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         while(true){
             when(parent){
                 is Node.TwoNode   -> {
-                     if (key < parent.keyValue1!!.key){
+                     if (key < parent.keyValue1.key){
                          if(parent.left == null ) return parent
                             else parent = parent.left
                      }
@@ -1144,13 +664,13 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                 }
                 is Node.ThreeNode -> {
                     when{
-                        key == parent.keyValue1!!.key    -> return (parent)
-                        key == parent.keyValue2!!.key    -> return (parent)
-                        key < parent.keyValue1!!.key -> if(parent.left   != null) parent = parent.left   else return (parent)
-                        key > parent.keyValue1!!.key
+                        key == parent.keyValue1.key    -> return (parent)
+                        key == parent.keyValue2.key    -> return (parent)
+                        key < parent.keyValue1.key -> if(parent.left   != null) parent = parent.left   else return (parent)
+                        key > parent.keyValue1.key
                             &&
-                        key < parent.keyValue2!!.key -> if(parent.middle != null) parent = parent.middle else return (parent)
-                        key > parent.keyValue2!!.key -> if(parent.right  != null) parent = parent.right  else return (parent)
+                        key < parent.keyValue2.key -> if(parent.middle != null) parent = parent.middle else return (parent)
+                        key > parent.keyValue2.key -> if(parent.right  != null) parent = parent.right  else return (parent)
                     }
                 }
                 is Node.FourNode  -> throw FourNodeException()
@@ -1198,7 +718,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         return queue.items
     }
 
-    fun inoredSuccesor(node: Node<K, V>,key:K): Node<K, V>? {
+    private fun inoredSuccesor(node: Node<K, V>, key:K): Node<K, V>? {
         val found = emptyLinkedList<Node<K, V>>()
         var result: Node<K, V>? = null
         var once=true
@@ -1292,7 +812,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                     }
                 }
                 is Node.FourNode -> TODO()
-            }
+                }
             is Node.TwoNode      -> {
                 when(parent){
                     is Node.TwoNode   -> {
@@ -1318,6 +838,8 @@ class TwoThreeTree<K:Comparable<K>,V>  {
     }
  }
 
+private fun <K:Comparable<K>, V> Node<K, V>.isRightOrLeft(): Boolean = getPosition()==Left || getPosition()==Right
+
 private fun <K:Comparable<K>, V> Node<K, V>.hasKey(key: K): Boolean =when(this){
 //    is Node.EmptyNode -> throw IllegalStateException("Empty node in tree")
 
@@ -1335,10 +857,29 @@ fun <K : Comparable<K>, V> Node<K, V>.getPosition() : Position {
         else -> throw IllegalStateException("")
     }
     }
+
+fun <K : Comparable<K>, V> ThreeNode<K, V>.asTwoNode(removeKey: K): TwoNode<K,V> {
+    when (this) {
+        this.keyValue1.key -> return TwoNode(this.keyValue2, parent = this.parent,left = left,right = middle)
+        this.keyValue2.key -> return TwoNode(this.keyValue1, parent = this.parent,left = middle,right = right)
+        else -> throw IllegalStateException("this value is not in this node")
+    }
+}
+fun <K : Comparable<K>, V> ThreeNode<K, V>.deleteFromNode(kv: KeyValue<K,V>) = deleteFromNode(kv.key)
+
 fun <K : Comparable<K>, V> ThreeNode<K, V>.deleteFromNode(key: K) =
     when (key) {
-        this.keyValue1!!.key -> this.replaceWith(TwoNode(this.keyValue2, parent = this.parent))
-        this.keyValue2!!.key -> this.replaceWith(TwoNode(this.keyValue1, parent = this.parent))
+        this.keyValue1.key -> this.replaceWith(TwoNode(this.keyValue2, parent = this.parent,left = left, right = middle))
+        this.keyValue2.key -> this.replaceWith(TwoNode(this.keyValue1, parent = this.parent,left = middle,right = right))
+        else -> throw IllegalStateException("this value is not in this node")
+    }
+
+fun <K : Comparable<K>, V> ThreeNode<K, V>.deleteFromNode(kv: KeyValue<K,V>,newLeft:Node<K,V>,newRight:Node<K,V>) = deleteFromNode(kv.key,newLeft,newRight)
+
+fun <K : Comparable<K>, V> ThreeNode<K, V>.deleteFromNode(key: K,newLeft:Node<K,V>,newRight:Node<K,V>) =
+    when (key) {
+        this.keyValue1.key -> this.replaceWith(TwoNode(this.keyValue2, parent = this.parent).addLeft(newLeft).addRight(newRight))
+        this.keyValue2.key -> this.replaceWith(TwoNode(this.keyValue1, parent = this.parent).addLeft(newLeft).addRight(newRight))
         else -> throw IllegalStateException("this value is not in this node")
     }
 

@@ -3,7 +3,8 @@ package extensions
 import java.util.*
 
 fun <E> emptyLinkedList() =  LinkedList<E>()
-
+fun <E> MutableList<E>.addIfNotNull(e:E?) = e?.let(this::add)
+fun <E> MutableList<E>.addIfNotNull(vararg e:E?) = e.forEach { addIfNotNull(it) }
 class Queue <T>(list:MutableList<T>) {
 
     var items: MutableList<T> = list

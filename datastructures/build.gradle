@@ -19,13 +19,19 @@ repositories {
 }
 
 dependencies {
+
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     testCompile 'io.kotlintest:kotlintest:2.0.6'
 }
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.suppressWarnings = true
+
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.suppressWarnings = true
+
 }
+

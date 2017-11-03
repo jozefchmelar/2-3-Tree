@@ -398,3 +398,164 @@ public boolean vymazZaznam(D mazanyZaznam) {
         return null;
     }
 
+////////////////351 pokus
+   while(true){
+                        if (i++ > 40) throw Exception("loop")
+                        var parentlessNewNode: Node<K, V>?=null
+                        if(once) {
+                            if(inorderSuccessorNode is ThreeNode && inorderSuccessorNode.isLeaf()){
+                                inorderSuccessorNode.deleteFromNode(key)
+                                return true
+                            }
+                            if(inorderSuccessorNode.parent is ThreeNode && inorderSuccessorNode.isLeaf()){
+                                val p = inorderSuccessorNode.parent as ThreeNode
+                                val s = inorderSuccessorNode.getSiblings()
+                                when(inorderSuccessorNode){
+                                    is Node.TwoNode -> {
+                                        when (inorderSuccessorNode.getPosition()) {
+                                            Left -> {
+                                                val sib = s.closestSibling()
+                                                if (sib is TwoNode) {
+                                                    val new3Node = sib.toThreeNode(p.keyValue1)
+                                                    p.replaceWith(
+                                                        TwoNode(p.keyValue2,parent=p.parent)
+                                                            .addLeft(new3Node)
+                                                            .addRight(p.right!!)
+                                                    )
+                                                    return true
+                                                } else TODO()
+                                            }
+                                            Middle -> TODO()
+                                            Right -> TODO()
+                                        }
+                                    }
+                                    is Node.ThreeNode -> TODO()
+                                }
+                            }
+                            val sibl = inorderSuccessorNode.getSiblings().closestSibling()
+                            if(sibl is ThreeNode){
+                                when(inorderSuccessorNode.getPosition()){
+                                    Left   -> {
+                                        inorderSuccessorNode.keyValue1=sibl.keyValue1
+                                        sibl.deleteFromNode(sibl.keyValue1.key)
+                                        val left =  inorderSuccessorNode.keyValue1
+                                        val par  =  inorderSuccessorNode.parent!!.keyValue1
+                                        inorderSuccessorNode.keyValue1=par
+                                        inorderSuccessorNode.parent!!.keyValue1=left
+
+                                        return true
+                                    }
+                                    Middle ->  {
+                                        println(insertedKeys)
+                                        println(key)
+                                        when(deleteNode){
+                                            is Node.TwoNode   -> {
+                                                val dSib = deleteNode.getSiblings().closestSibling()
+                                                parentlessNewNode=ThreeNode(dSib.keyValue1,deleteNodeParent!!.keyValue1,parent=deleteNodeParent)
+                                               deleteNode = deleteNodeParent// println()
+//                                                TODO()
+                                            }
+                                            is Node.ThreeNode -> TODO()
+                                        }
+
+                                    }
+                                    Right  -> {
+                                        println(insertedKeys)
+                                        println(key)
+                                        TODO()
+                                    }
+                                }
+                            }
+                            when (deleteNode) {
+                                is Node.TwoNode -> {
+                                    if(deleteNode.hasKids()){
+                                        println()
+                                        parentlessNewNode = ThreeNode(deleteNode.left!!.keyValue1,deleteNode.keyValue1,parent=deleteNode)
+                                        father=deleteNode
+
+                                    }       else
+                                    parentlessNewNode = (father!!.left as TwoNode).toThreeNode(father.right!!.keyValue1).copy(parent = inorderSuccessorNode)
+                                }
+                                is Node.ThreeNode -> TODO()
+                            }
+                            once=false
+                        }
+                        val siblings =father?.getSiblings()
+
+                        when(siblings){
+                            is Sibling.TwoSiblings -> {
+                                if(siblings.hasThreeNodeSibling()){
+                                    TODO()
+                                }else{
+                                    when(deleteNode!!.getPosition()){
+                                        Left -> TODO()
+                                        Middle -> {
+
+                                          parentlessNewNode =  ThreeNode(siblings.first.keyValue1,siblings.first.parent!!.keyValue1,parent=parentlessNewNode?.parent)
+                                                .addMiddle(siblings.first.right!!)
+                                                .addLeft(siblings.first.left!!)
+                                                .addRight(parentlessNewNode ?: return true)
+
+                                            println()
+
+                                        }
+                                        Right -> TODO()
+                                    }
+                                }
+
+                            }
+                            is Sibling.OneSibling  -> {
+                                if(siblings.sibling is ThreeNode){
+                                    TODO()
+                                }else{
+                                    when(father?.getPosition()){
+                                        Left -> {
+                                            val parent  = father.parent
+                                          //  val test = parent?.getSiblings()
+                                            val sibling = siblings.sibling as TwoNode
+                                            val nejakyNode= ThreeNode(parent!!.keyValue1,sibling.keyValue1)
+                                                .addMiddle(sibling.left!!)
+                                                .addRight(sibling.right!!)
+                                                .addLeft(parentlessNewNode!!)
+
+                                            //parent.parent=parent
+                                            parent.left=nejakyNode
+
+                                            father = nejakyNode.setNewParent(parent)
+                                            deleteNode=father.parent
+                                            father=deleteNode
+                                            println()
+
+                                        }
+                                        Middle -> TODO()
+                                        Right -> {
+                                            val nejakyNode = ThreeNode(siblings.sibling.keyValue1,father.parent!!.keyValue1)
+                                                .addMiddle(siblings.sibling.right!!)
+                                                .addLeft(siblings.sibling.left!!)
+                                                .addRight(father.left!!)
+                                            nejakyNode.setNewParent(father.parent!!)
+
+                                            val newParent = nejakyNode.parent
+                                            newParent!!.addRight(nejakyNode)
+                                                newParent.left=null
+                                            father = newParent
+
+
+
+
+                                        }
+
+
+                                        null -> TODO()
+                                    }
+                                }
+                            }
+                            is Sibling.NoSiblings  -> {
+                                root=father!!.right
+                                return true
+                            }
+                        }
+
+
+                        println()
+                    }
