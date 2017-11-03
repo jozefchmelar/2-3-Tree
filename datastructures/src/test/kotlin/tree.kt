@@ -491,7 +491,7 @@ class InsertionTest : StringSpec() {
         "[46] testik"{
             val keys = listOf(80, 95, 93, 15, 19, 61, 37, 78, 31, 26, 63, 67, 62, 43, 72, 28, 32, 16, 47, 73, 6, 86, 49, 55,27,40,41)
             keys.forEach { tree.put(it,4)}
-            val keyToDelete = 95
+            val keyToDelete = 93
             val deleted = tree.delete(keyToDelete)
             val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
             result shouldBe true
@@ -508,8 +508,20 @@ class InsertionTest : StringSpec() {
             result shouldBe true
 
         }
+        (1..1000).map{ Random(it.toLong()) }.forEachIndexed { indexx, rnd ->
+            val index=indexx.toLong()
+            "[$index] testik"{
+            val rnd = Random(index)
+            val keys = Collections.nCopies(30,Any()).map { rnd.nextInt(500) }.distinct().toMutableList()
+            keys.forEach { tree.put(it,4)}
+            val keyToDelete = keys[Random(index).nextInt(keys.size)]
+            val deleted = tree.delete(keyToDelete)
+            val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
+            result shouldBe true
+        }
+        }
 
-        listOf(Random(987),Random(456),Random(8945),Random(962),Random(2659),Random(986547),Random(987987987),Random(986231),Random(789876))
+        listOf(Random(987),Random(456),Random(8945),Random(962),Random(2659),Random(986547),Random(987987987),Random(986231),Random())
             .forEachIndexed { index,rnd ->
             "[$index] RND test"{
                 val keys = Collections.nCopies(9564,Any()).map { rnd.nextInt(9999) }.distinct().toMutableList()

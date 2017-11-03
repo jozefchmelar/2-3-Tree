@@ -99,7 +99,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                 when (sibling) {
                 //try to redistribute nodes from siblings
                     is Node.ThreeNode -> {
-                        redistribute(currentDeleteNode, sibling, parent)
+                        redistribute(currentDeleteNode, sibling, parent,parentless)
                         return true
                     }
                 //if not possible, merge node (see next slide)
@@ -164,10 +164,23 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                                     }
 
                                     Right -> {
-                                        val newThree = sibling.toThreeNode(parent.keyValue2)
+                                        val newThree = sibling
+                                            .toThreeNode(parent.keyValue2)
+                                            .apply {
+                                                sibling.right?.let { addMiddle  (it) }
+                                                sibling.left ?.let { addLeft    (it) }
+                                                parentless   ?.let { addRight   (it) }
+                                            }
                                         parent.addRight(newThree)
                                         parent.left?.let { parent.addMiddle(it) }
-                                        parent.deleteFromNode(parent.keyValue2)
+                                        if(parent!=root)
+                                            parent.deleteFromNode(parent.keyValue2)
+                                        else{
+                                            root = TwoNode((root!! as ThreeNode).keyValue1)
+                                                .addRight(newThree)
+                                                .addLeft(root!!.left!!)
+                                            return true
+                                        }
                                         return true
                                     }
 
@@ -194,23 +207,34 @@ class TwoThreeTree<K:Comparable<K>,V>  {
     }
 
 
-    private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node<K, V>?) = when(parent){
-        is Node.TwoNode   -> redistribute(deleteNode, threeNodeSibling, parent)
-        is Node.ThreeNode -> redistribute(deleteNode, threeNodeSibling, parent)
+    private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node<K, V>?,parentLess:Node<K,V>?) = when(parent){
+        is Node.TwoNode   -> redistribute(deleteNode, threeNodeSibling, parent,parentLess)
+        is Node.ThreeNode -> redistribute(deleteNode, threeNodeSibling, parent,parentLess)
         is Node.FourNode  -> throw FourNodeException()
         null              -> TODO()
     }
 
 
 
-    private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node.ThreeNode<K, V>) {
+    private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node.ThreeNode<K, V>,parentLess:Node<K,V>?) {
         when(deleteNode.getPosition()) {
             Left -> {
                 val p = parent.keyValue1
                 val s = threeNodeSibling.keyValue1
                 deleteNode.keyValue1 = p
                 parent.keyValue1 = s
+                if (parentLess==null)
                 threeNodeSibling.deleteFromNode(s)
+                else{
+                    val sl = threeNodeSibling.left!!
+                    val sm = threeNodeSibling.middle!!
+                    val sr = threeNodeSibling.right!!
+                    deleteNode
+                        .addLeft(parentLess)
+                        .addRight(sl)
+                    threeNodeSibling.deleteFromNode(s,sm,sr)
+
+                }
             }
             Middle -> {
                 when (threeNodeSibling.getPosition()) {
@@ -219,15 +243,38 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                         val s = threeNodeSibling.keyValue2
                         deleteNode.keyValue1 = p
                         parent.keyValue1 = s
-                        threeNodeSibling.deleteFromNode(s)
+                        if(parentLess==null)
+                            threeNodeSibling.deleteFromNode(s)
+                        else{
+                            val sl = threeNodeSibling.left!!
+                            val sm = threeNodeSibling.middle!!
+                            val sr = threeNodeSibling.right!!
+                            deleteNode
+                                .addRight(parentLess)
+                                .addLeft(sr)
+                            threeNodeSibling.deleteFromNode(s,sl,sm)
+
+                        }
                     }
                     Middle -> throw IllegalStateException("middle node wont have middle sibling")
                     Right -> {
                         val p = parent.keyValue2
                         val s = threeNodeSibling.keyValue1
+                        val sl = threeNodeSibling.left
+                        val sm = threeNodeSibling.middle
+                        val sr = threeNodeSibling.right
                         deleteNode.keyValue1 = p
                         parent.keyValue2 = s
+                        if(parentLess==null)
                         threeNodeSibling.deleteFromNode(s)
+                        else
+                        {
+                            deleteNode
+                                .addLeft(parentLess)
+                                .addRight(sl!!)
+                            threeNodeSibling.deleteFromNode(s,sm!!,sr!!)
+
+                        }
                     }
                 }
             }
@@ -236,12 +283,23 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                 val s = threeNodeSibling.keyValue2
                 deleteNode.keyValue1 = p
                 parent.keyValue2 = s
-                threeNodeSibling.deleteFromNode(s)
+                if(parentLess==null)
+                 threeNodeSibling.deleteFromNode(s)
+                else{
+                    val sl = threeNodeSibling.left!!
+                    val sm = threeNodeSibling.middle!!
+                    val sr = threeNodeSibling.right!!
+                    deleteNode
+                        .addRight(parentLess)
+                        .addLeft(sr)
+                    threeNodeSibling.deleteFromNode(s,sl,sm)
+
+                }
             }
         }
     }
 
-    private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node.TwoNode<K, V>) {
+    private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node.TwoNode<K, V>,parentLess:Node<K,V>?) {
         val p = parent.keyValue1
         when(deleteNode.getPosition()){
             Left -> {
@@ -252,14 +310,36 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                 parent.keyValue1     = s
                 deleteNode.keyValue1 = p
                 sr?.let { deleteNode.addLeft(it) }
-                threeNodeSibling.deleteFromNode(s)
+                if(parentLess==null)
+                    threeNodeSibling.deleteFromNode(s)
+                else
+                {
+                    deleteNode.apply {
+                        addLeft(parentLess)
+                        addRight(sl!!)
+                    }
+                    threeNodeSibling.deleteFromNode(s,sm!!,sr!!)
+
+                }
 
             }
             Right -> {
                 val s = threeNodeSibling.keyValue2
+                val sl = threeNodeSibling.left
+                val sm = threeNodeSibling.middle
+                val sr = threeNodeSibling.right
                 parent.keyValue1     = s
                 deleteNode.keyValue1 = p
-                threeNodeSibling.deleteFromNode(s)
+                if(parentLess==null)
+                    threeNodeSibling.deleteFromNode(s)
+                else{
+                    deleteNode.apply {
+                        addRight(parentLess)
+                        addLeft(sr!!)
+                    }
+                    threeNodeSibling.deleteFromNode(s,sl!!,sm!!)
+
+                }
             }
             Middle -> throw Exception("two node parent with middle child?")
         }
@@ -724,7 +804,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         var once=true
         inorder { currentNode ->
             found.add(currentNode)
-            if (found.size > 2) {
+            if (found.size > 1) {
                 val predposledny = found[found.size - 2]
                 val kv1 = node.keyValue1
                 val kv2 = (node as? ThreeNode)?.keyValue2
