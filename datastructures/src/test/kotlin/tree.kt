@@ -508,11 +508,11 @@ class InsertionTest : StringSpec() {
             result shouldBe true
 
         }
-        (1..1000).map{ Random(it.toLong()) }.forEachIndexed { indexx, rnd ->
+        (1..393).map{ Random(it.toLong()) }.forEachIndexed { indexx, rnd ->
             val index=indexx.toLong()
             "[$index] testik"{
             val rnd = Random(index)
-            val keys = Collections.nCopies(30,Any()).map { rnd.nextInt(500) }.distinct().toMutableList()
+            val keys = Collections.nCopies(1000,Any()).map { rnd.nextInt(5000) }.distinct().toMutableList()
             keys.forEach { tree.put(it,4)}
             val keyToDelete = keys[Random(index).nextInt(keys.size)]
             val deleted = tree.delete(keyToDelete)

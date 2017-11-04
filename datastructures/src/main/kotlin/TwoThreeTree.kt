@@ -2,6 +2,7 @@ package Tree
 import Tree.Position.*
 import Tree.node.*
 import Tree.node.Node.*
+import extensions.MySet
 import extensions.Queue
 import extensions.emptyLinkedList
 
@@ -11,13 +12,23 @@ class TwoThreeTree<K:Comparable<K>,V>  {
 
     //for testing purposes only
     val insertedKeys = emptyLinkedList<K>()
-
-    fun put(key:K,value:V){
-
+    var keylist = emptyLinkedList<K>()
+    val keySet = MySet(keylist)
+    fun get(key: K ) : V?{
+        val found = find(key)
+        return when(found){
+            is Node.TwoNode   -> found.keyValue1.value
+            is Node.ThreeNode -> if(key > found.keyValue1.key) found.keyValue2.value else found.keyValue1.value
+            else  -> null
+        }
+    }
+    fun put(key:K,value:V) : Boolean{
+        if(keySet.exists(key)) return false
         if(root ==null) {
             root = TwoNode(key with value)
             insertedKeys.add(key)
-            return
+            keySet.insert(key)
+            return true
         }
 
         val foundNode = getNode(key)
@@ -29,6 +40,9 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         }
 
         insertedKeys.add(key)
+        keySet.insert(key)
+        return true
+
     }
 
 
@@ -757,6 +771,16 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                 null              -> return (parent)
             }
         }
+    }
+
+    fun getValuesInorder() : List<V>{
+        val list = emptyLinkedList<V>()
+        root?.let {
+            inorder(it){
+                list += it.keyValue1.value
+            }
+        }
+        return list
     }
 
     fun getInorder(): List<K> {
