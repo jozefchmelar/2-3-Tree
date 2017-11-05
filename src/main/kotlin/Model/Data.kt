@@ -39,6 +39,7 @@ fun Data.startHospitalization(hospital: Hospital,patient: Patient,hospitalizatio
 
 fun Data.endHospitalization(hospital: Hospital,patient: Patient){
     hospital.currentHospitalizations.delete(patient)
+    hospital.currentInsuranceHospitalizations.get(patient.healthInsurance)?.remove(patient)
 }
 
 fun Data.insertPatientToHospital(patient: Patient, hospital: Hospital) {

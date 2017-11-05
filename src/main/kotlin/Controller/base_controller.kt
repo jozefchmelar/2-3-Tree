@@ -8,7 +8,7 @@ import gui.model.Hospitalization
 import gui.model.Patient
 import tornadofx.*
 
-abstract class BaseController : Controller() {
+open class BaseController : Controller() {
 
     val insuranceComp by lazy { Data.insuranceCompanies.observable() }
     val hospitals     by lazy { Data.hospitals.getValuesInorder().observable() }
@@ -16,31 +16,57 @@ abstract class BaseController : Controller() {
     val foundPatients    = mutableListOf<Patient>().observable()
     val hospitalizations = mutableListOf<Hospitalization>().observable()
 
-    fun findPatient(birthNumber: String) {
+    open fun clear(){
+        foundPatients.clear()
+        hospitalizations.clear()
+    }
+    open fun findPatient(birthNumber: String) {
         foundPatients.clear()
         Data.findPatient(birthNumber)?.let { foundPatients.add(it) }
     }
 
-    fun findPatient(name: String,surname:String) {
+    open fun findPatient(name: String, surname: String) {
         foundPatients.clear()
-        Data.findPatient(name,surname).let { foundPatients.setAll(it) }
+        Data.findPatient(name, surname).let { foundPatients.setAll(it) }
     }
 
-    fun findPatient(name: Hospital,birthNumber: String) {
+    open fun findPatient(name: Hospital, birthNumber: String) {
         foundPatients.clear()
-        Data.findPatient(name,birthNumber).let { foundPatients.setAll(it) }
+        Data.findPatient(name, birthNumber)?.let { foundPatients.setAll(it) }
     }
 
-    fun findPatient(hospital: Hospital, firstName: String, lastName: String) {
-        Data.findPatient(hospital,firstName,lastName).let {
+    open fun findPatient(hospital: Hospital, firstName: String, lastName: String) {
+        Data.findPatient(hospital, firstName, lastName).let {
             foundPatients.setAll(it)
         }
     }
 
-    fun getHospitalizations(patient: Patient){
+    open  fun getHospitalizations(patient: Patient) {
         hospitalizations.clear()
         hospitalizations.setAll(patient.hospitalizations)
     }
 
+    open fun findPatient(hospital: Hospital, name: String?, surname: String?, birthNumber: String?) {
+        val results = mutableListOf<Patient>()
+        birthNumber?.let { Data.findPatient(hospital, it)?.let { results.add(it) } }
+        Data.findPatient(hospital, name ?: "", surname ?: "").let { results += it }
+        foundPatients.setAll(results)
+    }
 
+    open fun findPatient(name: String?, surname: String?, birthNumber: String?) {
+        val results = mutableListOf<Patient>()
+        birthNumber?.let { Data.findPatient(it)?.let { results.add(it) } }
+        Data.findPatient(name ?: "", surname ?: "").let { results += it }
+        foundPatients.setAll(results)
+    }
+
+
+    open fun getHospitalizations(hospital: Hospital, patient: Patient) {
+       val patientInHospital =  hospital.currentHospitalizations.get(patient) //?.hospitalizations?.let { hospitalizations.setAll(it) }
+        if(patientInHospital!=null){
+            patientInHospital.hospitalizations.let { hospitalizations.setAll(it) }
+        }else{
+            hospitalizations.clear()
+        }
+    }
 }

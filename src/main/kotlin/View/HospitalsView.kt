@@ -7,7 +7,6 @@ import javafx.scene.layout.VBox
 import tornadofx.*
 
 
-data class shifasfas(val l:String)
 
 class HospitalsView : View() {
 
@@ -50,7 +49,10 @@ class HospitalsView : View() {
 
             }
 
-
+            style {
+                padding = box(20.px)
+            }
         }
+
     }
 }

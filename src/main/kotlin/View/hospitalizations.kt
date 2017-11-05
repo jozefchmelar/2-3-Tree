@@ -5,50 +5,63 @@ import app.controller.HospitalizationController
 import gui.model.*
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
+import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import tornadofx.*
 import java.time.LocalDate
 
 class HospitalizationsView : View() {
 
-    private val controller : HospitalizationController       by inject()
+    private val controller: HospitalizationController       by inject()
 
-    private var firstNameField       : TextField            by singleAssign()
-    private var lastNameField        : TextField            by singleAssign()
-    private var birthNumberField     : TextField            by singleAssign()
-    private var foundPatients        : TableView<Patient>   by singleAssign()
+    private var firstNameField: TextField            by singleAssign()
+    private var lastNameField: TextField            by singleAssign()
+    private var birthNumberField: TextField            by singleAssign()
+    private var foundPatients: TableView<Patient>   by singleAssign()
 
-    private val hospitalizationModel : HospitalizationModel by inject()
-    private val hospital             : HospitalModel        by inject()
-    private val patient              : PatientModel         by inject()
+    private val hospitalizationModel: HospitalizationModel by inject()
+    private val hospital: HospitalModel        by inject()
+    private val patient: PatientModel         by inject()
 
     override val root = VBox()
 
     init {
-        goHome()
+        goHome(controller::clear)
         hbox {
+            vgrow = Priority.ALWAYS
+            hgrow = Priority.ALWAYS
+            maxWidth = Double.POSITIVE_INFINITY
             vbox {
+                vgrow = Priority.ALWAYS
+                hgrow = Priority.ALWAYS
+                maxWidth = Double.POSITIVE_INFINITY
                 label("Nemocnica")
                 tableview(controller.hospitals) {
+                    vgrow = Priority.ALWAYS
+                    hgrow = Priority.ALWAYS
+                    maxWidth = Double.POSITIVE_INFINITY
                     column("Nazov", Hospital::name)
                     bindSelected(hospital)
                 }
             }
             vbox {
+                vgrow = Priority.ALWAYS
+                hgrow = Priority.ALWAYS
+                maxWidth = Double.POSITIVE_INFINITY
                 hbox {
                     firstNameField = textfield {
                         promptText = "meno"
-
                     }
                     lastNameField = textfield {
                         promptText = "priezvisko"
-
                     }
+
                     button("Najdi") {
                         action {
-                            controller.findPatient(firstNameField.text,lastNameField.text)
+                            controller.findPatient(firstNameField.text, lastNameField.text)
                         }
                     }
+
                 }
                 hbox {
                     birthNumberField = textfield {
@@ -62,17 +75,28 @@ class HospitalizationsView : View() {
                 }
 
                 foundPatients = tableview(controller.foundPatients) {
+                    vgrow = Priority.ALWAYS
+                    hgrow = Priority.ALWAYS
+                    maxWidth = Double.POSITIVE_INFINITY
+                    vgrow = Priority.ALWAYS
+                    hgrow = Priority.ALWAYS
+                    maxWidth = Double.POSITIVE_INFINITY
                     column("Rodne cislo", Patient::birthNumber)
                     column("Meno", Patient::firstName)
                     column("Priezvisko", Patient::lastName)
                     column("Poistovna", Patient::healthInsurance)
-
+                    onUserSelect {
+                        controller.getHospitalizations(hospital.item, it)
+                    }
                     bindSelected(patient)
 
                 }
 
             }
             vbox {
+                vgrow = Priority.ALWAYS
+                hgrow = Priority.ALWAYS
+                maxWidth = Double.POSITIVE_INFINITY
                 form {
 
                     fieldset("Pridanie hospitalizacie") {
@@ -81,7 +105,7 @@ class HospitalizationsView : View() {
                         }
 
                         field("Zaciatok") {
-                            datepicker{
+                            datepicker {
                                 value = LocalDate.now()
                             }.bind(hospitalizationModel.start)
                         }
@@ -96,11 +120,12 @@ class HospitalizationsView : View() {
                     action {
                         hospitalizationModel.patient.value = patient.item
                         hospitalizationModel.commit()
-                            controller.addHospitalization(hospital.item, patient.item, hospitalizationModel.item)
+                        controller.addHospitalization(hospital.item, patient.item, hospitalizationModel.item)
                     }
                 }
 
             }
         }
+
     }
 }

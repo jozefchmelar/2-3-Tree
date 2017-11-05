@@ -1,12 +1,17 @@
 package app.gui
 
 import app.controller.PatientRecordController
+import com.intellij.openapi.editor.SelectionModel
 import gui.model.*
+import javafx.scene.control.SelectionMode
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
+import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
+import org.jdesktop.swingx.calendar.DateSelectionModel
 import tornadofx.*
-data class lll(val l:String)
+
+data class lll(val l: String)
 
 class PatienRecordView : View() {
 
@@ -23,23 +28,39 @@ class PatienRecordView : View() {
 
     init {
         with(root) {
-            goHome()
+            goHome(controller::clear)
 
             hbox {
+                vgrow = Priority.ALWAYS
+                hgrow = Priority.ALWAYS
+                maxWidth = Double.POSITIVE_INFINITY
                 tableview(controller.hospitals) {
                     smartResize()
                     column("Meno", Hospital::name)
                     bindSelected(hospitalModel)
+
+                    onUserSelect {
+                        if(it==hospitalModel.item)
+                            selectionModel.select(null)
+                    }
+
+                    onSelectionChange { hospital ->
+                        if(hospital != null && patient.item!=null)
+                            controller.findPatient(hospital,name.text,surname.text,birthNumber.text)
+                    }
                 }
 
                 vbox {
+                    vgrow = Priority.ALWAYS
+                    hgrow = Priority.ALWAYS
+                    maxWidth = Double.POSITIVE_INFINITY
                     hbox {
                         birthNumber = textfield {
                             promptText = "Rodne cislo"
                         }
                         button("Hladaj") {
                             action {
-                                if(hospitalModel.item!=null)
+                                if (hospitalModel.item != null)
                                     controller.findPatient(hospitalModel.item, birthNumber.text)
                                 else
                                     controller.findPatient(birthNumber.text)
@@ -57,19 +78,23 @@ class PatienRecordView : View() {
                             surname = textfield {
                                 promptText = "priezvisko"
                             }
-                        }
-                        button("Hladaj") {
-                            action {
-                                if(hospitalModel.item !=null)
-                                    controller.findPatient(hospitalModel.item, name.text, surname.text)
-                                else
-                                    controller.findPatient(name.text, surname.text)
+                            button("Hladaj") {
+                                action {
+                                    if (hospitalModel.item != null)
+                                        controller.findPatient(hospitalModel.item, name.text, surname.text)
+                                    else
+                                        controller.findPatient(name.text, surname.text)
 
+                                }
                             }
                         }
+
                     }
 
                     tableview(controller.foundPatients) {
+                        vgrow = Priority.ALWAYS
+                        hgrow = Priority.ALWAYS
+                        maxWidth = Double.POSITIVE_INFINITY
                         smartResize()
                         column("Rc", Patient::birthNumber)
                         column("Meno", Patient::firstName)
@@ -78,16 +103,24 @@ class PatienRecordView : View() {
                         column("Poistovna", Patient::healthInsurance)
                         bindSelected(patient)
                         onSelectionChange {
-                            if (it != null)
-                                controller.getHospitalizations(it)
+                            it?.let { controller.getHospitalizations(it) }
                         }
                     }
                 }
+
                 tableview(controller.hospitalizations) {
+                    vgrow = Priority.ALWAYS
+                    hgrow = Priority.ALWAYS
+                    maxWidth = Double.POSITIVE_INFINITY
                     column("diagnosis", Hospitalization::diagnosis)
                     column("start", Hospitalization::start)
                     column("end", Hospitalization::end)
+
                 }
+
+            }
+            style {
+                padding = box(20.px)
             }
         }
 

@@ -26,10 +26,10 @@ data class Patient(
     val lastName: String,
     val birthDate: LocalDate,
     val healthInsurance: InsuranceCompany,
-    val hospitalizations: MutableList<Hospitalization> = emptyLinkedList(),
-    val isHospitalized: Boolean = false
+    val hospitalizations: MutableList<Hospitalization> = emptyLinkedList()
 ) : Comparable<Patient> {
     override fun compareTo(other: Patient): Int = birthNumber.compareTo(other.birthNumber)
+    fun isHospitalized() = hospitalizations.last().end==null && hospitalizations.last().start != null
 }
 
 

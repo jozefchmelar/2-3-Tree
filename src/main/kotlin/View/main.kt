@@ -11,32 +11,39 @@ fun main(args: Array<String>) {
     launch<MyApp>(args)
 }
 
-class MyApp: App(MainView::class)
+class MyApp : App(MainView::class)
 
 class MainView : View() {
 
     override val root = BorderPane()
 
-    val topView = find(TopView::class)
+    val topView    = find(TopView::class)
     val centerView = find(CenterView::class)
-     init {
+
+    init {
         reloadStylesheetsOnFocus()
 
         with(root) {
             top    = topView.root
-            bottom = centerView.root
+            center = centerView.root
         }
     }
 }
 
-fun View.goHome() = button("Back") {
-    action{ replaceWith(
-        CenterView::class,
-        ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.RIGHT)
-    )}
+fun View.goHome(f: () -> Unit = {}) = hbox {
+
+    button("Back") {
+        action {
+            f()
+            replaceWith(
+                CenterView::class,
+                ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.RIGHT)
+            )
+        }
+    }
 }
 
-class CenterView : View(){
+class CenterView : View() {
 
     var label: Label by singleAssign()
     val menu = listOf(
@@ -45,9 +52,9 @@ class CenterView : View(){
 
         Pair("2.Vyhľadanie záznamov pacienta/ov v zadanej nemocnici", AddPatientView::class),
 
-        Pair("3.Vykonanie záznamu o zacati   hospitalizácii pacienta",HospitalizationsView::class),
+        Pair("3.Vykonanie záznamu o zacati   hospitalizácii pacienta", HospitalizationsView::class),
 
-        Pair("4.Vykonanie záznamu o ukonceni hospitalizácie pacienta",AddPatientView::class),
+        Pair("4.Vykonanie záznamu o ukonceni hospitalizácie pacienta", AddPatientView::class),
 
         Pair("5.Pacienti v nemocnici za obdobie", AddPatientView::class),
 
@@ -64,10 +71,10 @@ class CenterView : View(){
         Pair("11,12,13 Nemocnice", HospitalsView::class)
 
     )
-    override val root = vbox{
+    override val root = vbox {
         prefWidth = 800.toDouble()
         prefHeight = 600.toDouble()
-        style{
+        style {
             padding = box(20.px)
         }
         menu.forEach {
@@ -84,7 +91,8 @@ class CenterView : View(){
 
     }
 }
-class TopView: View() {
+
+class TopView : View() {
 
     override val root = vbox {
         menubar {
@@ -99,12 +107,13 @@ class TopView: View() {
                     println("Clear!")
                 }
 
-            }        }
+            }
+        }
 
     }
 }
 
-class BottomView: View() {
+class BottomView : View() {
     override val root = Label("Bottom View")
 }
 

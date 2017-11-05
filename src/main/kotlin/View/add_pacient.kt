@@ -8,7 +8,7 @@ import tornadofx.*
 
 class AddPatientView : View() {
 
-    private val controller: AddPatientController by inject()
+    private val controller  : AddPatientController  by inject()
     private val patientModel: PatientModel         by inject()
 
     override val root = VBox()
@@ -17,7 +17,8 @@ class AddPatientView : View() {
         title = "Pridat pacienta"
 
         with(root) {
-            goHome()
+
+            goHome(controller::clear)
 
             form {
                 fieldset("Personal Information") {
@@ -53,6 +54,9 @@ class AddPatientView : View() {
 
             }
 
+            style {
+                padding = box(20.px)
+            }
 
         }
     }
