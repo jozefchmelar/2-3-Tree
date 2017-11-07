@@ -6,15 +6,21 @@ import extensions.emptyLinkedList
 import gui.model.Hospital
 import gui.model.Hospitalization
 import gui.model.Patient
+import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
 open class BaseController : Controller() {
-
+    val status = SimpleStringProperty()
     val insuranceComp by lazy { Data.insuranceCompanies.observable() }
     val hospitals     by lazy { Data.hospitals.getValuesInorder().observable() }
 
     val foundPatients    = mutableListOf<Patient>().observable()
     val hospitalizations = mutableListOf<Hospitalization>().observable()
+
+    fun refresh(){
+        insuranceComp.setAll(Data.insuranceCompanies)
+        hospitals.setAll(Data.hospitals.getValuesInorder())
+    }
 
     open fun clear(){
         foundPatients.clear()

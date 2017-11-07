@@ -36,10 +36,13 @@ fun View.goHome(f: () -> Unit = {}) = hbox {
     button("Back") {
         action {
             f()
+
             replaceWith(
                 CenterView::class,
-                ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.RIGHT)
+                ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.RIGHT),
+                true,true
             )
+            close()
         }
     }
 }
@@ -67,7 +70,7 @@ class CenterView : View() {
 
         Pair("11. Pridanie nemocnice", HospitalsView::class),
 
-        Pair("11,12,13 Nemocnice", HospitalsView::class),
+        Pair("Zrusenie nemocnice", CancelHospitalsView::class),
 
         Pair("11,12,13 Nemocnice", HospitalsView::class)
 
