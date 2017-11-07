@@ -13,13 +13,16 @@ Pre každú nemocnicu evidujte:
  */
 data class Hospital(
     val name: String,
-    val patients                        : TwoThreeTree<String, Patient> = TwoThreeTree(),
-    val patientsFirstName               : TwoThreeTree<String, MutableList<Patient>> = TwoThreeTree(),
-    val patientsLastName                : TwoThreeTree<String, MutableList<Patient>> = TwoThreeTree(),
-    val currentHospitalizations         : TwoThreeTree<Patient,Patient> = TwoThreeTree(),
-    val currentInsuranceHospitalizations: TwoThreeTree<InsuranceCompany,MutableList<Patient>> = TwoThreeTree()
+    val patients                         : TwoThreeTree<String, Patient> = TwoThreeTree(),
+    val patientsFirstName                : TwoThreeTree<String, MutableList<Patient>> = TwoThreeTree(),
+    val patientsLastName                 : TwoThreeTree<String, MutableList<Patient>> = TwoThreeTree(),
+    val currentHospitalizations          : TwoThreeTree<Patient,Patient> = TwoThreeTree(),
+    val currentInsuranceHospitalizations : TwoThreeTree<InsuranceCompany,MutableList<Patient>> = TwoThreeTree()
 
-)
+) {
+    override fun toString(): String = name
+    override fun equals(other: Any?)= other is Hospital && other.name.toLowerCase() ==  name.toLowerCase()
+}
 
 class HospitalModel : ItemViewModel<Hospital>() {
     val name = bind(Hospital::name)

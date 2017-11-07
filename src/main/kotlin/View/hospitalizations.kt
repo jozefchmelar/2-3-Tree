@@ -41,7 +41,16 @@ class HospitalizationsView : View() {
                     hgrow = Priority.ALWAYS
                     maxWidth = Double.POSITIVE_INFINITY
                     column("Nazov", Hospital::name)
-                    bindSelected(hospital)
+//                    bindSelected(hospital)
+//                    bindSelected(hospitalizationModel.hospital)
+//                    onSelectionChange {
+//                        hospital.value = it
+//                        hospitalizationModel.value = it
+//                    }
+                    selectionModel.selectedItemProperty().onChange {
+                        hospital.item = it
+                    //    hospitalizationModel.item.hospital = it
+                    }
                 }
             }
             vbox {
@@ -119,6 +128,8 @@ class HospitalizationsView : View() {
                 button("Pridat hospitalizaciu") {
                     action {
                         hospitalizationModel.patient.value = patient.item
+                        hospitalizationModel.hospital.value = hospital.item
+
                         hospitalizationModel.commit()
                         controller.addHospitalization(hospital.item, patient.item, hospitalizationModel.item)
                     }

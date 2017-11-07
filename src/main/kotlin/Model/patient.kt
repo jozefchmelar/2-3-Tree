@@ -12,6 +12,7 @@ import java.util.*
 data class InsuranceCompany(val id: Int, val name: String) : Comparable<InsuranceCompany>{
 
     override fun compareTo(other: InsuranceCompany): Int = id.compareTo(other.id)
+    override fun equals(other: Any?) = other is InsuranceCompany && other.id == id
     override fun toString() = name
 }
 
@@ -28,8 +29,9 @@ data class Patient(
     val healthInsurance: InsuranceCompany,
     val hospitalizations: MutableList<Hospitalization> = emptyLinkedList()
 ) : Comparable<Patient> {
+
     override fun compareTo(other: Patient): Int = birthNumber.compareTo(other.birthNumber)
-    fun isHospitalized() = hospitalizations.last().end==null && hospitalizations.last().start != null
+    override fun equals(other: Any?) = other is Patient && other.birthNumber==birthNumber
 }
 
 

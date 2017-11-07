@@ -5,7 +5,25 @@ import Tree.node.Node.*
 import extensions.MySet
 import extensions.Queue
 import extensions.emptyLinkedList
+import org.apache.http.annotation.Experimental
 
+data class HablaTest(val id:String,val habla:String="gsdkiogksdopgksdopgksdopgksd") : Comparable<HablaTest> {
+    override fun equals(other: Any?): Boolean {
+        return (other is HablaTest) && other.id == id
+    }
+    //Compares this object with the specified object for order.
+    // Returns zero if this object is equal to the specified other object,
+    // a negative number if it's less than other, or a positive number if it's greater than other.
+
+
+    override fun compareTo(other: HablaTest) :Int{ when {
+        id == other.id -> return  0
+        id < other.id  -> return -1
+        id > other.id  -> return  1
+        else -> TODO()
+    }
+    }
+}
 
 class TwoThreeTree<K:Comparable<K>,V>  {
     internal var root : Node<K,V>? = null
@@ -72,25 +90,71 @@ class TwoThreeTree<K:Comparable<K>,V>  {
               if not possible, merge node (see next slide)
               https://www.cs.drexel.edu/~amd435/courses/cs260/lectures/L-6_2-3_Trees.pdf
       */
-    fun delete(key: K): Boolean {
+    fun rightLeftMost (node: Node<K, V>): Node<K, V>? {
+        var left: Node<K, V>? =
+        when(node){
+            is Node.TwoNode  ->  node.left
+            is Node.ThreeNode -> node.middle
+            else -> TODO()
+        }
 
+        while(left?.left!=null){
+            left = left.left
+        }
+        return left
+    }
+    fun deleteRoot(key:K):Boolean{
+        val r = root
+        when (r) {
+            is Node.TwoNode -> {
+                root = null
+                return true
+            }
+            is Node.ThreeNode -> {
+                if (key == r.keyValue1.key)
+                    root = TwoNode(r.keyValue2)
+                else root = TwoNode(r.keyValue1)
+                return true
+            }
+        }
+        return true
+    }
+    fun delete(key: K): Boolean {
+        keySet.remove(key)
+        insertedKeys.remove(key)
+        if(root==null) return false
         //  Locate node n, which contains item I
         val deleteNode = find(key) ?: return false
-
+        if (deleteNode == root && deleteNode.isLeaf()) {
+            val r = root
+            when (r) {
+                is Node.TwoNode -> {
+                    root = null
+                    return true
+                }
+                is Node.ThreeNode -> {
+                    if (key == r.keyValue1.key)
+                        root = TwoNode(r.keyValue2)
+                    else root = TwoNode(r.keyValue1)
+                    return true
+                }
+            }
+        }
         // if delete node is leaf three node just delete the key from it
         if (deleteNode.isLeaf()) {
             if (deleteNode is ThreeNode) {
                 deleteNode.deleteFromNode(key)
                 return true
             } else if (deleteNode is TwoNode) {
-                if (deleteFromLeaf(deleteNode, deleteNode.parent)) {
+                if (deleteFromLeaf(deleteNode, deleteNode.parent,key)) {
                     return true
                 }
             }
         }
 
         // 2. If node n is not a leaf  swap I with inorder successor
-        val inorderSuccessorNode = inoredSuccesor(deleteNode, key) ?: throw Exception("successor not found ")
+        val inorderSuccessorNode = inoredSuccesor(deleteNode, key) ?:
+            throw Exception("successor not found ")
         val inosKv = inorderSuccessorNode.keyValue1
         if(!deleteNode.isLeaf())
             swapKeys(deleteNode, inorderSuccessorNode, key)
@@ -98,11 +162,12 @@ class TwoThreeTree<K:Comparable<K>,V>  {
 
         //If leaf node n contains another item, just delete item I
         if (inorderSuccessorNode is ThreeNode && inorderSuccessorNode.isLeaf()) {
-            inorderSuccessorNode.deleteFromNode(afterswap)
+            inorderSuccessorNode.deleteFromNode(afterswap) //afterswap ....tu bol pred tym
             return true
         } else {
 
-            var currentDeleteNode: Node<K, V> = if(deleteNode.isLeaf()) deleteNode else if(inorderSuccessorNode.isLeaf()) inorderSuccessorNode else TODO()
+            var currentDeleteNode: Node<K, V> = if(deleteNode.isLeaf()) deleteNode else if(inorderSuccessorNode.isLeaf()) inorderSuccessorNode
+            else TODO()
             var parentless   : Node<K,V>?     = null
             //var i = 0
             while (true) {
@@ -126,7 +191,6 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                                } else {
                                    parentless = internalMerge(sibling,parent,parentless!!)
                                    currentDeleteNode = parent
-                                   println()
                                }
                             }
                             is Node.ThreeNode -> {
@@ -141,8 +205,10 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                                             }
                                         parent.addLeft(newThree)
                                         parent.right?.let { parent.addMiddle(it) }
+                                        val nl = parent.left
+                                        val nr = parent.middle
                                         if(parent!=root)
-                                            parent.deleteFromNode(parent.keyValue1)
+                                            parent.deleteFromNode(parent.keyValue1,nl,nr)
                                         else
                                         {
                                             root = TwoNode((root!! as ThreeNode).keyValue2)
@@ -164,8 +230,10 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                                                 }
                                             parent.addLeft(newThree)
                                             parent.right?.let { parent.addMiddle(it) }
+                                        val nl = parent.left
+                                        val nr = parent.middle
                                             if(parent!=root)
-                                                parent.deleteFromNode(parent.keyValue1)
+                                                parent.deleteFromNode(parent.keyValue1,nl,nr)
                                             else
                                             {
                                                 root = TwoNode((root!! as ThreeNode).keyValue2)
@@ -187,8 +255,9 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                                             }
                                         parent.addRight(newThree)
                                         parent.left?.let { parent.addMiddle(it) }
+
                                         if(parent!=root)
-                                            parent.deleteFromNode(parent.keyValue2)
+                                            parent.deleteFromNode(parent.keyValue2,parent.middle,newThree)
                                         else{
                                             root = TwoNode((root!! as ThreeNode).keyValue1)
                                                 .addRight(newThree)
@@ -206,7 +275,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                     null -> {
 
                         if(currentDeleteNode==root){
-                            root = parentless
+                            root = parentless?.clearParent()
                             return true
                         }
                         else{
@@ -359,13 +428,13 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         }
     }
 
-    private fun deleteFromLeaf(deleteNode: TwoNode<K, V>, parent: Node<K, V>?): Boolean = when(parent){
-        is Node.TwoNode   -> deleteFromLeaf(deleteNode,parent)
-        is Node.ThreeNode -> deleteFromLeaf(deleteNode,parent)
+    private fun deleteFromLeaf(deleteNode: TwoNode<K, V>, parent: Node<K, V>?,key:K): Boolean = when(parent){
+        is Node.TwoNode   -> deleteFromLeaf(deleteNode,parent,key)
+        is Node.ThreeNode -> deleteFromLeaf(deleteNode,parent,key)
         is Node.FourNode  -> throw FourNodeException()
         null -> TODO()
     }
-    private fun deleteFromLeaf(deleteNode: TwoNode<K, V>, parent: TwoNode<K, V>): Boolean {
+    private fun deleteFromLeaf(deleteNode: TwoNode<K, V>, parent: TwoNode<K, V>,key:K): Boolean {
         if(deleteNode.getSiblings().hasThreeNodeSibling()){
             val sibling = deleteNode.getSiblings().threeNodeSibling()
             when(deleteNode.getPosition()){
@@ -424,7 +493,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         }
     }
 
-    private fun deleteFromLeaf(deleteNode: TwoNode<K, V>, parent: ThreeNode<K, V>): Boolean {
+    private fun deleteFromLeaf(deleteNode: TwoNode<K, V>, parent: ThreeNode<K, V>,key:K): Boolean {
         when(deleteNode.getPosition()){
             Left   -> {
                 val sibling = deleteNode.getSiblings().closestSibling()
@@ -441,7 +510,10 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                     val s  = sibling.keyValue1
                     parent.addLeft(ThreeNode(p, s))
                     parent.addMiddle(pr) // middle becomes right
-                    parent.deleteFromNode(p)
+                    if(parent!=root)
+                    parent.deleteFromNode(p,parent.left,parent.middle)
+                    else
+                        root = TwoNode(parent.keyValue2).addLeft(ThreeNode(p,s)).addRight(pr)
                     return true
                 }
             }
@@ -474,7 +546,12 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                     val s = deleteNode.getSiblings().closestSibling() as TwoNode
                     parent.addLeft(s.toThreeNode(p))
                     parent.addMiddle(pr) // middle becomes right
-                    parent.deleteFromNode(p)
+                    if(parent==root) {
+                        root = TwoNode(parent.keyValue2).addLeft(s.toThreeNode(p)).addRight(pr)
+
+                        return true
+                    } else
+                        parent.deleteFromNode(p, s.toThreeNode(p), pr)
                     return true
                 }
             }
@@ -490,8 +567,10 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                 }else{
                     val p = parent .keyValue2
                     val s = sibling.keyValue1
-
+                    if(parent!=root)
                     parent.deleteFromNode(p, parent.left!!, ThreeNode(s, p))
+                    else
+                        root = TwoNode(parent.keyValue1).addLeft(parent.left!!).addRight(ThreeNode(s,p))
                     return true
                 }
             }
@@ -621,7 +700,6 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                 is Node.ThreeNode -> {
                     val originPosition    = getNodePosition(fourNode)
                     val newFourNodeParent = parent.merge(originPosition, fourNode)
-                    println()
                 }
                 null ->{
                     val splitted = fourNode.split()
@@ -655,8 +733,16 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                     }
                     if (parent == root)
                         root = newParent
-                    else
-                        fourNode.parent!!.replaceWith(newParent)
+//                    else if (fourNode.parent == null)
+//                        root = fourNode.split()
+                    else {
+                        if (fourNode.parent?.parent != null)
+                            fourNode.parent!!.replaceWith(newParent)
+                        else {
+                            root = newParent
+                            return
+                        }
+                    }
                     return
                 }
                 is Node.ThreeNode -> {
@@ -850,8 +936,8 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         return result
     }
 
-    fun inorder(node: Node<K, V> = root!!,visit : (Node<K,V>) -> Unit) {
-
+    fun inorder(node: Node<K, V>? = root,visit : (Node<K,V>) -> Unit) {
+        if(node==null) return
         val stack = emptyLinkedList<Node<K, V>>()
         val pushLeft = { _node: Node<K, V>? ->
             var node = _node
@@ -935,7 +1021,6 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                 TODO()
             }
             is Node.ThreeNode    -> {
-                println()
                 TODO()
             }
         }
@@ -952,12 +1037,78 @@ private fun <K:Comparable<K>, V> Node<K, V>.hasKey(key: K): Boolean =when(this){
     is Node.FourNode -> TODO()
 }
 
+infix fun <K : Comparable<K>, V> Node<K, V>?.partialyEquals(other:Node<K,V>?) : Boolean {
+    return when(this){
+        is Node.TwoNode   -> when(other){
+            is Node.TwoNode   ->
+                    this.keyValue1 == other.keyValue1
+
+            is Node.ThreeNode ->
+                    this.keyValue1 == other.keyValue1 ||
+                    this.keyValue1 == other.keyValue2
+
+            is Node.FourNode  ->
+                    this.keyValue1 == other.keyValue1 ||
+                    this.keyValue1 == other.keyValue2 ||
+                    this.keyValue1 == other.keyValue3
+            null            -> true
+        }
+        is Node.ThreeNode -> when(other){
+            is Node.TwoNode   ->
+                    this.keyValue1 == other.keyValue1 ||
+                    this.keyValue2 == other.keyValue1
+
+            is Node.ThreeNode ->
+                    this.keyValue1 == other.keyValue1 ||
+                    this.keyValue1 == other.keyValue2 ||
+                    this.keyValue2 == other.keyValue1 ||
+                    this.keyValue2 == other.keyValue2
+
+            is Node.FourNode  ->
+                    this.keyValue1 == other.keyValue1 ||
+                    this.keyValue1 == other.keyValue2 ||
+                    this.keyValue1 == other.keyValue3 ||
+                    this.keyValue2 == other.keyValue1 ||
+                    this.keyValue2 == other.keyValue2 ||
+                    this.keyValue2 == other.keyValue3 ||
+                    this.keyValue2 == other.keyValue2
+            null -> true
+        }
+        is Node.FourNode  ->  when(other){
+            is Node.TwoNode   ->
+                    this.keyValue1 == other.keyValue1 ||
+                    this.keyValue3 == other.keyValue1 ||
+                    this.keyValue2 == other.keyValue1
+
+            is Node.ThreeNode ->
+                    this.keyValue1 == other.keyValue1 ||
+                    this.keyValue1 == other.keyValue2 ||
+                    this.keyValue2 == other.keyValue1 ||
+                    this.keyValue2 == other.keyValue2 ||
+                    this.keyValue3 == other.keyValue1 ||
+                    this.keyValue3 == other.keyValue2
+
+            is Node.FourNode  ->
+                    this.keyValue1 == other.keyValue1 ||
+                    this.keyValue1 == other.keyValue2 ||
+                    this.keyValue1 == other.keyValue3 ||
+                    this.keyValue2 == other.keyValue1 ||
+                    this.keyValue2 == other.keyValue2 ||
+                    this.keyValue2 == other.keyValue3 ||
+                    this.keyValue3 == other.keyValue1 ||
+                    this.keyValue3 == other.keyValue2 ||
+                    this.keyValue3 == other.keyValue3
+            null -> true
+        }
+        null -> true
+    }
+}
 fun <K : Comparable<K>, V> Node<K, V>.getPosition() : Position {
     val parent = parent!!
     return when{
-        parent.left == this  -> Left
-        parent.right == this -> Right
-        (parent is ThreeNode) && parent.middle == this -> Middle
+        parent.left  partialyEquals this -> Left
+        parent.right partialyEquals this -> Right
+        (parent is ThreeNode) && parent.middle partialyEquals this -> Middle
         else -> throw IllegalStateException("")
     }
     }
@@ -969,21 +1120,22 @@ fun <K : Comparable<K>, V> ThreeNode<K, V>.asTwoNode(removeKey: K): TwoNode<K,V>
         else -> throw IllegalStateException("this value is not in this node")
     }
 }
+
 fun <K : Comparable<K>, V> ThreeNode<K, V>.deleteFromNode(kv: KeyValue<K,V>) = deleteFromNode(kv.key)
 
 fun <K : Comparable<K>, V> ThreeNode<K, V>.deleteFromNode(key: K) =
-    when (key) {
-        this.keyValue1.key -> this.replaceWith(TwoNode(this.keyValue2, parent = this.parent,left = left, right = middle))
-        this.keyValue2.key -> this.replaceWith(TwoNode(this.keyValue1, parent = this.parent,left = middle,right = right))
+    when (key) {/// tuto okotinu preppisat
+        this.keyValue1.key -> this.replaceWith(TwoNode(this.keyValue2, parent = this.parent,left = left, right = middle))//.addLeft(left).addRight(middle) )
+        this.keyValue2.key -> this.replaceWith(TwoNode(this.keyValue1, parent = this.parent,left = middle,right = right))//.addLeft(middle).addRight(right))
         else -> throw IllegalStateException("this value is not in this node")
     }
 
-fun <K : Comparable<K>, V> ThreeNode<K, V>.deleteFromNode(kv: KeyValue<K,V>,newLeft:Node<K,V>,newRight:Node<K,V>) = deleteFromNode(kv.key,newLeft,newRight)
+fun <K : Comparable<K>, V> ThreeNode<K, V>.deleteFromNode(kv: KeyValue<K,V>,newLeft:Node<K,V>?,newRight:Node<K,V>?) = deleteFromNode(kv.key,newLeft,newRight)
 
-fun <K : Comparable<K>, V> ThreeNode<K, V>.deleteFromNode(key: K,newLeft:Node<K,V>,newRight:Node<K,V>) =
+fun <K : Comparable<K>, V> ThreeNode<K, V>.deleteFromNode(key: K,newLeft:Node<K,V>?,newRight:Node<K,V>?) =
     when (key) {
-        this.keyValue1.key -> this.replaceWith(TwoNode(this.keyValue2, parent = this.parent).addLeft(newLeft).addRight(newRight))
-        this.keyValue2.key -> this.replaceWith(TwoNode(this.keyValue1, parent = this.parent).addLeft(newLeft).addRight(newRight))
+        this.keyValue1.key -> this.replaceWith(TwoNode(this.keyValue2, parent = this.parent).apply{newLeft?.let{addLeft(it)}; newRight?.let{addRight(it)}})//.addLeft(newLeft).addRight(newRight))
+        this.keyValue2.key -> this.replaceWith(TwoNode(this.keyValue1, parent = this.parent).apply{newLeft?.let{addLeft(it)}; newRight?.let{addRight(it)}})//.addLeft(newLeft).addRight(newRight))
         else -> throw IllegalStateException("this value is not in this node")
     }
 

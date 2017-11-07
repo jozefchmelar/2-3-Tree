@@ -1,8 +1,11 @@
 package app.controller
 
 import Model.Data
+import Model.endHospitalization
 import Model.findPatient
 import gui.model.Hospital
+import gui.model.Hospitalization
+import gui.model.Patient
 
 class PatientRecordController : BaseController() {
 
@@ -28,4 +31,11 @@ class PatientRecordController : BaseController() {
         hospitalizations.clear()
 
     }
+
+    fun endHospitalization(hospital: Hospital, patient: Patient, hospitalization: Hospitalization) : Boolean {
+         Data.endHospitalization(hospital, patient,hospitalization)
+            getHospitalizations(hospital,patient)
+        return true
+    }
+
 }

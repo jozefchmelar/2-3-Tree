@@ -1,3 +1,5 @@
+import Operation.*
+import Tree.HablaTest
 import Tree.TwoThreeTree
 import Tree.node.Node
 import Tree.node.*
@@ -13,8 +15,17 @@ import java.util.*
 import java.text.NumberFormat
 import kotlin.collections.HashSet
 import com.intellij.util.containers.ContainerUtil.subList
+import java.time.LocalDate
 
 
+fun rnd()= Random(5)
+fun rndLocalDate() = LocalDate.of(1980+rnd().nextInt(37),rnd().nextInt(11)+1,rnd().nextInt(27)+1)
+fun maybe(f:()->Unit) = if(rnd().nextBoolean()) f() else {}
+ enum class Operation{
+    Insert,Delete ;
+  companion object {
+      fun random() = if(Random().nextInt(100) > 40 ) Insert else Delete
+  } }
 
 @Suppress("UNUSED_CHANGED_VALUE")
 class InsertionTest : StringSpec() {
@@ -31,6 +42,121 @@ class InsertionTest : StringSpec() {
         val seeds = Collections.nCopies(numberOfGenerators, Any()).map { Math.abs(UUID.randomUUID().hashCode().toLong()) }
         val randomGenerators = Collections.nCopies(numberOfGenerators, Any()).mapIndexed { index, _ -> Random(seeds[index]) }
 
+        "[xx] delete kv1 from three node"{
+            val tree = TwoThreeTree<HablaTest, HablaTest>()
+            val keys = (1..1000).map { HablaTest("$it","habla")}.toMutableList()
+            keys.forEach { tree.put(it,it) }
+            val deletedKeys = mutableListOf<HablaTest>()
+            val keyToDelete = getRandomSubList(keys,keys.size)
+            val s = keyToDelete.mapIndexed { index, it ->
+                val keys = tree.insertedKeys
+                val deleted = tree.delete(it)
+                if(deleted)
+                    deletedKeys.add(it)
+                val result=(tree.getInorder() == (keys-it).sorted() && deleted)// && leavesAreOnSameLevel(tree))
+                if(!result)
+                    println("$index $it")
+                result
+            }
+            s.all{it==true} shouldBe true
+            //val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted.all { it==true } )//&& leavesAreOnSameLevel(tree) )
+            //result shouldBe true
+        }
+        "tetetwe"{
+
+            tree.put(73) // true
+            tree.put(36) // true
+            tree.put(76) // true
+            tree.delete(73) // true
+            tree.put(52) // true
+            tree.put(84) // true
+            tree.delete(36) // true
+            tree.put(74) // true
+            tree.delete(84) // true
+            tree.delete(76) // true
+            tree.delete(52) // true
+            tree.put(68) // true
+            tree.delete(68) // true
+            tree.put(16) // true
+            tree.delete(74) // true
+            tree.delete(16) // true // nic
+            tree.put(73) // true
+            tree.put(71) // true
+            tree.put(65) // true
+            tree.put(78) // true
+            tree.put(15) // true
+            tree.put(7) // true
+            tree.put(6) // true
+            tree.put(42) // true
+            tree.delete(6) // true
+            tree.delete(73) // true
+            tree.delete(42) // true
+            tree.put(0) // true
+            tree.put(95) // true
+            tree.put(44) // true
+            tree.put(89) // true
+            tree.delete(71) // true
+            tree.put(73) // false
+            tree.put(70) // false
+            tree.put(10) // false
+            tree.delete(95) // false
+            tree.delete(10) // false
+            tree.delete(15) // false
+            tree.delete(0) // false
+            tree.delete(70) // false
+            tree.delete(65) // false
+            tree.put(29) // false
+            tree.delete(73) // false
+            tree.put(63) // false
+            tree.put(65) // false
+
+
+        }
+            fun Triple<Operation, Int, Boolean>.toCode(){
+                var s =""
+                s+= if(first==Insert) "tree.put($second)" else "tree.delete($second)"
+                s+= " // $third"
+                println(s)
+
+            }
+        "[xy] delete"{
+            val inserted = mutableListOf<Int>()
+            val results = mutableListOf<Boolean>()
+            val history = mutableListOf<Triple<Operation, Int, Boolean>>()
+            try {
+                for (i in 1..5000) {
+                    when (Operation.random()) {
+                        Insert -> {
+                            val ins = Random().nextInt(10000)
+                            if (!inserted.contains(ins)) {
+                                inserted.add(ins)
+                                tree.put(ins)
+                                val res = tree.getInorder() == inserted.sorted() && leavesAreOnSameLevel(tree)
+                                results.add(res)
+                                history.add(Triple(Insert, ins, res))
+                            }
+                        }
+                        Delete -> {
+                            if (inserted.isNotEmpty()) {
+                                val toDel = inserted[Random().nextInt(inserted.size)]
+                                tree.delete(toDel)
+                                inserted.remove(toDel)
+                                val res = tree.getInorder() == inserted.sorted()// && leavesAreOnSameLevel(tree)
+                                results.add(res)
+                                history.add(Triple(Delete, toDel, res))
+                            }
+                        }
+                    }
+                }
+                println(history)
+                history.all { it.third==true  } shouldBe true
+            } catch (e:Exception){
+                println(history)
+                history.forEach { it.toCode() }
+            }
+        }
+/*
+//region other
         "[01] delete kv1 from three node"{
             val keys = listOf(4, 15, 18, 47, 90, 25, 50, 54, 53)//, 112, 911, 150)
             keys.forEach { tree.put(it) }
@@ -508,7 +634,7 @@ class InsertionTest : StringSpec() {
             result shouldBe true
 
         }
-        (1..393).map{ Random(it.toLong()) }.forEachIndexed { indexx, rnd ->
+       /* (1..393).map{ Random(it.toLong()) }.forEachIndexed { indexx, rnd ->
             val index=indexx.toLong()
             "[$index] testik"{
             val rnd = Random(index)
@@ -519,32 +645,51 @@ class InsertionTest : StringSpec() {
             val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
             result shouldBe true
         }
-        }
+        }*/
 
         listOf(Random(987),Random(456),Random(8945),Random(962),Random(2659),Random(986547),Random(987987987),Random(986231),Random())
             .forEachIndexed { index,rnd ->
             "[$index] RND test"{
-                val keys = Collections.nCopies(9564,Any()).map { rnd.nextInt(9999) }.distinct().toMutableList()
+                val keys = Collections.nCopies(4000,Any()).map { rnd.nextInt(9999) }.distinct().toMutableList()
                 keys.forEach { tree.put(it,4)}
                 val keyToDelete = keys[rnd.nextInt(keys.size)]
                 val deleted = tree.delete(keyToDelete)
                 val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
                 result shouldBe true
 
-            }
+            }.config(enabled = false)
         }
-
+//endregion
+*/
     }
+//
+//    fun leavesAreOnSameLevel(tree:TwoThreeTree<Int,Int>):Boolean{
+//        val leafs = emptyLinkedList<Node<Int, Int>>()
+//        tree.inorder { node ->
+//            if (node.isLeaf()) leafs += node
+//        }
+//
+//        val size: Boolean = leafs.map {
+//            val stack = emptyLinkedList<Node<Int, Int>>()
+//            var n: Node<Int, Int>? = it
+//            while (n != null) {
+//                stack.push(n)
+//                n = n.parent
+//            }
+//            stack.size
+//        }.distinct().size == 1
+//        return size
+//    }
 
-    fun leavesAreOnSameLevel(tree:TwoThreeTree<Int,Int>):Boolean{
-        val leafs = emptyLinkedList<Node<Int, Int>>()
+    fun <A:Comparable<A>,B> leavesAreOnSameLevel(tree:TwoThreeTree<A,B>):Boolean{
+        val leafs = emptyLinkedList<Node<A, B>>()
         tree.inorder { node ->
             if (node.isLeaf()) leafs += node
         }
 
         val size: Boolean = leafs.map {
-            val stack = emptyLinkedList<Node<Int, Int>>()
-            var n: Node<Int, Int>? = it
+            val stack = emptyLinkedList<Node<A, B>>()
+            var n: Node<A, B>? = it
             while (n != null) {
                 stack.push(n)
                 n = n.parent
@@ -557,7 +702,7 @@ class InsertionTest : StringSpec() {
 }
 
 fun <T> getRandomSubList(input: MutableList<T>, subsetSize: Int): List<T> {
-    val r = Random()
+    val r = Random(20)
     val inputSize = input.size
     for (i in 0 until subsetSize) {
         val indexToSwap = i + r.nextInt(inputSize - i)

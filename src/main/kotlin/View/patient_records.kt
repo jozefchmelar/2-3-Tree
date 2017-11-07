@@ -3,6 +3,7 @@ package app.gui
 import app.controller.PatientRecordController
 import com.intellij.openapi.editor.SelectionModel
 import gui.model.*
+import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.control.SelectionMode
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
@@ -11,18 +12,17 @@ import javafx.scene.layout.VBox
 import org.jdesktop.swingx.calendar.DateSelectionModel
 import tornadofx.*
 
-data class lll(val l: String)
 
 class PatienRecordView : View() {
 
     val controller: PatientRecordController by inject()
     val hospitalModel: HospitalModel by inject()
+    val hospitalalization: HospitalizationModel by inject()
     val patient: PatientModel by inject()
     var birthNumber: TextField by singleAssign()
     var surname: TextField by singleAssign()
     var name: TextField by singleAssign()
-    var hospitals: TableView<Hospital> by singleAssign()
-
+    val test = SimpleBooleanProperty(false)
 
     override val root = VBox()
 
@@ -39,10 +39,6 @@ class PatienRecordView : View() {
                     column("Meno", Hospital::name)
                     bindSelected(hospitalModel)
 
-                    onUserSelect {
-                        if(it==hospitalModel.item)
-                            selectionModel.select(null)
-                    }
 
                     onSelectionChange { hospital ->
                         if(hospital != null && patient.item!=null)
@@ -108,16 +104,26 @@ class PatienRecordView : View() {
                     }
                 }
 
-                tableview(controller.hospitalizations) {
-                    vgrow = Priority.ALWAYS
-                    hgrow = Priority.ALWAYS
-                    maxWidth = Double.POSITIVE_INFINITY
-                    column("diagnosis", Hospitalization::diagnosis)
-                    column("start", Hospitalization::start)
-                    column("end", Hospitalization::end)
-
+                hbox {
+                    tableview(controller.hospitalizations) {
+                        vgrow = Priority.ALWAYS
+                        hgrow = Priority.ALWAYS
+                        maxWidth = Double.POSITIVE_INFINITY
+                        column("diagnosis", Hospitalization::diagnosis)
+                        column("start", Hospitalization::start)
+                        column("end", Hospitalization::end)
+                        column("nemocnica", Hospitalization::hospital)
+                        onSelectionChange {
+                            test.set(it?.end==null)
+                        }
+                    }.bindSelected(hospitalalization)
+                    button("Ukonci hospitalizaciu"){
+                        enableWhen(test)
+                        action {
+                            test.set(controller.endHospitalization(hospitalModel.item, patient.item, hospitalalization.item))
+                        }
+                    }
                 }
-
             }
             style {
                 padding = box(20.px)

@@ -67,16 +67,40 @@ sealed class Node<K : Comparable<K>, V> {
         val nodeParent = node.parent
         when (nodeParent) {
             is Node.TwoNode -> when {
-                this == nodeParent.left -> nodeParent.addLeft(node)
-                this == nodeParent.right -> nodeParent.addRight(node)
+                this partialyEquals nodeParent.left -> nodeParent.addLeft(node)
+                this partialyEquals nodeParent.right -> nodeParent.addRight(node)
                 else -> throw IllegalArgumentException("can't replace this node, cause he doesn't belong to any parent ")
 
             }
             is Node.ThreeNode -> when {
-                this == nodeParent.left   -> nodeParent.addLeft(node)
-                this == nodeParent.middle -> nodeParent.addMiddle(node)
-                this == nodeParent.right  -> nodeParent.addRight(node)
-                else -> throw IllegalArgumentException("can't replace this node, cause he doesn't belong to any parent ")
+                this partialyEquals nodeParent.left   -> nodeParent.addLeft(node)
+                this partialyEquals nodeParent.middle -> nodeParent.addMiddle(node)
+                this partialyEquals nodeParent.right  -> nodeParent.addRight(node)
+                else -> {
+                   if(this is ThreeNode){
+                     val l = nodeParent.left
+                     val m = nodeParent.middle
+                     val r = nodeParent.right
+                     when{
+                         l is ThreeNode ->{
+                            if(this.keyValue1 == l.keyValue1 || this.keyValue2 == l.keyValue2)
+                                nodeParent.addLeft(node)
+                         }
+
+                         m is ThreeNode -> {
+                             if (this.keyValue1 == m.keyValue1 || this.keyValue2 == m.keyValue2)
+                                 nodeParent.addMiddle(node)
+                         }
+
+                         r is ThreeNode -> {
+                             if (this.keyValue1 == r.keyValue1 || this.keyValue2==r.keyValue2)
+                                 nodeParent.addRight(node)
+                         }
+
+                     }
+                   }
+                    //throw IllegalArgumentException("can't replace this node, cause he doesn't belong to any parent ")
+                }
 
             }
             is Node.FourNode -> throw FourNodeInsertionException()

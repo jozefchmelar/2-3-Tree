@@ -1,5 +1,6 @@
 package gui.model
 
+import javafx.beans.property.Property
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
@@ -8,26 +9,30 @@ import java.util.*
 import tornadofx.getValue
 import tornadofx.setValue
 
-data class Hospitalization(
+ data class Hospitalization(
     val patient: Patient,
     val diagnosis: String,
     val end: LocalDate? = null,
-    val start: LocalDate
+    val start: LocalDate,
+    val hospital:Hospital
+
 ){
-    override fun toString() = "${patient.birthNumber} ${patient.firstName} ${patient.lastName} $start $end $diagnosis"
+    override fun toString() = "${patient.birthNumber} ${patient.firstName} ${patient.lastName} $start $end $diagnosis $hospital"
+
 }
 
 
 class HospitalizationModel : ItemViewModel<Hospitalization>() {
     override fun onCommit() {
         super.onCommit()
-        item = Hospitalization(patient.value, diagnosis.value, end.value, start.value)
+        item = Hospitalization(patient.value, diagnosis.value,end.value, start.value,hospital.value)
     }
 
     val start   = bind(Hospitalization::start)
     val patient = bind(Hospitalization::patient)
-    val end     = bind(Hospitalization::end)
+    val end     =  bind(Hospitalization::end)
     val diagnosis = bind(Hospitalization::diagnosis)
+    val hospital = bind(Hospitalization::hospital)
 }
 
 
