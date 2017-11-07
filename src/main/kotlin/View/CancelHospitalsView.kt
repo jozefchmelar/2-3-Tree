@@ -1,7 +1,11 @@
 package app.gui
 
+import Model.Data
+import Tree.node.KeyValue
+import app.controller.BaseController
 import app.controller.CancelHospitalController
 import app.controller.HospitalsController
+import gui.model.Hospital
 import gui.model.HospitalModel
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
@@ -53,4 +57,26 @@ class CancelHospitalsView : View() {
         }
 
     }
+}
+
+class TestController:BaseController()
+class TestView :View(){
+    private val controller: TestController by inject()
+
+    override val root = VBox()
+    init {
+        with(root){
+            goHome()
+            button("Do stuff") {
+                action {
+//                    val neviem: List<KeyValue<String, Hospital>> =  Data.hospitals.intervalSearch("E","O",{
+//                        println(it)
+//                    })
+//
+//                    println(neviem)
+                }
+            }
+        }
+    }
+
 }

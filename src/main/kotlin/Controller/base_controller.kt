@@ -2,8 +2,7 @@ package app.controller
 
 import Model.Data
 import Model.findPatient
-import extensions.emptyLinkedList
-import gui.model.Hospital
+ import gui.model.Hospital
 import gui.model.Hospitalization
 import gui.model.Patient
 import javafx.beans.property.SimpleStringProperty

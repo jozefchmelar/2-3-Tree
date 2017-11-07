@@ -1,5 +1,6 @@
 package app.gui
 
+import Model.Data
 import Model.genDummy
 import Model.load
 import Model.save
@@ -18,14 +19,15 @@ class MainView : View() {
 
     override val root = BorderPane()
 
-    val topView    = find(TopView::class)
+    val topView = find(TopView::class)
     val centerView = find(CenterView::class)
 
     init {
+
         reloadStylesheetsOnFocus()
 
         with(root) {
-            top    = topView.root
+            top = topView.root
             center = centerView.root
         }
     }
@@ -36,11 +38,10 @@ fun View.goHome(f: () -> Unit = {}) = hbox {
     button("Back") {
         action {
             f()
-
             replaceWith(
                 CenterView::class,
-                ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.RIGHT),
-                true,true
+                ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.RIGHT)
+                , true, true
             )
             close()
         }
@@ -52,27 +53,27 @@ class CenterView : View() {
     var label: Label by singleAssign()
     val menu = listOf(
 
-        Pair("1.Vyhladanie zaznamov pacienta", PatienRecordView::class),
+        Pair("1.Vyhladanie zaznamov pacienta|Zrusenie hospitalizacie", PatienRecordView::class),
 
-        Pair("2.Vyhľadanie záznamov pacienta/ov v zadanej nemocnici", AddPatientView::class),
 
         Pair("3.Vykonanie záznamu o zacati   hospitalizácii pacienta", HospitalizationsView::class),
 
-        Pair("4.Vykonanie záznamu o ukonceni hospitalizácie pacienta", AddPatientView::class),
 
-        Pair("5.Pacienti v nemocnici za obdobie", AddPatientView::class),
+        Pair("5.Pacienti v nemocnici za obdobie  ", RangeHospitalized::class),
 
         Pair("6.Pridanie pacienta", AddPatientView::class),
 
-        Pair("7.Faktura", AddPatientView::class),
+        Pair("7.Faktura  ", InvoiceView::class),
 
-        Pair("8,9,10,Hospitalizovani pacienti v nemocnici", CurrentlyHospitalized::class),
+        Pair("Hospitalizovani pacienti v nemocnici", CurrentlyHospitalized::class),
 
-        Pair("11. Pridanie nemocnice", HospitalsView::class),
+        Pair("Pridanie nemocnice", HospitalsView::class),
 
         Pair("Zrusenie nemocnice", CancelHospitalsView::class),
 
-        Pair("11,12,13 Nemocnice", HospitalsView::class)
+        Pair("Generator", GeneratorView::class),
+        Pair("test", TestView::class)
+
 
     )
     override val root = vbox {

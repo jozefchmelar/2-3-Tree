@@ -251,17 +251,88 @@ class TwoThreeTree<K:Comparable<K>,V>  {
 
     }
 
-    fun intervalSearch(min:K,max:K): List<Node<K, V>> {
-        var actual: Node<K, V>? = root
-        val helpQueue = Queue<Node<K,V>?>(emptyLinkedList())
-        val intervalSearchLinkedNodeElement = emptyLinkedList<Node<K,V>>()
-        helpQueue.enqueue(actual)
-        while(true){
-            if(helpQueue.count() > 0)
-                actual=helpQueue.dequeue()
-            else
-                return intervalSearchLinkedNodeElement
+    fun inInterval(min:K,max:K): List<V> {
+            val res = mutableListOf<V>()
+        intervalSearch(min,max){
+            when(it){
+                is Node.TwoNode   -> res.add(it.keyValue1.value)
+                is Node.ThreeNode -> {
+                    res.add(it.keyValue1.value)
+                    res.add(it.keyValue2.value)
+                }
 
+            }
+        }
+        return res
+    }
+
+    private fun intervalSearch(min: K, max: K, f: (Node<K, V>?) -> Unit): List<KeyValue<K, V>> {
+        var actual: Node<K, V>? = root
+        val queue = Queue<Node<K, V>?>(emptyLinkedList())
+        val nodes = emptyLinkedList<KeyValue<K, V>>()
+        queue.enqueue(actual)
+        while (true) {
+            if (queue.count() > 0)
+                actual = queue.dequeue()
+            else
+                return nodes
+
+            if (actual
+                is Node.TwoNode) {
+                if (actual.keyValue1.key in min..max) {
+                    nodes.addLast(actual.keyValue1)
+                    f(actual)
+                    if (actual.hasKids()) {
+                        queue.enqueue(actual.left)
+                        queue.enqueue(actual.right)
+                    }
+                } else {
+                    //actuale key < min don't go left
+                    //if actual key > max
+                    if (actual.isLeaf()) {
+                        if (actual.keyValue1.key > min) {
+                            queue.enqueue(actual.left)
+                        }
+                        if (actual.keyValue1.key > max) {
+                            queue.enqueue(actual.right)
+                        }
+                    }
+                }
+            } else if (actual is Node.ThreeNode)
+            {
+                if (actual.keyValue1.key in min..max)
+                {
+                    nodes.addLast(actual.keyValue1)
+                    f(actual)
+                    if (actual.hasKids())
+                        queue.enqueue(actual.left)
+
+                }
+                else
+                {
+                    //i'lltake left one only if if key > min
+                    if (actual.hasKids())
+                        if (actual.keyValue1.key > min)
+                            queue.enqueue(actual.left)
+
+                }
+                if (actual.keyValue2.key in min..max) {
+                    nodes.addLast(actual.keyValue2)
+                    f(actual)
+                    if (actual.hasKids())
+                        queue.enqueue(actual.right)
+
+                }
+                else
+                {
+                    if(actual.hasKids())
+                        if(actual.keyValue2.key > max)
+                            queue.enqueue(actual.right)
+                }
+                if(actual.hasKids()){
+                    queue.enqueue(actual.middle)
+                }
+            }
         }
     }
     private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node<K, V>?,parentLess:Node<K,V>?) = when(parent){
@@ -907,7 +978,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         return result
     }
 
-    private fun inorder(node: Node<K, V>? = root,visit : (Node<K,V>) -> Unit) {
+    internal fun inorder(node: Node<K, V>? = root,visit : (Node<K,V>) -> Unit) {
         if(node==null) return
         val stack = emptyLinkedList<Node<K, V>>()
         val pushLeft = { _node: Node<K, V>? ->

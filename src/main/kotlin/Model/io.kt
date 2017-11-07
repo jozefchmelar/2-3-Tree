@@ -115,8 +115,15 @@ fun loadPatientsAndStuff(){
                 }.forEach {
                     p.hospitalizations.add(it)
                     Data.insertPatientToHospital(p, it.hospital)
-                    if (it.end == null)
+                    if (it.end == null){
                         it.hospital.currentHospitalizations.put(p, p)
+                        it.hospital.currentStartDateHospitalization.get(it.start)?.add(p)   ?:  it.hospital.currentStartDateHospitalization.put(it.start,mutableListOf(p))
+
+                    } else{
+                        it.hospital.currentEndDateHospitalization.get(it.end)?.add(p)   ?:  it.hospital.currentEndDateHospitalization.put(it.end,mutableListOf(p))
+                    }
+                    Data.hospitalizationsInMonth.get(it.start.toMonthYear())?.add(it) ?: Data.hospitalizationsInMonth.put(it.start.toMonthYear(), mutableListOf(it))
+
 
                 }
             }

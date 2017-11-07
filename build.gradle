@@ -30,6 +30,7 @@ dependencies {
     compile 'no.tornado:tornadofx:1.7.12'
     compile 'com.jfoenix:jfoenix:1.9.0'
     compile group: 'net.sf.supercsv', name: 'super-csv', version: '2.4.0'
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.0.5'
 
 
 //    compile files("/usr/share/java/openjfx/lib/packager.jar")
