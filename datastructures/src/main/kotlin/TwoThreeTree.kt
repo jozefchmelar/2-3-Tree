@@ -6,6 +6,7 @@ import extensions.MySet
 import extensions.Queue
 import extensions.emptyLinkedList
 import org.apache.http.annotation.Experimental
+import java.util.*
 
 data class HablaTest(val id:String,val habla:String="gsdkiogksdopgksdopgksdopgksd") : Comparable<HablaTest> {
     override fun equals(other: Any?): Boolean {
@@ -80,45 +81,6 @@ class TwoThreeTree<K:Comparable<K>,V>  {
 
     }
 
-    /*
-          1. Locate node n, which contains item I
-          2. If node n is not a leaf  swap I with inorder successor
-          deletion always begins at a leaf
-          3. If leaf node n contains another item, just delete item I
-              else
-              try to redistribute nodes from siblings (see next slide)
-              if not possible, merge node (see next slide)
-              https://www.cs.drexel.edu/~amd435/courses/cs260/lectures/L-6_2-3_Trees.pdf
-      */
-    fun rightLeftMost (node: Node<K, V>): Node<K, V>? {
-        var left: Node<K, V>? =
-        when(node){
-            is Node.TwoNode  ->  node.left
-            is Node.ThreeNode -> node.middle
-            else -> TODO()
-        }
-
-        while(left?.left!=null){
-            left = left.left
-        }
-        return left
-    }
-    fun deleteRoot(key:K):Boolean{
-        val r = root
-        when (r) {
-            is Node.TwoNode -> {
-                root = null
-                return true
-            }
-            is Node.ThreeNode -> {
-                if (key == r.keyValue1.key)
-                    root = TwoNode(r.keyValue2)
-                else root = TwoNode(r.keyValue1)
-                return true
-            }
-        }
-        return true
-    }
     fun delete(key: K): Boolean {
         keySet.remove(key)
         insertedKeys.remove(key)
@@ -289,16 +251,25 @@ class TwoThreeTree<K:Comparable<K>,V>  {
 
     }
 
+    fun intervalSearch(min:K,max:K): List<Node<K, V>> {
+        var actual: Node<K, V>? = root
+        val helpQueue = Queue<Node<K,V>?>(emptyLinkedList())
+        val intervalSearchLinkedNodeElement = emptyLinkedList<Node<K,V>>()
+        helpQueue.enqueue(actual)
+        while(true){
+            if(helpQueue.count() > 0)
+                actual=helpQueue.dequeue()
+            else
+                return intervalSearchLinkedNodeElement
 
+        }
+    }
     private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node<K, V>?,parentLess:Node<K,V>?) = when(parent){
         is Node.TwoNode   -> redistribute(deleteNode, threeNodeSibling, parent,parentLess)
         is Node.ThreeNode -> redistribute(deleteNode, threeNodeSibling, parent,parentLess)
         is Node.FourNode  -> throw FourNodeException()
         null              -> TODO()
     }
-
-
-
     private fun redistribute(deleteNode: Node<K, V>, threeNodeSibling: Node.ThreeNode<K, V>, parent: Node.ThreeNode<K, V>,parentLess:Node<K,V>?) {
         when(deleteNode.getPosition()) {
             Left -> {
@@ -461,7 +432,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         }
     }
 
-    fun leafMerge(leafNode : Node<K, V>, futureEmptyParent: TwoNode<K, V>): ThreeNode<K,V> {
+    private fun leafMerge(leafNode : Node<K, V>, futureEmptyParent: TwoNode<K, V>): ThreeNode<K,V> {
         if (leafNode.hasKids()) throw IllegalArgumentException("leaf node is expected")
         return when (leafNode.getPosition()) {
             Left   -> ThreeNode(futureEmptyParent.keyValue1, futureEmptyParent.right!!.keyValue1)
@@ -470,7 +441,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         }
     }
 
-    fun internalMerge(toMergeWith: TwoNode<K, V>, futureEmptyParent: TwoNode<K, V>, mergedChild: Node<K, V>) : ThreeNode<K,V>{
+    private fun internalMerge(toMergeWith: TwoNode<K, V>, futureEmptyParent: TwoNode<K, V>, mergedChild: Node<K, V>) : ThreeNode<K,V>{
         if (toMergeWith.isLeaf()) throw IllegalArgumentException("internal node is expected")
         return when(toMergeWith.getPosition()){
             Left   -> {
@@ -765,7 +736,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
 
     }
 
-     private fun ThreeNode<K, V>.merge(fromSide: Position, fourNode:FourNode<K,V>): FourNode<K, V> {
+    private fun ThreeNode<K, V>.merge(fromSide: Position, fourNode:FourNode<K,V>): FourNode<K, V> {
         val splitted = fourNode.split()
         return  when (fromSide) {
             Left -> {
@@ -879,7 +850,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         return list
     }
 
-    fun levelOrder(node: Node<K, V>?): MutableList<Node<K, V>>? {
+    private fun levelOrder(node: Node<K, V>?): MutableList<Node<K, V>>? {
         val queue = Queue<Node<K, V>>(emptyLinkedList())
         val helpQueue = Queue<Node<K, V>>(emptyLinkedList())
 
@@ -936,7 +907,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         return result
     }
 
-    fun inorder(node: Node<K, V>? = root,visit : (Node<K,V>) -> Unit) {
+    private fun inorder(node: Node<K, V>? = root,visit : (Node<K,V>) -> Unit) {
         if(node==null) return
         val stack = emptyLinkedList<Node<K, V>>()
         val pushLeft = { _node: Node<K, V>? ->

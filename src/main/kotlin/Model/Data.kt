@@ -76,10 +76,10 @@ fun Data.findPatient(hospital: Hospital, name: String, surname: String): List<Pa
 fun genDummy() {
     println("Generating data...")
     val insuranceCompanies = mutableListOf(
-        InsuranceCompany(1, "Vseobecna zdravotna"),
-        InsuranceCompany(2, "Dovera"),
-        InsuranceCompany(3, "Union"),
-        InsuranceCompany(4, "Rick&Morty"))
+        InsuranceCompany(0, "Vseobecna zdravotna"),
+        InsuranceCompany(1, "Dovera"),
+        InsuranceCompany(2, "Union"),
+        InsuranceCompany(3, "Rick&Morty"))
 
     insuranceCompanies.forEach { Data.insuranceCompanies.add(it) }
     val pocetPacientov = 2000
@@ -92,7 +92,7 @@ fun genDummy() {
     }
 
     patients.forEachIndexed { index, patient ->
-     //   if(index%500==0) println("${ index.toDouble() / pocetPacientov.toDouble() *100} %")
+        if(index%500==0) println("${ index.toDouble() / pocetPacientov.toDouble() *100} %")
         Data.insertPatient(patient)
         if (patient.birthNumber.toInt() < 4000) {
             for(i in 1..10) {
@@ -111,10 +111,12 @@ fun genDummy() {
         }
     }
 
-
-
 }
 //year month day
-fun rnd()= Random(5)
+fun rnd()= Random()
 fun rndLocalDate() = LocalDate.of(1980+rnd().nextInt(37),rnd().nextInt(11)+1,rnd().nextInt(27)+1)
 fun maybe(f:()->Unit) = if(rnd().nextBoolean()) f() else {}
+
+interface CSVable{
+    fun toCsv() :String
+}

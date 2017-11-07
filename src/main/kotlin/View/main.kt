@@ -1,13 +1,14 @@
 package app.gui
 
 import Model.genDummy
+import Model.load
+import Model.save
 import javafx.geometry.Insets
 import javafx.scene.control.Label
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 
 fun main(args: Array<String>) {
-    genDummy()
     launch<MyApp>(args)
 }
 
@@ -98,13 +99,14 @@ class TopView : View() {
         menubar {
             menu("File") {
                 item("Save", "Shortcut+S").action {
-                    println("Saving!")
+                    save()
                 }
                 item("Load").action {
-                    println("Loading!")
+                    load()
                 }
-                item("Clear").action {
-                    println("Clear!")
+
+                item("Generate").action {
+                    genDummy()
                 }
 
             }

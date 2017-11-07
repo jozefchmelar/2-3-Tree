@@ -59,10 +59,11 @@ class CurrentlyHospitalized : View() {
                         vgrow = Priority.ALWAYS
                         hgrow = Priority.ALWAYS
                         smartResize()
-                        column("Rodne cislo", Patient::birthNumber)
+                        column("Rodne cislo", Patient::birthNumber).setComparator { s, sa ->s.toInt().compareTo(sa.toInt())  }
                         column("Meno", Patient::firstName)
                         column("Priezvisko", Patient::lastName)
                         column("Poistovna", Patient::healthInsurance)
+
                     }
                 }
 

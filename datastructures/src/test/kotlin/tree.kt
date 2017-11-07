@@ -155,7 +155,7 @@ class InsertionTest : StringSpec() {
                 history.forEach { it.toCode() }
             }
         }
-/*
+
 //region other
         "[01] delete kv1 from three node"{
             val keys = listOf(4, 15, 18, 47, 90, 25, 50, 54, 53)//, 112, 911, 150)
@@ -657,10 +657,10 @@ class InsertionTest : StringSpec() {
                 val result=(tree.getInorder() == (keys-keyToDelete).sorted() && deleted && leavesAreOnSameLevel(tree) )
                 result shouldBe true
 
-            }.config(enabled = false)
+            }
         }
 //endregion
-*/
+
     }
 //
 //    fun leavesAreOnSameLevel(tree:TwoThreeTree<Int,Int>):Boolean{

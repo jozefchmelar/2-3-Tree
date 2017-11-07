@@ -1,6 +1,7 @@
 package gui.model
 
-import extensions.emptyLinkedList
+import Model.CSVable
+ import extensions.emptyLinkedList
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
@@ -9,8 +10,9 @@ import tornadofx.*
 import java.time.LocalDate
 import java.util.*
 
-data class InsuranceCompany(val id: Int, val name: String) : Comparable<InsuranceCompany>{
+data class InsuranceCompany(val id: Int, val name: String) : Comparable<InsuranceCompany>, CSVable {
 
+    override fun toCsv() = listOf(id,name).joinToString(",")
     override fun compareTo(other: InsuranceCompany): Int = id.compareTo(other.id)
     override fun equals(other: Any?) = other is InsuranceCompany && other.id == id
     override fun toString() = name
@@ -21,15 +23,16 @@ class InsuranceCompanyModel : ItemViewModel<InsuranceCompany>() {
     val name = bind(InsuranceCompany::name)
 }
 
-data class Patient(
+data class Patient (
     val birthNumber: String,
     val firstName: String,
     val lastName: String,
     val birthDate: LocalDate,
     val healthInsurance: InsuranceCompany,
     val hospitalizations: MutableList<Hospitalization> = emptyLinkedList()
-) : Comparable<Patient> {
+) : Comparable<Patient>,CSVable {
 
+    override fun toCsv() = listOf(birthNumber,firstName,lastName,birthDate,healthInsurance,hospitalizations).joinToString(",")
     override fun compareTo(other: Patient): Int = birthNumber.compareTo(other.birthNumber)
     override fun equals(other: Any?) = other is Patient && other.birthNumber==birthNumber
 }

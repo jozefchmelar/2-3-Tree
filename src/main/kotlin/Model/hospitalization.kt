@@ -1,5 +1,6 @@
 package gui.model
 
+import Model.CSVable
 import javafx.beans.property.Property
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
@@ -16,8 +17,9 @@ import tornadofx.setValue
     val start: LocalDate,
     val hospital:Hospital
 
-){
-    override fun toString() = "${patient.birthNumber} ${patient.firstName} ${patient.lastName} $start $end $diagnosis $hospital"
+): CSVable {
+     override fun toCsv() = listOf(patient,diagnosis,end,start,hospital).joinToString(",")
+     override fun toString() = "${patient.birthNumber} ${patient.firstName} ${patient.lastName} $start $end $diagnosis $hospital"
 
 }
 

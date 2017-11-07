@@ -13,6 +13,6 @@ class CurrentlyHospitalizedController : BaseController()
 
     fun getHospitalizations(hospital: Hospital,insuranceCompany: InsuranceCompany){
         println(insuranceCompany)
-        foundPatients.setAll(hospital.currentInsuranceHospitalizations.get(insuranceCompany) ?: emptyList<Patient>())
+        foundPatients.setAll(hospital.currentInsuranceHospitalizations.get(insuranceCompany)?.sortedBy { it.birthNumber.toInt() } ?: emptyList<Patient>())
     }
 }

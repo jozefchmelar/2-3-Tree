@@ -2,18 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dec249bb-ad2a-4b84-841c-7c26cdb0acfe" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/kotlin/Model/io.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/sem1_main.iml" afterPath="$PROJECT_DIR$/.idea/modules/sem1_main.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/sem1_test.iml" afterPath="$PROJECT_DIR$/.idea/modules/sem1_test.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/main/kotlin/delete.txt" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/delete.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/main/kotlin/extensions/collections.kt" afterPath="$PROJECT_DIR$/datastructures/src/main/kotlin/extensions/collections.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt" afterPath="$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/Controller/patient_record.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/Controller/patient_record.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/Controller/currentyl_hospitalized.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/Controller/currentyl_hospitalized.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/Model/Data.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/Model/Data.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/Model/hospital.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/Model/hospital.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/Model/hospitalization.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/Model/hospitalization.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/Model/patient.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/Model/patient.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/View/hospitalizations.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/View/hospitalizations.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/View/patient_records.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/View/patient_records.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/util.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/util.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/View/currently_hospitalized.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/View/currently_hospitalized.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/View/main.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/View/main.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/datastructures/.gradle/" />
@@ -31,7 +35,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/semestralka1$MySpec.coverage" NAME="MySpec Coverage Results" MODIFIED="1507544441646" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/semestralka1$TestyVkladania.coverage" NAME="TestyVkladania Coverage Results" MODIFIED="1508085425316" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/semestralka1$Gui.coverage" NAME="Gui Coverage Results" MODIFIED="1509833154135" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/semestralka1$Gui.coverage" NAME="Gui Coverage Results" MODIFIED="1510023264381" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/semestralka1$InsertionTest.coverage" NAME="InsertionTest Coverage Results" MODIFIED="1510008592747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/semestralka1$TwoThreeTreeKt.coverage" NAME="TwoThreeTreeKt Coverage Results" MODIFIED="1507670083846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/semestralka1$MainKt.coverage" NAME="MainKt Coverage Results" MODIFIED="1508955428180" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
@@ -124,77 +128,84 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TwoThreeTree.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt">
+      <file leaf-file-name="hospital.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/hospital.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="66" column="7" lean-forward="false" selection-start-line="66" selection-start-column="7" selection-end-line="66" selection-end-column="7" />
+            <state relative-caret-position="144">
+              <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="currently_hospitalized.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/currently_hospitalized.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="295">
+              <caret line="27" column="41" lean-forward="true" selection-start-line="27" selection-start-column="41" selection-end-line="27" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="base_controller.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/Controller/base_controller.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="80">
+              <caret line="29" column="72" lean-forward="true" selection-start-line="29" selection-start-column="72" selection-end-line="29" selection-end-column="72" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="currentyl_hospitalized.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/Controller/currentyl_hospitalized.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="13" column="19" lean-forward="false" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="io.kt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/io.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="535">
+              <caret line="98" column="25" lean-forward="false" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
               <folding>
-                <element signature="e#13#207#0" expanded="true" />
+                <element signature="e#15#309#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tree.kt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt">
+      <file leaf-file-name="patient.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/patient.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="129" column="58" lean-forward="false" selection-start-line="129" selection-start-column="58" selection-end-line="129" selection-end-column="58" />
-              <folding>
-                <element signature="e#0#536#0" expanded="true" />
-                <element signature="e#31207#31271#2" expanded="false" />
-                <element signature="n#!!block;n#measureTime#0" expanded="false" />
-                <marker date="1510014914155" expanded="false" signature="6052:30476" ph="other" />
-                <marker date="1510014914155" expanded="false" signature="6520:6889" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="6963:7331" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="7429:7798" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="7872:8241" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="8301:8669" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="8731:9099" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="9160:9529" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="9594:10122" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="9795:9856" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="10187:10555" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="10647:11018" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="11113:11484" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="11579:11950" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="12041:12413" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="12504:12875" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="12971:13342" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="13438:13809" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="13901:14273" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="14364:14724" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="14817:15177" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="15274:15634" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="15731:16091" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="16185:16548" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="16645:17008" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="17101:17465" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="17495:17920" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="17949:18375" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="18404:18830" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="18859:19285" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="19314:19740" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="19769:20195" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="20224:20649" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="20678:21103" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="21132:21557" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="21587:22049" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="22115:22557" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="22608:23050" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="23102:23544" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="23587:24007" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="24066:24486" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="24545:24965" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="25027:25447" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="25509:25929" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="25991:26411" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="26447:26859" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="26882:27303" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="27770:28191" ph="{...}" />
-                <marker date="1510014914155" expanded="false" signature="29152:29769" ph="/ (1..393).map{ Random(it.toLong()) }.forEachIndexed { indexx, rnd -&gt; .../" />
-              </folding>
+            <state relative-caret-position="213">
+              <caret line="25" column="19" lean-forward="false" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/main.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-9">
+              <caret line="31" column="1" lean-forward="true" selection-start-line="31" selection-start-column="1" selection-end-line="31" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="patients.csv" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/patients.csv">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -202,9 +213,11 @@
       <file leaf-file-name="Data.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/Data.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1376">
-              <caret line="94" column="7" lean-forward="false" selection-start-line="94" selection-start-column="7" selection-end-line="94" selection-end-column="7" />
-              <folding />
+            <state relative-caret-position="128">
+              <caret line="16" column="8" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+              <folding>
+                <element signature="e#2195#2515#2" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -249,6 +262,9 @@
       <find>find</find>
       <find>equals</find>
       <find>print</find>
+      <find>paNode</find>
+      <find>actual</find>
+      <find>linkedKeyValueData</find>
     </findStrings>
     <replaceStrings>
       <replace>= TODO()</replace>
@@ -641,8 +657,8 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4524792408000" />
-        <entry key="$PROJECT_DIR$/build.gradle" value="2448055485" />
+        <entry key="$PROJECT_DIR$" value="4525013221000" />
+        <entry key="$PROJECT_DIR$/build.gradle" value="1441379634" />
         <entry key="$PROJECT_DIR$/datastructures" value="4526426847000" />
         <entry key="$PROJECT_DIR$/datastructures/build.gradle" value="4056690264" />
         <entry key="$PROJECT_DIR$/datastructures/gradle/wrapper/gradle-wrapper.properties" value="615277776" />
@@ -1020,9 +1036,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/test.java" />
-        <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/two_three_tree.kt" />
-        <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/Test.java" />
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/node2.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/test.form" />
         <option value="$PROJECT_DIR$/src/main/kotlin/View/main.form" />
@@ -1039,13 +1052,10 @@
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/smutne delete" />
         <option value="$PROJECT_DIR$/datastructures/settings.gradle" />
         <option value="$PROJECT_DIR$/datastructures/build.gradle" />
-        <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/delete.txt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Controller/controller.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/View/AddHospitalView.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Controller/add_hospital_controller.kt" />
-        <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/kotlin/functional.kt" />
-        <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/extensions/collections.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Model/Patient.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/View/hospitalization_record_view.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Model/hopistal.kt" />
@@ -1053,24 +1063,30 @@
         <option value="$PROJECT_DIR$/src/main/kotlin/View/hospitalization_record.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Controller/hospitals_controller.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Controller/add_patient_controller.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/Controller/currentyl_hospitalized.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/View/add_pacient.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/View/HospitalsView.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/Controller/base_controller.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Controller/hospitalization_controller.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Controller/patient_record.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/View/main.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/View/hospitalizations.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/View/currently_hospitalized.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/View/patient_records.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/Model/hospitalization.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/util.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/Model/patient.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/Model/hospital.kt" />
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/Controller/currentyl_hospitalized.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/View/currently_hospitalized.kt" />
+        <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/delete.txt" />
         <option value="$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/Model/Data.kt" />
         <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt" />
+        <option value="$PROJECT_DIR$/datastructures/src/main/kotlin/extensions/collections.kt" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/Model/patient.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/Model/hospitalization.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/Model/hospital.kt" />
+        <option value="$PROJECT_DIR$/patients.csv" />
+        <option value="$PROJECT_DIR$/hospitals.csv" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/View/main.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/Controller/base_controller.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/Model/Data.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/Model/io.kt" />
       </list>
     </option>
   </component>
@@ -1203,15 +1219,24 @@
               <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="datastructures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
             </path>
             <path>
               <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
               <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="datastructures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="semestralka1" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="datastructures" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="kotlin" type="462c0819:PsiDirectoryNode" />
+              <item name="extensions" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="semestralka1" type="b2602c69:ProjectViewProjectNode" />
@@ -1263,7 +1288,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.3873563" />
     <property name="SearchEverywhereHistoryKey" value="plugins&#9;ACTION&#9;WelcomeScreen.Plugins" />
@@ -1637,16 +1662,17 @@
       <option name="project" value="LOCAL" />
       <updated>1509892657138</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="stromisko hotof">
+      <created>1510015096159</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1510015096159</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="InsertionTest - 2017.11.07 at 01h 10m 02s.xml">
-      <configuration name="InsertionTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="InsertionTest - 2017.11.07 at 01h 10m 51s.xml">
-      <configuration name="InsertionTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="InsertionTest - 2017.11.07 at 01h 13m 46s.xml">
       <configuration name="InsertionTest" configurationId="JUnit" />
     </history-entry>
@@ -1671,9 +1697,16 @@
     <history-entry file="InsertionTest - 2017.11.07 at 01h 35m 27s.xml">
       <configuration name="InsertionTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="InsertionTest - 2017.11.07 at 02h 02m 20s.xml">
+      <configuration name="InsertionTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="InsertionTest - 2017.11.07 at 02h 04m 05s.xml">
+      <configuration name="InsertionTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="1963" y="0" width="1920" height="1044" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1689,13 +1722,13 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17708333" sideWeight="0.49628055" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17708333" sideWeight="0.49628055" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296875" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4548353" sideWeight="0.49791667" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24335814" sideWeight="0.49791667" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.50371945" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1756,14 +1789,15 @@
     <MESSAGE value="DELETE" />
     <MESSAGE value="dost vela veci v guii" />
     <MESSAGE value="next stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="next stuff" />
+    <MESSAGE value="stromisko hotof" />
+    <option name="LAST_COMMIT_MESSAGE" value="stromisko hotof" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="957" />
+      <option name="time" value="960" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="JUnit">
@@ -1777,68 +1811,11 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$APPLICATION_HOME_DIR$/jre64/lib/ext/jfxrt.jar!/javafx/collections/ObservableList.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="25" column="12" lean-forward="false" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Controller/controller.kt" />
-    <entry file="jar://$APPLICATION_HOME_DIR$/jre64/lib/ext/jfxrt.jar!/javafx/scene/control/TextInputControl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="782" column="16" lean-forward="false" selection-start-line="782" selection-start-column="16" selection-end-line="782" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/no.tornado/tornadofx/1.7.12/af8d9d063098858a7d592e44373b757222e4eaf/tornadofx-1.7.12-sources.jar!/tornadofx/FX.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="394" column="0" lean-forward="false" selection-start-line="394" selection-start-column="0" selection-end-line="394" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/share/java/openjfx/jre/lib/ext/jfxrt.jar!/javafx/scene/control/TextInputControl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="284" column="0" lean-forward="false" selection-start-line="284" selection-start-column="0" selection-end-line="284" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/lang/StringBuilder.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="78" column="0" lean-forward="false" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/no.tornado/tornadofx/1.7.12/af8d9d063098858a7d592e44373b757222e4eaf/tornadofx-1.7.12-sources.jar!/tornadofx/Controls.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="262" column="16" lean-forward="false" selection-start-line="262" selection-start-column="16" selection-end-line="262" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/jre64/lib/ext/jfxrt.jar!/javafx/beans/property/SimpleObjectProperty.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/functional.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="384">
           <caret line="24" column="0" lean-forward="true" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/jre64/lib/ext/jfxrt.jar!/javafx/scene/control/TableView.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="526" column="58" lean-forward="true" selection-start-line="526" selection-start-column="58" selection-end-line="526" selection-end-column="58" />
         </state>
       </provider>
     </entry>
@@ -1871,32 +1848,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Controller/currentyl_hospitalized.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="6" column="6" lean-forward="false" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-          <folding>
-            <element signature="e#24#108#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/Controller/hospitals_controller.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="112">
           <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding>
             <element signature="e#24#83#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/add_pacient.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding>
-            <element signature="e#17#174#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1953,23 +1910,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Controller/base_controller.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="63" column="13" lean-forward="false" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="13" />
-          <folding>
-            <element signature="e#24#203#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/time/LocalDate.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="192" column="12" lean-forward="false" selection-start-line="192" selection-start-column="12" selection-end-line="192" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/Controller/patient_record.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="496">
@@ -2000,17 +1940,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/patient_records.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="114" column="62" lean-forward="true" selection-start-line="114" selection-start-column="62" selection-end-line="114" selection-end-column="62" />
-          <folding>
-            <element signature="e#2429#3182#2" expanded="false" />
-            <element signature="e#3263#3993#2" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/kotlin-runtime.jar!/kotlin/kotlin.kotlin_builtins">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="213">
@@ -2022,14 +1951,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
           <caret line="353" column="23" lean-forward="false" selection-start-line="353" selection-start-column="23" selection-end-line="353" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/hospitalization.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="11" column="27" lean-forward="false" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2060,58 +1981,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/extensions/collections.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/hospitalizations.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9">
-          <caret line="93" column="54" lean-forward="true" selection-start-line="93" selection-start-column="54" selection-end-line="93" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.kotlintest/kotlintest/2.0.6/a342e6c37339649575d74f04a5a3c468eb9afe33/kotlintest-2.0.6-sources.jar!/io/kotlintest/Spec.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/HospitalsView.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-80">
-          <caret line="10" column="6" lean-forward="false" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/hospital.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="18" column="58" lean-forward="false" selection-start-line="18" selection-start-column="58" selection-end-line="18" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/main.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/patient.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="23" column="11" lean-forward="false" selection-start-line="23" selection-start-column="11" selection-end-line="23" selection-end-column="11" />
           <folding />
         </state>
       </provider>
@@ -2121,16 +1994,8 @@
         <state relative-caret-position="-240">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#228#0" expanded="true" />
+            <element signature="e#0#228#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/currently_hospitalized.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="64" column="69" lean-forward="false" selection-start-line="64" selection-start-column="69" selection-end-line="64" selection-end-column="69" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2142,6 +2007,162 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/patient_records.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="455">
+          <caret line="114" column="62" lean-forward="false" selection-start-line="114" selection-start-column="62" selection-end-line="114" selection-end-column="62" />
+          <folding>
+            <element signature="e#2429#3182#2" expanded="false" />
+            <element signature="e#3263#3993#2" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/HospitalsView.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16">
+          <caret line="10" column="6" lean-forward="false" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/hospitalizations.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16">
+          <caret line="93" column="54" lean-forward="false" selection-start-line="93" selection-start-column="54" selection-end-line="93" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/add_pacient.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/jre64/lib/ext/jfxrt.jar!/javafx/scene/control/TableView.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="618" column="31" lean-forward="false" selection-start-line="618" selection-start-column="31" selection-end-line="618" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/jre64/lib/ext/jfxrt.jar!/javafx/scene/control/TableColumnBase.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="401" column="22" lean-forward="false" selection-start-line="401" selection-start-column="22" selection-end-line="401" selection-end-column="22" />
+          <folding>
+            <element signature="e#12723#12724#0" expanded="true" />
+            <element signature="e#12775#12776#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3255">
+          <caret line="659" column="13" lean-forward="false" selection-start-line="659" selection-start-column="13" selection-end-line="659" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#536#0" expanded="true" />
+            <element signature="e#2543#4114#2" expanded="false" />
+            <element signature="e#31179#31243#2" expanded="false" />
+            <element signature="n#!!block;n#measureTime#0" expanded="false" />
+            <marker date="1510016561307" expanded="true" signature="6050:30450" ph="other" />
+            <marker date="1510016561307" expanded="false" signature="6518:6887" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="6961:7329" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="7427:7796" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="7870:8239" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="8299:8667" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="8729:9097" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="9158:9527" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="9592:10120" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="9793:9854" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="10185:10553" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="10645:11016" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="11111:11482" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="11577:11948" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="12039:12411" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="12502:12873" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="12969:13340" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="13436:13807" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="13899:14271" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="14362:14722" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="14815:15175" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="15272:15632" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="15729:16089" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="16183:16546" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="16643:17006" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="17099:17463" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="17493:17918" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="17947:18373" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="18402:18828" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="18857:19283" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="19312:19738" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="19767:20193" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="20222:20647" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="20676:21101" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="21130:21555" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="21585:22047" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="22113:22555" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="22606:23048" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="23100:23542" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="23585:24005" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="24064:24484" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="24543:24963" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="25025:25445" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="25507:25927" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="25989:26409" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="26445:26857" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="26880:27301" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="27768:28189" ph="{...}" />
+            <marker date="1510016561307" expanded="false" signature="29150:29767" ph="/ (1..393).map{ Random(it.toLong()) }.forEachIndexed { indexx, rnd -&gt; .../" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/extensions/collections.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-416">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="82" column="0" lean-forward="false" selection-start-line="82" selection-start-column="0" selection-end-line="82" selection-end-column="0" />
+          <folding>
+            <element signature="e#13#226#0" expanded="true" />
+            <element signature="n#!!block;n#get#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#put#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#swapKeys#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#delete#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#redistribute#1;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#redistribute#2;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#deleteFromLeaf#1;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#leafMerge#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#internalMerge#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#deleteFromLeaf#2;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#insert#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#insert#1;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#insert#2;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#merge#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#find#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#getNode#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#getValuesInorder#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#getInorder#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#levelOrder#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#inoredSuccesor#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#inorder#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+            <element signature="n#!!block;n#getNodePosition#0;n#!!block;n#TwoThreeTree#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/node.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -2150,81 +2171,134 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/Data.kt">
+    <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1376">
-          <caret line="94" column="7" lean-forward="false" selection-start-line="94" selection-start-column="7" selection-end-line="94" selection-end-column="7" />
+        <state relative-caret-position="512">
+          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/TwoThreeTree.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/hospitalization.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="66" column="7" lean-forward="false" selection-start-line="66" selection-start-column="7" selection-end-line="66" selection-end-column="7" />
+        <state relative-caret-position="272">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/datastructures/src/main/kotlin/delete.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1248">
+          <caret line="78" column="9" lean-forward="false" selection-start-line="78" selection-start-column="9" selection-end-line="78" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/sql/Timestamp.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="18" column="11" lean-forward="false" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/java-1.8.0-openjdk-amd64/jre/lib/rt.jar!/java/time/LocalDate.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="621" column="16" lean-forward="false" selection-start-line="621" selection-start-column="16" selection-end-line="621" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/insurance.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="21" lean-forward="true" selection-start-line="0" selection-start-column="21" selection-end-line="0" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Controller/currentyl_hospitalized.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="13" column="19" lean-forward="false" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/hospital.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/currently_hospitalized.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="27" column="41" lean-forward="true" selection-start-line="27" selection-start-column="41" selection-end-line="27" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Controller/base_controller.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="29" column="72" lean-forward="true" selection-start-line="29" selection-start-column="72" selection-end-line="29" selection-end-column="72" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/hospitals.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/View/main.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-9">
+          <caret line="31" column="1" lean-forward="true" selection-start-line="31" selection-start-column="1" selection-end-line="31" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/patients.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/patient.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="25" column="19" lean-forward="false" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/Data.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="16" column="8" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
           <folding>
-            <element signature="e#13#207#0" expanded="true" />
+            <element signature="e#2195#2515#2" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/datastructures/src/test/kotlin/tree.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Model/io.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="129" column="58" lean-forward="false" selection-start-line="129" selection-start-column="58" selection-end-line="129" selection-end-column="58" />
+        <state relative-caret-position="535">
+          <caret line="98" column="25" lean-forward="false" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
           <folding>
-            <element signature="e#0#536#0" expanded="true" />
-            <element signature="e#31207#31271#2" expanded="false" />
-            <element signature="n#!!block;n#measureTime#0" expanded="false" />
-            <marker date="1510014914155" expanded="false" signature="6052:30476" ph="other" />
-            <marker date="1510014914155" expanded="false" signature="6520:6889" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="6963:7331" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="7429:7798" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="7872:8241" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="8301:8669" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="8731:9099" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="9160:9529" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="9594:10122" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="9795:9856" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="10187:10555" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="10647:11018" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="11113:11484" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="11579:11950" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="12041:12413" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="12504:12875" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="12971:13342" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="13438:13809" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="13901:14273" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="14364:14724" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="14817:15177" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="15274:15634" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="15731:16091" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="16185:16548" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="16645:17008" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="17101:17465" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="17495:17920" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="17949:18375" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="18404:18830" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="18859:19285" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="19314:19740" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="19769:20195" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="20224:20649" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="20678:21103" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="21132:21557" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="21587:22049" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="22115:22557" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="22608:23050" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="23102:23544" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="23587:24007" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="24066:24486" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="24545:24965" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="25027:25447" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="25509:25929" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="25991:26411" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="26447:26859" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="26882:27303" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="27770:28191" ph="{...}" />
-            <marker date="1510014914155" expanded="false" signature="29152:29769" ph="/ (1..393).map{ Random(it.toLong()) }.forEachIndexed { indexx, rnd -&gt; .../" />
+            <element signature="e#15#309#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2285,11 +2359,12 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>sem1</last-edited>
+          <last-edited>datastructures_main|datastructures</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.3873563" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>

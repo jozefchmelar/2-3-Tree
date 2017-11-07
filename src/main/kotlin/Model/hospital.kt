@@ -1,5 +1,6 @@
 package gui.model
 
+import Model.CSVable
 import Tree.TwoThreeTree
 import extensions.emptyLinkedList
 import gui.model.Hospitalization
@@ -19,12 +20,13 @@ data class Hospital(
     val currentHospitalizations          : TwoThreeTree<Patient,Patient> = TwoThreeTree(),
     val currentInsuranceHospitalizations : TwoThreeTree<InsuranceCompany,MutableList<Patient>> = TwoThreeTree()
 
-) {
+):CSVable {
+    override fun toCsv() = listOf(name,patients,patientsFirstName,patientsLastName,currentHospitalizations,currentInsuranceHospitalizations).joinToString(",")
     override fun toString(): String = name
     override fun equals(other: Any?)= other is Hospital && other.name.toLowerCase() ==  name.toLowerCase()
 }
 
 class HospitalModel : ItemViewModel<Hospital>() {
-    val name = bind(Hospital::name)
+    val name     = bind(Hospital::name)
     val patients = bind(Hospital::patients)
 }
