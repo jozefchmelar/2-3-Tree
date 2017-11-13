@@ -32,7 +32,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
     //for testing purposes only
     val insertedKeys = emptyLinkedList<K>()
     var keylist = emptyLinkedList<K>()
-    val keySet = MySet(keylist)
+ //   val keySet = MySet(keylist)
     fun get(key: K ) : V?{
         val found = find(key)
         return when(found){
@@ -42,16 +42,22 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         }
     }
     fun put(key:K,value:V) : Boolean{
-        if(keySet.exists(key)) return false
+     //   if(keySet.exists(key)) return false
         if(root ==null) {
             root = TwoNode(key with value)
             insertedKeys.add(key)
-            keySet.insert(key)
+      //      keySet.insert(key)
             return true
         }
 
         val foundNode = getNode(key)
-
+        when(foundNode){
+            is Node.TwoNode -> if( key == foundNode.keyValue1.key) return false
+            is Node.ThreeNode ->{
+                if( key == foundNode.keyValue1.key) return false
+                if( key == foundNode.keyValue2.key) return false
+            }
+        }
         when(foundNode){
             is TwoNode   -> insert(foundNode,key,value)
             is ThreeNode -> insert(foundNode,key,value)
@@ -59,7 +65,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
         }
 
         insertedKeys.add(key)
-        keySet.insert(key)
+    //    keySet.insert(key)
         return true
 
     }
@@ -82,7 +88,7 @@ class TwoThreeTree<K:Comparable<K>,V>  {
     }
 
     fun delete(key: K): Boolean {
-        keySet.remove(key)
+//        keySet.remove(key)
         insertedKeys.remove(key)
         if(root==null) return false
         //  Locate node n, which contains item I
@@ -298,18 +304,14 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                         }
                     }
                 }
-            } else if (actual is Node.ThreeNode)
-            {
-                if (actual.keyValue1.key in min..max)
-                {
+            } else if (actual is Node.ThreeNode) {
+                if (actual.keyValue1.key in min..max) {
                     nodes.addLast(actual.keyValue1)
                     f(actual)
                     if (actual.hasKids())
                         queue.enqueue(actual.left)
 
-                }
-                else
-                {
+                } else {
                     //i'lltake left one only if if key > min
                     if (actual.hasKids())
                         if (actual.keyValue1.key > min)
@@ -322,14 +324,12 @@ class TwoThreeTree<K:Comparable<K>,V>  {
                     if (actual.hasKids())
                         queue.enqueue(actual.right)
 
-                }
-                else
-                {
-                    if(actual.hasKids())
-                        if(actual.keyValue2.key > max)
+                } else {
+                    if (actual.hasKids())
+                        if (actual.keyValue2.key > max)
                             queue.enqueue(actual.right)
                 }
-                if(actual.hasKids()){
+                if (actual.hasKids()) {
                     queue.enqueue(actual.middle)
                 }
             }

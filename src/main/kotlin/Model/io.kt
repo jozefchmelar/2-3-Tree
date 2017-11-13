@@ -4,14 +4,10 @@ import gui.model.Hospital
 import gui.model.Hospitalization
 import gui.model.InsuranceCompany
 import gui.model.Patient
-import javafx.beans.binding.StringBinding
 import java.io.File
-import java.sql.Timestamp
 import java.time.LocalDate
-import java.util.*
 import java.time.ZoneId
-import java.time.temporal.TemporalQueries.localDate
-
+import java.util.*
 
 
 enum class FileName(val value: String){
@@ -120,10 +116,9 @@ fun loadPatientsAndStuff(){
                         it.hospital.currentStartDateHospitalization.get(it.start)?.add(p)   ?:  it.hospital.currentStartDateHospitalization.put(it.start,mutableListOf(p))
 
                     } else{
-                        it.hospital.currentEndDateHospitalization.get(it.end)?.add(p)   ?:  it.hospital.currentEndDateHospitalization.put(it.end,mutableListOf(p))
+                        it.hospital.currentEndDateHospitalization.get(it.end)?.add(p)       ?:  it.hospital.currentEndDateHospitalization.put(it.end,mutableListOf(p))
                     }
-                    Data.hospitalizationsInMonth.get(it.start.toMonthYear())?.add(it) ?: Data.hospitalizationsInMonth.put(it.start.toMonthYear(), mutableListOf(it))
-
+                    Data.hospitalizationsInMonth.get(it.start.toMonthYear())?.add(it)       ?: Data.hospitalizationsInMonth.put(it.start.toMonthYear(), mutableListOf(it))
 
                 }
             }

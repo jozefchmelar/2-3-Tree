@@ -1,6 +1,7 @@
 package app.gui
 
 import app.controller.GeneratorController
+import javafx.application.Platform
 import javafx.scene.layout.VBox
 import org.controlsfx.control.Notifications
 import tornadofx.*
@@ -52,20 +53,19 @@ class GeneratorView : View() {
 
 
                 button("Save") {
-                    setOnAction {
 
+                    action {
                         if (generatorData.commit()) {
                             val g = generatorData.item
                             controller.generate(g)
 
                         }
                     }
-
-
                 }
+
             }
         }
 
+
     }
 }
-

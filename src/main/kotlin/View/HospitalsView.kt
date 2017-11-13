@@ -36,6 +36,7 @@ class HospitalsView : View() {
                     button("Save") {
                         setOnAction {
                             model.commit()
+                            println(model.name.value)
                             controller.addHospital(model.name.value)
                         }
                     }

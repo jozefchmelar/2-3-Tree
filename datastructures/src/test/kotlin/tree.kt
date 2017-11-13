@@ -1,21 +1,14 @@
-import Operation.*
+import Operation.Delete
+import Operation.Insert
 import Tree.HablaTest
 import Tree.TwoThreeTree
 import Tree.node.Node
-import Tree.node.*
+import Tree.node.with
 import extensions.emptyLinkedList
-import extensions.powerOf
-import io.kotlintest.TestCaseConfig
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.milliseconds
-import io.kotlintest.seconds
 import io.kotlintest.specs.StringSpec
-import java.lang.Math.abs
-import java.util.*
-import java.text.NumberFormat
-import kotlin.collections.HashSet
-import com.intellij.util.containers.ContainerUtil.subList
 import java.time.LocalDate
+import java.util.*
 
 
 fun rnd()= Random(5)
