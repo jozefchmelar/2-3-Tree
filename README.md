@@ -73,3 +73,6 @@ uložiť do textového súboru (súborov) vo fomáte csv (Comma-separated values
 jednoducho importovateľná (v súbore sú iba potrebné údaje). Nie je nutné, aby boli všetky dáta v
 jednom súbore. Veľkosť súboru(ov) má byť čo najmenšia.
 Pracujte každý samostatne!
+
+
+FOR THE LOVE OF GOD DO NOT OPEN THAT CODE 
